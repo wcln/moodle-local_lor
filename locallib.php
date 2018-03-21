@@ -1,46 +1,68 @@
 <?php
 
-
-
-
-function local_projectspage_get_projects($category, $order_by = "alphabetical") {
+function local_lor_get_content($type, $platform, $categories, $grades, $order_by = "new", $keywords) {
   global $DB;
 
   if ($order_by === "alphabetical") {
-    $order_by = ' ORDER BY description ASC';
+    $order_by = ' ORDER BY title ASC';
   } else if ($order_by === "new") {
     $order_by = ' ORDER BY date_created DESC';
   }
 
-  if (is_null($category)) {
-    // get ALL projects
-    $projects = $DB->get_records_sql('SELECT * FROM {lor_project}' . $order_by);
-  } else {
-    $projects = $DB->get_records_sql('SELECT * FROM {lor_project}, {lor_project_categories} WHERE {lor_project}.id = {lor_project_categories}.pid AND {lor_project_categories}.cid=?' . $order_by, array($category));
+  $sql = 'SELECT {lor_content}.id, type, title, image, link, date_created
+          FROM {lor_content}, {lor_platform}, {lor_content_grades}, {lor_type}, {lor_content_categories}
+          WHERE {lor_content}.platform = {lor_platform}.id
+            AND {lor_content_grades}.content = {lor_content}.id
+            AND {lor_type}.id = {lor_content}.type
+            AND {lor_content_categories}.content = {lor_content}.id';
+
+  $params = array();
+
+  if(!is_null($type)) {
+    $sql .= ' AND {lor_type}.id = ?';
+    $params[] = $type;
   }
 
-  return $projects;
+  if(!is_null($platform)) {
+    $sql .= ' AND {lor_platform}.id = ?';
+    $params[] = $platform;
+  }
+
+  // if(!is_null($categories)) {
+  //   $sql .= ' AND {lor_type}.id = ?';
+  //   $params[] = $type;
+  // }
+
+  $content = $DB->get_records_sql($sql, $params);
+  return $content;
 }
 
-function local_projectspage_get_project_from_id($id) {
-  global $DB;
-
-  $project = $DB->get_record_sql('SELECT {lor_project}.id, date_created, topics, description, cid FROM {lor_project} WHERE {lor_project}.id=?', array($id));
-  return $project;
-}
-
-function local_projectspage_get_all_project_categories() {
+function local_lor_get_categories() {
   global $DB;
 
   $categories = $DB->get_records_sql('SELECT id, name FROM {lor_category}');
   return $categories;
 }
 
-function local_projectspage_get_project_category_from_id($id) {
+function local_lor_get_platforms() {
   global $DB;
 
-  $category = $DB->get_record_sql('SELECT id, name FROM {lor_category} WHERE id=?', array($id));
-  return $category;
+  $platforms = $DB->get_records_sql('SELECT id, name FROM {lor_platform}');
+  return $platforms;
+}
+
+function local_lor_get_types() {
+  global $DB;
+
+  $types = $DB->get_records_sql('SELECT id, name FROM {lor_type}');
+  return $types;
+}
+
+function local_lor_get_grades() {
+  global $DB;
+
+  $grades = $DB->get_records_sql('SELECT grade FROM {lor_grade}');
+  return $grades;
 }
 
 function local_projectspage_add_project($description, $categories, $topics, $contributors, $grades, &$form) {

@@ -3,6 +3,6 @@
 defined('MOODLE_INTERNAL') || die();
 
 if ($hassiteconfig) {
-	$settings = new admin_externalpage('local_projectspage', get_string('pluginname', 'local_projectspage'), "$CFG->wwwroot/local/projectspage/index.php");
+	$settings = new admin_externalpage('local_lor', get_string('pluginname', 'local_lor'), "$CFG->wwwroot/local/lor/index.php");
 	$ADMIN->add('localplugins', $settings);
 }

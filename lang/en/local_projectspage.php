@@ -1,0 +1,22 @@
+<?php
+
+$string['pluginname'] = "Projects Page";
+
+$string['heading'] = "Add a Project";
+$string['description'] = "Inquiry Question";
+$string['categories'] = "Choose one or more categories";
+$string['topics'] = "Keywords (eg. circulatory system, heart, blood)";
+$string['word'] = "Upload a Word document of the project";
+$string['pdf'] = "Attach a PDF version of the project";
+$string['icon'] = "Upload an icon (200x150px)";
+$string['grade'] = "Grade(s)";
+$string['contributors'] = "Contributor(s)";
+$string['files'] = 'Files';
+$string['about'] = 'About';
+$string['submit'] = "Submit";
+
+
+$string['error_filenames'] = "All files must have the same name!";
+$string['error_filename_exists'] = "This filename exists in the database already! Please change the filename of all files.";
+$string['error_file_exists'] = "This filename already exists on the server! Please change the filename of all files.";
+$string['error_categories'] = "You must choose AT LEAST one category.";

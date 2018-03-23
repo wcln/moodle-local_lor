@@ -10,7 +10,7 @@ $search_platform = null;
 $search_type = null;
 $search_grades = null;
 $search_keywords = null;
-$order_by = "alphabetical";
+$order_by = "new";
 
 
 if (isset($_GET['categories'])) {
@@ -105,22 +105,30 @@ $grades = local_lor_get_grades();
       <b>Categories:</b>
       <select name="categories[]" class="multiple" multiple="multiple">
       <?php foreach ($categories as $category): ?>
-        <option value="<?=$category->id?>"><?=$category->name?></option>
+        <?php if (in_array($category->id, $search_categories)): ?>
+          <option selected="selected" value="<?=$category->id?>"><?=$category->name?></option>
+        <?php else: ?>
+          <option value="<?=$category->id?>"><?=$category->name?></option>
+        <?php endif ?>
       <?php endforeach ?>
       </select>
 
       <b>Grades:</b>
       <select name="grades[]" class="multiple" multiple="multiple">
-      <?php foreach ($grades as $grade): ?>
-        <option value="<?=$grade->grade?>"><?=$grade->grade?></option>
-      <?php endforeach ?>
+        <?php foreach ($grades as $grade): ?>
+          <?php if (in_array($grade->grade, $search_grades)): ?>
+            <option selected="selected" value="<?=$grade->grade?>"><?=$grade->grade?></option>
+          <?php else: ?>
+            <option value="<?=$grade->grade?>"><?=$grade->grade?></option>
+          <?php endif ?>
+        <?php endforeach ?>
       </select>
 
       <b>Sort by:</b>
       <select name="order_by">
         <option value="new">Recently Added</option>
-        <?php if ($order_by === "new"): ?>
-          <option value="new" selected="selected">Recently Added</option>
+        <?php if ($order_by === "alphabetical"): ?>
+          <option value="alphabetical" selected="selected">Alphabetical</option>
         <?php else: ?>
           <option value="alphabetical">Alphabetical</option>
         <?php endif ?>

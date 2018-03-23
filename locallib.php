@@ -56,9 +56,6 @@ function local_lor_get_content($type, $platform, $categories, $grades, $order_by
           FROM $tables
           WHERE $where_clause";
 
-  var_dump($sql);
-  var_dump($params);
-
   $content = $DB->get_records_sql($sql, $params);
 
   return $content;

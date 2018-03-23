@@ -64,6 +64,10 @@ $grades = local_lor_get_grades();
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="styles.css">
 
+<!-- multiple select -->
+<link href="lib/multiple-select/multiple-select.css" rel="stylesheet"/>
+
+
 <h1>BCLN Learning Material</h1>
 <div class="container-fluid" id="content-container">
 
@@ -99,14 +103,18 @@ $grades = local_lor_get_grades();
       </div>
 
       <b>Categories:</b>
+      <select name="categories[]" class="multiple" multiple="multiple">
       <?php foreach ($categories as $category): ?>
-        <input type="checkbox" name="categories" value="<?=$category->id?>" /><?=$category->name?>
+        <option value="<?=$category->id?>"><?=$category->name?></option>
       <?php endforeach ?>
+      </select>
 
       <b>Grades:</b>
+      <select name="grades[]" class="multiple" multiple="multiple">
       <?php foreach ($grades as $grade): ?>
-        <input type="checkbox" name="grades" value="<?=$grade->grade?>" /><?=$grade->grade?>
+        <option value="<?=$grade->grade?>"><?=$grade->grade?></option>
       <?php endforeach ?>
+      </select>
 
       <b>Sort by:</b>
       <select name="order_by">
@@ -135,13 +143,13 @@ $grades = local_lor_get_grades();
         <hr>
       <div class="col-md-4 item-image">
         <a href="https://bclearningnetwork.com/LOR/projects/<?=$item->id?>.pdf" target="_blank">
-          <img src="https://bclearningnetwork.com/LOR/projects/<?=$item->id?>.png" width="200" height="150" />
+          <img src="<?=$item->image?>" width="200" height="150" />
         </a>
 
       </div>
       <div class="col-md-8 project-about text-left">
-        <a href="https://bclearningnetwork.com/LOR/projects/<?=$item->id?>.pdf" target="_blank"><h3><?=$item->description?></h3></a>
-        <p><i>Topics: </i><?=$item->topics?></p>
+        <a href="https://bclearningnetwork.com/LOR/projects/<?=$item->id?>.pdf" target="_blank"><h3><?=$item->title?></h3></a>
+        <p><i>Topics: </i><?=local_lor_get_keywords_string_for_item($item->id)?></p>
       </div>
     <?php endforeach ?>
     <?php endif ?>
@@ -153,12 +161,19 @@ $grades = local_lor_get_grades();
 // show the platform select if type == game is selected
 $("#type-select").change(function() {
   if ($("#type-select option:selected").text() === "Game") {
-    $("#platform-select").css("display: inline");
+    $("#platform-select").css("display", "inline");
+  } else {
+    $("#platform-select").css("display", "none");
   }
 });
 
 
 </script>
+<script src="lib/multiple-select/multiple-select.js"></script>
+<script>
+    $('.multiple').multipleSelect();
+</script>
+
 
 
 <?php

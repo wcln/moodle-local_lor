@@ -3,38 +3,84 @@
 function local_lor_get_content($type, $platform, $categories, $grades, $order_by = "new", $keywords) {
   global $DB;
 
+  $tables = "{lor_content}";
+  $where_clause = '1=1';
+  $params = array();
+
+  // order by
   if ($order_by === "alphabetical") {
     $order_by = ' ORDER BY title ASC';
   } else if ($order_by === "new") {
     $order_by = ' ORDER BY date_created DESC';
   }
 
-  $sql = 'SELECT {lor_content}.id, type, title, image, link, date_created
-          FROM {lor_content}, {lor_platform}, {lor_content_grades}, {lor_type}, {lor_content_categories}
-          WHERE {lor_content}.platform = {lor_platform}.id
-            AND {lor_content_grades}.content = {lor_content}.id
-            AND {lor_type}.id = {lor_content}.type
-            AND {lor_content_categories}.content = {lor_content}.id';
+  // categories
+  if(!is_null($categories)) {
+    $tables .= ", {lor_content_categories}, {lor_category}";
+    $where_clause .= " AND {lor_content}.id = {lor_content_categories}.content
+                        AND {lor_content_categories}.category={lor_category}.id AND (";
+    foreach ($categories as $cat) {
+      $where_clause .= "{lor_category}.id = ? OR ";
+      $params[] = $cat;
+    }
 
-  $params = array();
+    $where_clause = substr($where_clause, 0, -4) . ")";
+  }
 
-  if(!is_null($type)) {
-    $sql .= ' AND {lor_type}.id = ?';
+  // grades
+  if(!is_null($grades)) {
+    $tables .= ", {lor_content_grades}";
+    $where_clause .= " AND {lor_content}.id = {lor_content_grades}.content AND (";
+    foreach ($grades as $grade) {
+      $where_clause .= "{lor_content_grades}.grade = ? OR ";
+      $params[] = $grade;
+    }
+
+    $where_clause = substr($where_clause, 0, -4) . ")";
+  }
+
+  // type
+  if(!is_null($type) && $type != -1) {
+    $where_clause .= " AND {lor_content}.type = ?";
     $params[] = $type;
   }
 
-  if(!is_null($platform)) {
-    $sql .= ' AND {lor_platform}.id = ?';
+  // platform
+  if(!is_null($type) && $type == 1 && !is_null($platform)) {
+    $where_clause .= ' AND {lor_content}.platform = ?';
     $params[] = $platform;
   }
 
-  // if(!is_null($categories)) {
-  //   $sql .= ' AND {lor_type}.id = ?';
-  //   $params[] = $type;
-  // }
+  // assemble query string
+  $sql = "SELECT DISTINCT {lor_content}.id, type, title, image, link, date_created
+          FROM $tables
+          WHERE $where_clause";
+
+  var_dump($sql);
+  var_dump($params);
 
   $content = $DB->get_records_sql($sql, $params);
+
   return $content;
+}
+
+function local_lor_get_keywords_string_for_item($content_id) {
+  global $DB;
+
+  $sql = "SELECT DISTINCT keyword FROM mdl_lor_content_keywords WHERE content = ?";
+
+  $keywords = $DB->get_records_sql($sql, array($content_id));
+
+  $keywords_str = "";
+  foreach ($keywords as $keyword) {
+    $keywords_str .= "$keyword->keyword, ";
+  }
+
+  if (strlen($keywords_str) > 1) {
+    $keywords_str = substr($keywords_str, 0, -2);
+  }
+
+  return $keywords_str;
 }
 
 function local_lor_get_categories() {

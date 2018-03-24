@@ -44,7 +44,7 @@ $PAGE->set_context(get_system_context());
 $PAGE->set_pagelayout('standard');
 $PAGE->set_title("BCLN: LOR");
 $PAGE->set_heading("BCLN Learning Material");
-$PAGE->set_url(new moodle_url('/local/lor/index.php', array('category' => $search_category)));
+$PAGE->set_url(new moodle_url('/local/lor/index.php'));
 
 echo $OUTPUT->header();
 
@@ -150,13 +150,13 @@ $grades = local_lor_get_grades();
       <div class="row text-center item">
         <hr>
       <div class="col-md-4 item-image">
-        <a href="https://bclearningnetwork.com/LOR/projects/<?=$item->id?>.pdf" target="_blank">
+        <a href="show.php?id=<?=$item->id?>" target="_blank">
           <img src="<?=$item->image?>" width="200" height="150" />
         </a>
 
       </div>
       <div class="col-md-8 project-about text-left">
-        <a href="https://bclearningnetwork.com/LOR/projects/<?=$item->id?>.pdf" target="_blank"><h3><?=$item->title?></h3></a>
+        <a href="show.php?id=<?=$item->id?>" target="_blank"><h3><?=$item->title?></h3></a>
         <p><i>Topics: </i><?=local_lor_get_keywords_string_for_item($item->id)?></p>
       </div>
     <?php endforeach ?>
@@ -167,14 +167,18 @@ $grades = local_lor_get_grades();
 <script>
 
 // show the platform select if type == game is selected
-$("#type-select").change(function() {
+$("#type-select").change(updatePlatformSelect);
+
+
+updatePlatformSelect();
+
+function updatePlatformSelect() {
   if ($("#type-select option:selected").text() === "Game") {
     $("#platform-select").css("display", "inline");
   } else {
     $("#platform-select").css("display", "none");
   }
-});
-
+}
 
 </script>
 <script src="lib/multiple-select/multiple-select.js"></script>

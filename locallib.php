@@ -51,20 +51,42 @@ function local_lor_get_content($type, $platform, $categories, $grades, $order_by
     $params[] = $platform;
   }
 
+  // keywords
+  if (!is_null($keywords) && $keywords !== "") {
+    $tables .= ", {lor_content_keywords}";
+    // un comment when there are actually keywords in the database
+    // $where_clause .= ' AND {lor_content_keywords}.content = {lor_content}.id AND (keyword LIKE ? OR title LIKE ?)';
+    $where_clause .= ' AND title LIKE ?';
+    $params[] = "%$keywords%";
+    // un comment when there are actrually keywords in the database
+    // $params[] = "%$keywords%";
+  }
+
   // assemble query string
   $sql = "SELECT DISTINCT {lor_content}.id, type, title, image, link, date_created
           FROM $tables
-          WHERE $where_clause";
+          WHERE $where_clause $order_by";
+
 
   $content = $DB->get_records_sql($sql, $params);
 
   return $content;
 }
 
+function local_lor_get_content_from_id($id) {
+  global $DB;
+
+  $sql = "SELECT DISTINCT {lor_content}.id, type, {lor_type}.name, title, image, link, platform, date_created
+          FROM {lor_content}, {lor_type}
+          WHERE {lor_content}.id=? AND {lor_content}.type = {lor_type}.id";
+  $item = $DB->get_record_sql($sql, array($id));
+  return $item;
+}
+
 function local_lor_get_keywords_string_for_item($content_id) {
   global $DB;
 
-  $sql = "SELECT DISTINCT keyword FROM mdl_lor_content_keywords WHERE content = ?";
+  $sql = "SELECT DISTINCT keyword FROM {lor_content_keywords} WHERE content = ?";
 
   $keywords = $DB->get_records_sql($sql, array($content_id));
 
@@ -78,6 +100,29 @@ function local_lor_get_keywords_string_for_item($content_id) {
   }
 
   return $keywords_str;
+}
+
+function local_lor_get_categories_string_for_item($content_id) {
+  global $DB;
+
+  $sql = "SELECT DISTINCT {lor_category}.name
+          FROM {lor_content}, {lor_content_categories}, {lor_category}
+          WHERE {lor_content}.id = {lor_content_categories}.content
+          AND {lor_content_categories}.category = {lor_category}.id
+          AND {lor_content}.id = ?";
+
+  $categories = $DB->get_records_sql($sql, array($content_id));
+
+  $categories_str = "";
+  foreach ($categories as $category) {
+    $categories_str .= "$category->name, ";
+  }
+
+  if (strlen($categories_str) > 1) {
+    $categories_str = substr($categories_str, 0, -2);
+  }
+
+  return $categories_str;
 }
 
 function local_lor_get_categories() {

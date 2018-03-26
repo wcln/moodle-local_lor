@@ -1,7 +1,7 @@
 <?php
 
 
-namespace local_projectspage\output;
+namespace local_lor\output;
 
 use renderable;
 use renderer_base;
@@ -23,7 +23,7 @@ class success_html implements renderable, templatable {
      */
     public function export_for_template(renderer_base $output) {
         $data = new stdClass();
-        $data->pid = $this->pid;                                                                            
+        $data->pid = $this->pid;
         return $data;
     }
 }

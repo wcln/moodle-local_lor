@@ -153,7 +153,7 @@ function local_lor_get_grades() {
   return $grades;
 }
 
-function local_projectspage_add_project($description, $categories, $topics, $contributors, $grades, &$form) {
+function local_lor_add_project($title, $categories, $topics, $contributors, $grades, &$form) {
   global $DB;
   global $CFG;
 
@@ -166,25 +166,121 @@ function local_projectspage_add_project($description, $categories, $topics, $con
 
   $pid = str_replace(".pdf", "", $form->get_new_filename('pdf'));
 
-  // insert into project table
-  $DB->execute('INSERT INTO {lor_project} VALUES (?,?,?,?,?)', array($pid, $description, $topics, date("Ymd"), $contributors));
+  // insert into content table
+  $record = new stdClass();
+  $record->type = 2;
+  $record->title = $title;
+  $record->image = $CFG->dirroot . '/LOR/projects/' . $form->get_new_filename('icon');
+  $record->link = $CFG->dirroot . '/LOR/projects/' . $form->get_new_filename('pdf');
+  $record->date_created = date("Ymd");
+  $pid = $DB->insert_record('lor_content', $record);
 
-  // insert into project_categories table
+  // insert into categories table
   $categories = array_filter($categories);
   foreach ($categories as $category) {
-    $record = new stdClass();
-    $record->pid = $pid;
-    $record->cid = (int)$category;
-    $DB->insert_record('project_categories', $record);
+    $DB->execute('INSERT INTO {lor_content_categories}(content, category) VALUES (?,?)', array($pid, (int)$category));
   }
 
-  // insert into project grades table
+  // insert into grades table
   $grades = array_filter($grades);
   foreach ($grades as $grade) {
-    $record = new stdClass();
-    $record->pid = $pid;
-    $record->grade = (int)$grade;
-    $DB->insert_record('project_grades', $record);
+    $DB->execute('INSERT INTO {lor_content_grades}(content, grade) VALUES (?,?)', array($pid, (int)$grade));
+  }
+
+  // insert into lor_keyword table and lor_content_keywords table
+  $keywords = explode(',', $topics);
+  foreach ($keywords as $word) {
+
+    // check if keyword exists already, if not then insert
+    $existing_record = $DB->get_record_sql('SELECT name FROM {lor_keyword} WHERE name=?', array($word));
+    if(sizeof($existing_record) > 0) {
+      $DB->execute('INSERT INTO {lor_content_keywords}(content, keyword) VALUES (?,?)', array($pid, $word));
+    } else {
+      $DB->execute('INSERT INTO {lor_keyword}(name) VALUES (?)', array($word));
+      $DB->execute('INSERT INTO {lor_content_keywords}(content, keyword) VALUES (?,?)', array($pid, $word));
+    }
+
+  }
+
+  // insert into lor_contributor and lor_content_contributors
+  $contributors = explode(',', $contributors);
+  foreach ($contributors as $contributor) {
+
+    // check if contributor exists already, if not then insert
+    $existing_record = $DB->get_record_sql('SELECT id FROM {lor_contributor} WHERE name=?', array($contributor));
+    if(sizeof($existing_record) > 0) {
+      $cid = $existing_record->id;
+    } else {
+      $cid = $DB->execute('INSERT INTO {lor_contributor}(name) VALUES (?)', array($contributor));
+    }
+
+
+    $DB->execute('INSERT INTO {lor_content_contributors}(content, contributor) VALUES (?,?)', array($pid, $cid));
+  }
+
+  return $pid;
+}
+
+function local_lor_add_game($title, $categories, $topics, $contributors, $grades, $link, $image, $platform) {
+  global $DB;
+  global $CFG;
+
+  date_default_timezone_set('America/Los_Angeles'); // PST
+
+
+  // insert into content table
+  $record = new stdClass();
+  $record->type = 1;
+  $record->title = $title;
+  $record->image = $image;
+  $record->link = $link;
+  $record->date_created = date("Ymd");
+  $record->platform = $platform;
+  $pid = $DB->insert_record('lor_content', $record);
+
+  // insert into categories table
+  $categories = array_filter($categories);
+  foreach ($categories as $category) {
+    $DB->execute('INSERT INTO {lor_content_categories}(content, category) VALUES (?,?)', array($pid, (int)$category));
+  }
+
+  // insert into grades table
+  $grades = array_filter($grades);
+  foreach ($grades as $grade) {
+    $DB->execute('INSERT INTO {lor_content_grades}(content, grade) VALUES (?,?)', array($pid, (int)$grade));
+  }
+
+  // insert into lor_keyword table and lor_content_keywords table
+  $keywords = explode(',', $topics);
+  foreach ($keywords as $word) {
+
+    // check if keyword exists already, if not then insert
+    $existing_record = $DB->get_record_sql('SELECT name FROM {lor_keyword} WHERE name=?', array($word));
+    if(sizeof($existing_record) > 0) {
+      $DB->execute('INSERT INTO {lor_content_keywords}(content, keyword) VALUES (?,?)', array($pid, $word));
+    } else {
+      $DB->execute('INSERT INTO {lor_keyword}(name) VALUES (?)', array($word));
+      $DB->execute('INSERT INTO {lor_content_keywords}(content, keyword) VALUES (?,?)', array($pid, $word));
+    }
+
+  }
+
+  // insert into lor_contributor and lor_content_contributors
+  $contributors = explode(',', $contributors);
+  foreach ($contributors as $contributor) {
+
+    // check if contributor exists already, if not then insert
+    $existing_record = $DB->get_record_sql('SELECT id FROM {lor_contributor} WHERE name=?', array($contributor));
+    var_dump($existing_record);
+    if($existing_record) {
+
+      $cid = $existing_record->id;
+    } else {
+      $cid = $DB->execute('INSERT INTO {lor_contributor}(name) VALUES (?)', array($contributor));
+    }
+
+
+    $DB->execute('INSERT INTO {lor_content_contributors}(content, contributor) VALUES (?,?)', array($pid, $cid));
   }
 
   return $pid;

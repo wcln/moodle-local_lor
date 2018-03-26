@@ -1,6 +1,6 @@
 <?php
 
-namespace local_projectspage\output;
+namespace local_lor\output;
 
 defined('MOODLE_INTERNAL') || die;
 
@@ -16,6 +16,6 @@ class renderer extends plugin_renderer_base {
      */
     public function render_success_html($page) {
         $data = $page->export_for_template($this);
-        return parent::render_from_template('local_projectspage/success_html', $data);
+        return parent::render_from_template('local_lor/success_html', $data);
     }
 }

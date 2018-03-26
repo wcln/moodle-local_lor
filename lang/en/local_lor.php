@@ -1,8 +1,10 @@
 <?php
 
-$string['pluginname'] = "Projects Page";
+$string['pluginname'] = "LOR Page";
 
-$string['heading'] = "Add a Project";
+// insert form
+$string['heading'] = "Add to LOR";
+$string['title'] = "Title";
 $string['description'] = "Inquiry Question";
 $string['categories'] = "Choose one or more categories";
 $string['topics'] = "Keywords (eg. circulatory system, heart, blood)";
@@ -14,8 +16,16 @@ $string['contributors'] = "Contributor(s)";
 $string['files'] = 'Files';
 $string['about'] = 'About';
 $string['submit'] = "Submit";
+$string['link'] = 'Link to game';
+$string['image'] = 'Preview image (200x150px)';
+
+// type form
+$string['type'] = "Type";
+$string['next'] = 'Next';
 
 
+
+// errors
 $string['error_filenames'] = "All files must have the same name!";
 $string['error_filename_exists'] = "This filename exists in the database already! Please change the filename of all files.";
 $string['error_file_exists'] = "This filename already exists on the server! Please change the filename of all files.";

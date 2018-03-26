@@ -134,7 +134,7 @@ $grades = local_lor_get_grades();
         <?php endif ?>
       </select>
 
-      <input type="text" placeholder="Keywords..." name="keywords">
+      <input type="text" placeholder="Keywords..." name="keywords" value="<?=$search_keywords?>">
 
       <button type="submit" class="btn btn-primary">Search</button>
   </form>

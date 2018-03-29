@@ -227,6 +227,7 @@ function local_lor_add_game($title, $categories, $topics, $contributors, $grades
 
   date_default_timezone_set('America/Los_Angeles'); // PST
 
+  var_dump($image);
 
   // insert into content table
   $record = new stdClass();

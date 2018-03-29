@@ -20,7 +20,12 @@ $PAGE->set_pagelayout('standard');
 require_login();
 
 $type_form = new type_form();
-$insert_form = new insert_form();
+$type = null;
+if ($fromform = $type_form->get_data()) {
+    $type = $fromform->type + 1;
+}
+
+$insert_form = new insert_form(null, $type);
 
 
 if ($fromform = $type_form->get_data()) {
@@ -28,8 +33,7 @@ if ($fromform = $type_form->get_data()) {
   echo $OUTPUT->header();
   echo $OUTPUT->heading(get_string('heading', 'local_lor'));
 
-  // show insert form and pass on type
-  $SESSION->content_type = $fromform->type + 1;
+  // show insert form
   $insert_form->display();
 
   echo $OUTPUT->footer();
@@ -40,7 +44,7 @@ if ($fromform = $type_form->get_data()) {
   // check type
   if ($fromform->type == 1) { // game
 
-    $pid = local_lor_add_game($fromform->title, $fromform->categories, $fromform->topics, $fromform->contributors, $fromform->grades, $fromform->link, $fromform->image, $fromform->platform);
+    $pid = local_lor_add_game($fromform->title, $fromform->categories, $fromform->topics, $fromform->contributors, $fromform->grades, $_POST['link'], $_POST['image'], $fromform->platform);
 
   } else if ($fromform->type == 2) { // project
 

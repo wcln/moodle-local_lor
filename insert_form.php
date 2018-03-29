@@ -63,7 +63,7 @@ class insert_form extends moodleform {
 		// header
 		$mform->addElement('header', 'files', get_string('files', 'local_lor'));
 
-    if ($SESSION->content_type == 1) { // if game
+    if ($this->_customdata['type'] == 1) { // if game
 
       // game link
       $mform->addElement('text', 'link', get_string('link', 'local_lor'));
@@ -74,7 +74,7 @@ class insert_form extends moodleform {
       $mform->addRule('image', get_string('required'), 'required', null);
 
 
-    } else if ($SESSION->content_type == 2) { // if project
+    } else if ($this->_customdata['type'] == 2) { // if project
 
       // word doc file
       $mform->addElement('filepicker', 'word', get_string('word', 'local_lor'), null, array('maxbytes'=>1000000, 'accepted_types'=>array('.doc', '.docx')));

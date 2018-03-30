@@ -211,7 +211,7 @@ function local_lor_add_project($title, $categories, $topics, $contributors, $gra
     if(sizeof($existing_record) > 0) {
       $cid = $existing_record->id;
     } else {
-      $cid = $DB->execute('INSERT INTO {lor_contributor}(name) VALUES (?)', array($contributor));
+      $cid = $DB->insert_record_raw('lor_contributor', array('id' => null, 'name' => $contributor), true, false, false);
     }
 
 
@@ -270,12 +270,12 @@ function local_lor_add_game($title, $categories, $topics, $contributors, $grades
 
     // check if contributor exists already, if not then insert
     $existing_record = $DB->get_record_sql('SELECT id FROM {lor_contributor} WHERE name=?', array($contributor));
-    var_dump($existing_record);
+
     if($existing_record) {
 
       $cid = $existing_record->id;
     } else {
-      $cid = $DB->execute('INSERT INTO {lor_contributor}(name) VALUES (?)', array($contributor));
+      $cid = $DB->insert_record_raw('lor_contributor', array('id' => null, 'name' => $contributor), true, false, false);
     }
 
     echo "pid: $pid cid: $cid";

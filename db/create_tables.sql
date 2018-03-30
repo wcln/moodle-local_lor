@@ -25,8 +25,12 @@ CREATE TABLE mdl_lor_content (
 	author_email VARCHAR(250),
 	platform BIGINT,
 	PRIMARY KEY (id),
-	FOREIGN KEY (platform) REFERENCES mdl_lor_platform (id),
+	FOREIGN KEY (platform) REFERENCES mdl_lor_platform (id)
+		ON UPDATE CASCADE
+		ON DELETE NO ACTION,
 	FOREIGN KEY (type) REFERENCES mdl_lor_type(id)
+		ON UPDATE CASCADE
+		ON DELETE NO ACTION
 );
 
 CREATE TABLE mdl_lor_keyword (
@@ -50,8 +54,12 @@ CREATE TABLE mdl_lor_content_categories (
 	content BIGINT,
 	category BIGINT,
 	PRIMARY KEY (content, category),
-	FOREIGN KEY (content) REFERENCES mdl_lor_content(id),
+	FOREIGN KEY (content) REFERENCES mdl_lor_content(id)
+		ON UPDATE CASCADE
+		ON DELETE CASCADE,
 	FOREIGN KEY (category) REFERENCES mdl_lor_category(id)
+		ON UPDATE CASCADE
+		ON DELETE CASCADE
 );
 
 CREATE TABLE mdl_lor_grade (
@@ -63,8 +71,12 @@ CREATE TABLE mdl_lor_content_grades (
 	content BIGINT,
 	grade INT,
 	PRIMARY KEY (content, grade),
-	FOREIGN KEY (content) REFERENCES mdl_lor_content(id),
+	FOREIGN KEY (content) REFERENCES mdl_lor_content(id)
+		ON UPDATE CASCADE
+		ON DELETE CASCADE,
 	FOREIGN KEY (grade) REFERENCES mdl_lor_grade(grade)
+		ON UPDATE CASCADE
+		ON DELETE CASCADE
 );
 
 CREATE TABLE mdl_lor_contributor (
@@ -77,6 +89,10 @@ CREATE TABLE mdl_lor_content_contributors (
 	content BIGINT,
 	contributor BIGINT,
 	PRIMARY KEY (content, contributor),
-	FOREIGN KEY (content) REFERENCES mdl_lor_content(id),
+	FOREIGN KEY (content) REFERENCES mdl_lor_content(id)
+		ON UPDATE CASCADE
+		ON DELETE CASCADE,
 	FOREIGN KEY (contributor) REFERENCES mdl_lor_contributor(id)
+		ON UPDATE CASCADE
+		ON DELETE CASCADE
 );

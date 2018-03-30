@@ -2,7 +2,8 @@
 
 require_once(__DIR__ . '/../../config.php'); // standard config file
 require_once(__DIR__ . '/locallib.php');
-require_once('insert_form.php');
+require_once('game_form.php');
+require_once('project_form.php');
 require_once('type_form.php');
 
 // set up the page
@@ -20,12 +21,8 @@ $PAGE->set_pagelayout('standard');
 require_login();
 
 $type_form = new type_form();
-$type = null;
-if ($fromform = $type_form->get_data()) {
-    $type = $fromform->type + 1;
-}
-
-$insert_form = new insert_form(null, $type);
+$game_form = new game_form();
+$project_form= new project_form();
 
 
 if ($fromform = $type_form->get_data()) {
@@ -34,25 +31,27 @@ if ($fromform = $type_form->get_data()) {
   echo $OUTPUT->heading(get_string('heading', 'local_lor'));
 
   // show insert form
-  $insert_form->display();
+  if ($fromform->type+1 == 1) { // game
+    $game_form->display();
+  } else if ($fromform->type+1 == 2) { // project
+    $project_form->display();
+  } else { // video
+    echo "Not available yet.";
+  }
 
   echo $OUTPUT->footer();
 
-} else if ($fromform = $insert_form->get_data()) {
+} else if ($fromform = $game_form->get_data()) {
 
-  $pid = -1;
-  // check type
-  if ($fromform->type == 1) { // game
 
-    $pid = local_lor_add_game($fromform->title, $fromform->categories, $fromform->topics, $fromform->contributors, $fromform->grades, $_POST['link'], $_POST['image'], $fromform->platform);
-
-  } else if ($fromform->type == 2) { // project
-
-    $pid = local_lor_add_project($fromform->title, $fromform->categories, $fromform->topics, $fromform->contributors, $fromform->grades, $addproject_form);
-
-  }
-
+  $pid = local_lor_add_game($fromform->title, $fromform->categories, $fromform->topics, $fromform->contributors, $fromform->grades, $_POST['link'], $_POST['image'], $fromform->platform);
   redirect(new moodle_url($url, array('pid' => $pid)));
+
+} else if ($fromform = $project_form->get_data()) {
+
+  $pid = local_lor_add_project($fromform->title, $fromform->categories, $fromform->topics, $fromform->contributors, $fromform->grades, $addproject_form);
+  redirect(new moodle_url($url, array('pid' => $pid)));
+
 } else {
   echo $OUTPUT->header();
   echo $OUTPUT->heading(get_string('heading', 'local_lor'));

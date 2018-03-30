@@ -227,8 +227,6 @@ function local_lor_add_game($title, $categories, $topics, $contributors, $grades
 
   date_default_timezone_set('America/Los_Angeles'); // PST
 
-  var_dump($image);
-
   // insert into content table
   $record = new stdClass();
   $record->type = 1;
@@ -280,6 +278,7 @@ function local_lor_add_game($title, $categories, $topics, $contributors, $grades
       $cid = $DB->execute('INSERT INTO {lor_contributor}(name) VALUES (?)', array($contributor));
     }
 
+    echo "pid: $pid cid: $cid";
 
     $DB->execute('INSERT INTO {lor_content_contributors}(content, contributor) VALUES (?,?)', array($pid, $cid));
   }

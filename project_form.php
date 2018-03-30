@@ -5,7 +5,7 @@ defined('MOODLE_INTERNAL') || die;
 require_once($CFG->libdir.'/formslib.php');
 require_once(__DIR__ . '/locallib.php');
 
-class insert_form extends moodleform {
+class project_form extends moodleform {
 
 	protected function definition() {
 		global $CFG;
@@ -63,32 +63,20 @@ class insert_form extends moodleform {
 		// header
 		$mform->addElement('header', 'files', get_string('files', 'local_lor'));
 
-    if ($this->_customdata['type'] == 1) { // if game
 
-      // game link
-      $mform->addElement('text', 'link', get_string('link', 'local_lor'));
-      $mform->addRule('link', get_string('required'), 'required', null);
+    // word doc file
+    $mform->addElement('filepicker', 'word', get_string('word', 'local_lor'), null, array('maxbytes'=>1000000, 'accepted_types'=>array('.doc', '.docx')));
+    $mform->addRule('word', get_string('required'), 'required', null);
 
-      // preview image link
-      $mform->addElement('text', 'image', get_string('image', 'local_lor'));
-      $mform->addRule('image', get_string('required'), 'required', null);
+		// pdf file
+    $mform->addElement('filepicker', 'pdf', get_string('pdf', 'local_lor'), null, array('maxbytes'=>1000000, 'accepted_types'=>array('.pdf')));
+    $mform->addRule('pdf', get_string('required'), 'required', null);
+
+		// image file
+    $mform->addElement('filepicker', 'icon', get_string('icon', 'local_lor'), null, array('maxbytes'=>1000000, 'accepted_types'=>array('.png', '.jpg')));
+    $mform->addRule('icon', get_string('required'), 'required', null);
 
 
-    } else if ($this->_customdata['type'] == 2) { // if project
-
-      // word doc file
-      $mform->addElement('filepicker', 'word', get_string('word', 'local_lor'), null, array('maxbytes'=>1000000, 'accepted_types'=>array('.doc', '.docx')));
-      $mform->addRule('word', get_string('required'), 'required', null);
-
-  		// pdf file
-      $mform->addElement('filepicker', 'pdf', get_string('pdf', 'local_lor'), null, array('maxbytes'=>1000000, 'accepted_types'=>array('.pdf')));
-      $mform->addRule('pdf', get_string('required'), 'required', null);
-
-  		// image file
-      $mform->addElement('filepicker', 'icon', get_string('icon', 'local_lor'), null, array('maxbytes'=>1000000, 'accepted_types'=>array('.png', '.jpg')));
-      $mform->addRule('icon', get_string('required'), 'required', null);
-
-    }
 
     // hidden type
     $mform->addElement('hidden', 'type', $SESSION->content_type);

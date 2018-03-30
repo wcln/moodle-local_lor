@@ -73,10 +73,6 @@ class game_form extends moodleform {
     $mform->addRule('image', get_string('required'), 'required', null);
 
 
-
-    // hidden type
-    $mform->addElement('hidden', 'type', $SESSION->content_type);
-
 		// submit button
 		$this->add_action_buttons(false, get_string('submit', 'local_lor'));
 	}

@@ -22,7 +22,7 @@ require_login();
 
 $type_form = new type_form();
 $game_form = new game_form();
-$project_form= new project_form();
+$project_form = new project_form();
 
 
 if ($fromform = $type_form->get_data()) {
@@ -43,16 +43,22 @@ if ($fromform = $type_form->get_data()) {
 
 } else if ($fromform = $game_form->get_data()) {
 
+  echo "game";
 
   $pid = local_lor_add_game($fromform->title, $fromform->categories, $fromform->topics, $fromform->contributors, $fromform->grades, $_POST['link'], $_POST['image'], $fromform->platform);
   redirect(new moodle_url($url, array('pid' => $pid)));
 
 } else if ($fromform = $project_form->get_data()) {
 
-  $pid = local_lor_add_project($fromform->title, $fromform->categories, $fromform->topics, $fromform->contributors, $fromform->grades, $addproject_form);
+  echo "project";
+
+  $pid = local_lor_add_project($fromform->title, $fromform->categories, $fromform->topics, $fromform->contributors, $fromform->grades, $project_form);
   redirect(new moodle_url($url, array('pid' => $pid)));
 
 } else {
+
+  echo "this";
+
   echo $OUTPUT->header();
   echo $OUTPUT->heading(get_string('heading', 'local_lor'));
 

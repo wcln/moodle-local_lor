@@ -151,7 +151,7 @@ $grades = local_lor_get_grades();
         <hr>
       <div class="col-md-4 item-image">
         <a href="show.php?id=<?=$item->id?>" target="_blank">
-          <img src="<?=$item->image?>" width="200" height="150" />
+          <img src="<?=$item->image?>" width="200px" height="150px" />
         </a>
 
       </div>

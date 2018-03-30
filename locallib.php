@@ -170,8 +170,8 @@ function local_lor_add_project($title, $categories, $topics, $contributors, $gra
   $record = new stdClass();
   $record->type = 2;
   $record->title = $title;
-  $record->image = $CFG->dirroot . '/LOR/projects/' . $form->get_new_filename('icon');
-  $record->link = $CFG->dirroot . '/LOR/projects/' . $form->get_new_filename('pdf');
+  $record->image = $CFG->wwwroot . '/LOR/projects/' . $form->get_new_filename('icon');
+  $record->link = $CFG->wwwroot . '/LOR/projects/' . $form->get_new_filename('pdf');
   $record->date_created = date("Ymd");
   $pid = $DB->insert_record('lor_content', $record);
 

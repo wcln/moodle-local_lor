@@ -78,9 +78,6 @@ class project_form extends moodleform {
 
 
 
-    // hidden type
-    $mform->addElement('hidden', 'type', $SESSION->content_type);
-
 		// submit button
 		$this->add_action_buttons(false, get_string('submit', 'local_lor'));
 	}
@@ -130,6 +127,6 @@ class project_form extends moodleform {
 		 }
 
 
-		return $errors;
+		return array(); // temp, need to do validation again
 	}
 }

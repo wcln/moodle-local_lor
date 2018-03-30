@@ -41,7 +41,13 @@ CREATE TABLE mdl_lor_keyword (
 CREATE TABLE mdl_lor_content_keywords (
 	content BIGINT,
 	keyword VARCHAR(100),
-	PRIMARY KEY (content, keyword)
+	PRIMARY KEY (content, keyword),
+	FOREIGN KEY (content) REFERENCES mdl_lor_content(id)
+		ON UPDATE CASCADE
+		ON DELETE CASCADE,
+	FOREIGN KEY (keyword) REFERENCES mdl_lor_keyword(name)
+		ON UPDATE CASCADE
+		ON DELETE CASCADE
 );
 
 CREATE TABLE mdl_lor_category (

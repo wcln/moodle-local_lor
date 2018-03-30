@@ -208,7 +208,7 @@ function local_lor_add_project($title, $categories, $topics, $contributors, $gra
 
     // check if contributor exists already, if not then insert
     $existing_record = $DB->get_record_sql('SELECT id FROM {lor_contributor} WHERE name=?', array($contributor));
-    if(sizeof($existing_record) > 0) {
+    if($existing_record) {
       $cid = $existing_record->id;
     } else {
       $cid = $DB->insert_record_raw('lor_contributor', array('id' => null, 'name' => $contributor), true, false, false);
@@ -255,7 +255,7 @@ function local_lor_add_game($title, $categories, $topics, $contributors, $grades
 
     // check if keyword exists already, if not then insert
     $existing_record = $DB->get_record_sql('SELECT name FROM {lor_keyword} WHERE name=?', array($word));
-    if(sizeof($existing_record) > 0) {
+    if($existing_record) {
       $DB->execute('INSERT INTO {lor_content_keywords}(content, keyword) VALUES (?,?)', array($pid, $word));
     } else {
       $DB->execute('INSERT INTO {lor_keyword}(name) VALUES (?)', array($word));
@@ -277,8 +277,6 @@ function local_lor_add_game($title, $categories, $topics, $contributors, $grades
     } else {
       $cid = $DB->insert_record_raw('lor_contributor', array('id' => null, 'name' => $contributor), true, false, false);
     }
-
-    echo "pid: $pid cid: $cid";
 
     $DB->execute('INSERT INTO {lor_content_contributors}(content, contributor) VALUES (?,?)', array($pid, $cid));
   }

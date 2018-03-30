@@ -193,7 +193,7 @@ function local_lor_add_project($title, $categories, $topics, $contributors, $gra
 
     // check if keyword exists already, if not then insert
     $existing_record = $DB->get_record_sql('SELECT name FROM {lor_keyword} WHERE name=?', array($word));
-    if(sizeof($existing_record) > 0) {
+    if($existing_record) {
       $DB->execute('INSERT INTO {lor_content_keywords}(content, keyword) VALUES (?,?)', array($pid, $word));
     } else {
       $DB->execute('INSERT INTO {lor_keyword}(name) VALUES (?)', array($word));

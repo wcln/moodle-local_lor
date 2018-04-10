@@ -43,7 +43,7 @@ if ($fromform = $type_form->get_data()) {
 
 } else if ($fromform = $game_form->get_data()) {
 
-  $pid = local_lor_add_game($fromform->title, $fromform->categories, $fromform->topics, $fromform->contributors, $fromform->grades, $_POST['link'], $_POST['image'], $fromform->platform);
+  $pid = local_lor_add_game($fromform->title, $fromform->categories, $fromform->topics, $fromform->contributors, $fromform->grades, $_POST['link'], $_POST['image']);
   redirect(new moodle_url($url, array('pid' => $pid)));
 
 } else if ($fromform = $project_form->get_data()) {

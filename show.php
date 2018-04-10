@@ -28,9 +28,6 @@ echo $OUTPUT->header();
     <h1><?=$item->title?></h1>
     <ul>
       <li><b>Categories</b>: <?=local_lor_get_categories_string_for_item($item->id)?></li>
-      <?php if ($item->type === 1): ?>
-        <li><b>Platform</b>: <?=$item->platform?></li>
-      <?php endif ?>
       <li><b>Keywords</b>: <?=local_lor_get_keywords_string_for_item($item->id)?></li>
       <li><b>Date Created:</b> <?=date("F Y", strtotime($item->date_created))?></li> <!-- Date in format: June 2017 -->
     </ul>

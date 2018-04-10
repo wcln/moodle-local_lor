@@ -1,6 +1,6 @@
 <?php
 
-function local_lor_get_content($type, $platform, $categories, $grades, $order_by = "new", $keywords) {
+function local_lor_get_content($type, $categories, $grades, $order_by = "new", $keywords) {
   global $DB;
 
   $tables = "{lor_content}";
@@ -46,10 +46,11 @@ function local_lor_get_content($type, $platform, $categories, $grades, $order_by
   }
 
   // platform
-  if(!is_null($type) && $type == 1 && !is_null($platform)) {
+  if(!is_null($type) && $type == 1) {
     $where_clause .= ' AND {lor_content}.platform = ?';
-    $params[] = $platform;
+    $params[] = 1; // always HTML5
   }
+
 
   // keywords
   if (!is_null($keywords) && $keywords !== "") {
@@ -130,13 +131,6 @@ function local_lor_get_categories() {
 
   $categories = $DB->get_records_sql('SELECT id, name FROM {lor_category}');
   return $categories;
-}
-
-function local_lor_get_platforms() {
-  global $DB;
-
-  $platforms = $DB->get_records_sql('SELECT id, name FROM {lor_platform}');
-  return $platforms;
 }
 
 function local_lor_get_types() {
@@ -221,7 +215,7 @@ function local_lor_add_project($title, $categories, $topics, $contributors, $gra
   return $pid;
 }
 
-function local_lor_add_game($title, $categories, $topics, $contributors, $grades, $link, $image, $platform) {
+function local_lor_add_game($title, $categories, $topics, $contributors, $grades, $link, $image) {
   global $DB;
   global $CFG;
 
@@ -234,7 +228,7 @@ function local_lor_add_game($title, $categories, $topics, $contributors, $grades
   $record->image = $image;
   $record->link = $link;
   $record->date_created = date("Ymd");
-  $record->platform = $platform;
+  $record->platform = 1; // always HTML5
   $pid = $DB->insert_record('lor_content', $record);
 
   // insert into categories table

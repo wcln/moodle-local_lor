@@ -6,7 +6,6 @@ require_once(__DIR__ . '/locallib.php');
 
 // checking URL for variables
 $search_categories = null;
-$search_platform = null;
 $search_type = null;
 $search_grades = null;
 $search_keywords = null;
@@ -21,10 +20,6 @@ if (isset($_GET['categories'])) {
 
 if (isset($_GET['order_by'])) {
   $order_by = $_GET['order_by'];
-}
-
-if (isset($_GET['platform'])) {
-  $search_platform = $_GET['platform'];
 }
 
 if (isset($_GET['type'])) {
@@ -51,9 +46,8 @@ echo $OUTPUT->header();
 
 
 // setting variables
-$content = local_lor_get_content($search_type, $search_platform, $search_categories, $search_grades, $order_by, $search_keywords);
+$content = local_lor_get_content($search_type, $search_categories, $search_grades, $order_by, $search_keywords);
 $categories = local_lor_get_categories();
-$platforms = local_lor_get_platforms();
 $types = local_lor_get_types();
 $grades = local_lor_get_grades();
 
@@ -87,20 +81,6 @@ $grades = local_lor_get_grades();
           <?php endif ?>
         <?php endforeach ?>
       </select>
-
-      <!-- only visible if type=game -->
-      <div id="platform-select">
-        <b>Platforms:</b>
-        <select name="platform">
-          <?php foreach($platforms as $platform): ?>
-            <?php if ($platform->id == $search_platform): ?>
-              <option selected="selected" value="<?=$platform->id?>"><?=$platform->name?></option>
-            <?php else: ?>
-              <option value="<?=$platform->id?>"><?=$platform->name?></option>
-            <?php endif ?>
-          <?php endforeach ?>
-        </select>
-      </div>
 
       <b>Categories:</b>
       <select name="categories[]" class="multiple" multiple="multiple">
@@ -164,23 +144,6 @@ $grades = local_lor_get_grades();
     <hr>
 </div>
 
-<script>
-
-// show the platform select if type == game is selected
-$("#type-select").change(updatePlatformSelect);
-
-
-updatePlatformSelect();
-
-function updatePlatformSelect() {
-  if ($("#type-select option:selected").text() === "Game") {
-    $("#platform-select").css("display", "inline");
-  } else {
-    $("#platform-select").css("display", "none");
-  }
-}
-
-</script>
 <script src="lib/multiple-select/multiple-select.js"></script>
 <script>
     $('.multiple').multipleSelect();

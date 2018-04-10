@@ -13,6 +13,11 @@ $PAGE->set_title("BCLN: " . $item->title);
 $PAGE->set_heading("LOR Item");
 $PAGE->set_url($CFG->wwwroot.'/local/lor/show.php?id='.$id);
 
+// nav bar
+$PAGE->navbar->ignore_active();
+$PAGE->navbar->add(get_string('lor', 'local_lor'), new moodle_url('/local/lor/index.php'));
+$PAGE->navbar->add($item->name, new moodle_url('/local/lor/show.php?id='.$id));
+
 echo $OUTPUT->header();
 ?>
 

@@ -41,6 +41,10 @@ $PAGE->set_title("BCLN: LOR");
 $PAGE->set_heading("BCLN Learning Material");
 $PAGE->set_url(new moodle_url('/local/lor/index.php'));
 
+// nav bar
+$PAGE->navbar->ignore_active();
+$PAGE->navbar->add(get_string('lor', 'local_lor'), new moodle_url('/local/lor/index.php'));
+
 echo $OUTPUT->header();
 
 

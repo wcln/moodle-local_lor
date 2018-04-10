@@ -30,3 +30,10 @@ $string['error_filenames'] = "All files must have the same name!";
 $string['error_filename_exists'] = "This filename exists in the database already! Please change the filename of all files.";
 $string['error_file_exists'] = "This filename already exists on the server! Please change the filename of all files.";
 $string['error_categories'] = "You must choose AT LEAST one category.";
+
+// nav bar
+$string['lor'] = "LOR";
+$string['insert'] = "Insert Form";
+$string['add_project'] = "Add Project";
+$string['add_game'] = "Add Game";
+$string['add_video'] = "Add Video";

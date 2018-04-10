@@ -15,7 +15,11 @@ class type_form extends moodleform {
 		$types_arr = array();
 		$types = local_lor_get_types();
 		foreach ($types as $type) {
-			$types_arr[] = $type->name;
+			if ($type->id != 2) {
+				$types_arr[$type->id] = $type->name;
+			} else {
+				$types_arr = array($type->id => $type->name) + $types_arr; // ensure Project is first option
+			}
 		}
 
     $mform->addElement('select', 'type', get_string('type', 'local_lor'), $types_arr);

@@ -17,6 +17,11 @@ $PAGE->set_title($title);
 $PAGE->set_heading($title);
 $PAGE->set_pagelayout('standard');
 
+// nav bar
+$PAGE->navbar->ignore_active();
+$PAGE->navbar->add(get_string('lor', 'local_lor'), new moodle_url('/local/lor/index.php'));
+$PAGE->navbar->add(get_string('insert', 'local_lor'), new moodle_url('/local/lor/insert.php'));
+
 
 require_login();
 
@@ -27,15 +32,27 @@ $project_form = new project_form();
 
 if ($fromform = $type_form->get_data()) {
 
+  // update nav bar
+  if ($fromform->type == 1) { // game
+    $PAGE->navbar->add(get_string('add_game', 'local_lor'));
+  } else if ($fromform->type == 2) { // project
+    $PAGE->navbar->add(get_string('add_project', 'local_lor'));
+  } else { // video
+    $PAGE->navbar->add(get_string('add_video', 'local_lor'));
+  }
+
   echo $OUTPUT->header();
   echo $OUTPUT->heading(get_string('heading', 'local_lor'));
 
   // show insert form
-  if ($fromform->type+1 == 1) { // game
+  if ($fromform->type == 1) { // game
+    $PAGE->navbar->add(get_string('add_game', 'local_lor'));
     $game_form->display();
-  } else if ($fromform->type+1 == 2) { // project
+  } else if ($fromform->type == 2) { // project
+    $PAGE->navbar->add(get_string('add_project', 'local_lor'));
     $project_form->display();
   } else { // video
+    $PAGE->navbar->add(get_string('add_video', 'local_lor'));
     echo "Not available yet.";
   }
 

@@ -126,6 +126,52 @@ function local_lor_get_categories_string_for_item($content_id) {
   return $categories_str;
 }
 
+function local_lor_get_grades_string_for_item($content_id) {
+  global $DB;
+
+  $sql = "SELECT DISTINCT {lor_grade}.grade
+          FROM {lor_content}, {lor_content_grades}, {lor_grade}
+          WHERE {lor_content}.id = {lor_content_grades}.content
+          AND {lor_content_grades}.grade = {lor_grade}.grade
+          AND {lor_content}.id = ?";
+
+  $grades = $DB->get_records_sql($sql, array($content_id));
+
+  $grades_str = "";
+  foreach ($grades as $grade) {
+    $grades_str .= "$grade->grade, ";
+  }
+
+  if (strlen($grades_str) > 1) {
+    $grades_str = substr($grades_str, 0, -2);
+  }
+
+  return $grades_str;
+}
+
+function local_lor_get_contributors_string_for_item($content_id) {
+  global $DB;
+
+  $sql = "SELECT DISTINCT {lor_contributor}.name
+          FROM {lor_content}, {lor_content_contributors}, {lor_contributor}
+          WHERE {lor_content}.id = {lor_content_contributors}.content
+          AND {lor_content_contributors}.contributor = {lor_contributor}.id
+          AND {lor_content}.id = ?";
+
+  $contributors = $DB->get_records_sql($sql, array($content_id));
+
+  $contributors_str = "";
+  foreach ($contributors as $contributor) {
+    $contributors_str .= "$contributor->name, ";
+  }
+
+  if (strlen($contributors_str) > 1) {
+    $contributors_str = substr($contributors_str, 0, -2);
+  }
+
+  return $contributors_str;
+}
+
 function local_lor_get_categories() {
   global $DB;
 

@@ -12,23 +12,21 @@ $PAGE->set_pagelayout('standard');
 $PAGE->set_title("BCLN: " . $item->title);
 $PAGE->set_heading("LOR Item");
 $PAGE->set_url($CFG->wwwroot.'/local/lor/show.php?id='.$id);
+
 echo $OUTPUT->header();
 ?>
 
-
-<!-- TODO: replace these with better links -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script src="https://bclearningnetwork.com/lib/jquery/jquery-3.2.1.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="styles.css">
 
 
 <div "container-fluid">
-  <div class="row" id="item-info">
+  <div class="row-fluid" id="item-info">
     <h1><?=$item->title?></h1>
     <ul>
       <li><b>Categories</b>: <?=local_lor_get_categories_string_for_item($item->id)?></li>
+      <li><b>Grades</b>: <?=local_lor_get_grades_string_for_item($item->id)?></li>
       <li><b>Keywords</b>: <?=local_lor_get_keywords_string_for_item($item->id)?></li>
+      <li><b>Contributor(s)</b>: <?=local_lor_get_contributors_string_for_item($item->id)?></li>
       <li><b>Date Created:</b> <?=date("F Y", strtotime($item->date_created))?></li> <!-- Date in format: June 2017 -->
     </ul>
 

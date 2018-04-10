@@ -14,7 +14,7 @@
 }
 
 /* Used to apply filters, contained in the filters div */
-select {
+.lor-select {
   margin-right: 1em;
 }
 
@@ -27,7 +27,7 @@ select {
   border-radius: 5px;
 }
 
-img {
+.lor-image {
   border-radius: 3px;
   border: 1px solid #bcbcbc;
 }

@@ -52,10 +52,8 @@ $types = local_lor_get_types();
 $grades = local_lor_get_grades();
 
 ?>
-<!-- TODO: replace these with better links -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
 <link rel="stylesheet" href="styles.css">
 
 <!-- multiple select -->
@@ -67,11 +65,11 @@ $grades = local_lor_get_grades();
 
 
   <!-- Filter settings -->
-  <div class="row" id="filters">
+  <div class="row-fluid" id="filters">
     <form action="index.php" method="GET">
 
       <b>Type:</b>
-      <select name="type" id="type-select">
+      <select class="lor-select" name="type" id="type-select">
         <option value="-1">All Types</option>
         <?php foreach($types as $type): ?>
           <?php if ($type->id == $search_type): ?>
@@ -83,7 +81,7 @@ $grades = local_lor_get_grades();
       </select>
 
       <b>Categories:</b>
-      <select name="categories[]" class="multiple" multiple="multiple">
+      <select name="categories[]" class="multiple lor-select" multiple="multiple">
       <?php foreach ($categories as $category): ?>
         <?php if (in_array($category->id, $search_categories)): ?>
           <option selected="selected" value="<?=$category->id?>"><?=$category->name?></option>
@@ -94,7 +92,7 @@ $grades = local_lor_get_grades();
       </select>
 
       <b>Grades:</b>
-      <select name="grades[]" class="multiple" multiple="multiple">
+      <select name="grades[]" class="multiple lor-select" multiple="multiple">
         <?php foreach ($grades as $grade): ?>
           <?php if (in_array($grade->grade, $search_grades)): ?>
             <option selected="selected" value="<?=$grade->grade?>"><?=$grade->grade?></option>
@@ -105,7 +103,7 @@ $grades = local_lor_get_grades();
       </select>
 
       <b>Sort by:</b>
-      <select name="order_by">
+      <select class="lor-select" name="order_by">
         <option value="new">Recently Added</option>
         <?php if ($order_by === "alphabetical"): ?>
           <option value="alphabetical" selected="selected">Alphabetical</option>
@@ -120,8 +118,8 @@ $grades = local_lor_get_grades();
   </form>
   </div>
 
-  <!-- Projects -->
-  <div class="row text-center">
+  <!-- Content -->
+  <div class="row-fluid text-center">
     <p id="count"><i><?=count($content)?> items match your search</i></p>
 
     <?php if (!is_null($content)): ?>
@@ -129,13 +127,13 @@ $grades = local_lor_get_grades();
       </div>
       <div class="row text-center item">
         <hr>
-      <div class="col-md-4 item-image">
+      <div class="span4 item-image">
         <a href="show.php?id=<?=$item->id?>" target="_blank">
-          <img src="<?=$item->image?>" width="200px" height="150px" />
+          <img class="lor-image" src="<?=$item->image?>" width="200px" height="150px" />
         </a>
 
       </div>
-      <div class="col-md-8 project-about text-left">
+      <div class="span7 project-about text-left">
         <a href="show.php?id=<?=$item->id?>" target="_blank"><h3><?=$item->title?></h3></a>
         <p><i>Topics: </i><?=local_lor_get_keywords_string_for_item($item->id)?></p>
       </div>

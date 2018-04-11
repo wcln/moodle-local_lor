@@ -17,6 +17,7 @@ $PAGE->set_title($title);
 $PAGE->set_heading($title);
 $PAGE->set_pagelayout('standard');
 
+
 // nav bar
 $PAGE->navbar->ignore_active();
 $PAGE->navbar->add(get_string('lor', 'local_lor'), new moodle_url('/local/lor/index.php'));
@@ -43,6 +44,8 @@ if ($fromform = $type_form->get_data()) {
 
   echo $OUTPUT->header();
   echo $OUTPUT->heading(get_string('heading', 'local_lor'));
+
+  ?><link rel="stylesheet" href="styles.css"><?php
 
   // show insert form
   if ($fromform->type == 1) { // game

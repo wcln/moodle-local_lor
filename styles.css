@@ -39,3 +39,15 @@
 #platform-select {
   display: none;
 }
+/* space out grade checkboxes on insert forms */
+#fgroup_id_grades > fieldset > span {
+  margin-right: 10px;
+}
+
+#fgroup_id_grades > fieldset > span > label {
+  padding-left: 0;
+}
+
+#fgroup_id_grades > fieldset > span > input {
+  margin-right: 4px;
+}

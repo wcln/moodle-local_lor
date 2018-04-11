@@ -29,7 +29,7 @@ class project_form extends moodleform {
 		$mform->addElement('header', 'about', get_string('about', 'local_lor'));
 
 		// description textarea
-    $mform->addElement('textarea', 'title', get_string('title', 'local_lor'), 'wrap="virtual" rows="2" cols="50"');
+    $mform->addElement('textarea', 'title', get_string('inquiry', 'local_lor'), 'wrap="virtual" rows="2" cols="50"');
     $mform->setType('title', PARAM_TEXT);
     $mform->addRule('title', get_string('required'), 'required', null);
 
@@ -54,7 +54,7 @@ class project_form extends moodleform {
 		foreach ($grades_arr as $grade) {
 			$grade_item[] = &$mform->createElement('advcheckbox', $grade, '', $grade, array('name' => $grade, 'group' => 2), $grade);
 		}
-		$mform->addGroup($grade_item, 'grades', get_string('grade', 'local_projectspage'));
+		$mform->addGroup($grade_item, 'grades', get_string('grade', 'local_lor'));
 
 		// contributors
 		$mform->addElement('text', 'contributors', get_string('contributors', 'local_lor'));

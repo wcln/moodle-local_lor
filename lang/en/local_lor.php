@@ -5,6 +5,7 @@ $string['pluginname'] = "LOR Page";
 // insert form
 $string['heading'] = "Add to LOR";
 $string['title'] = "Title";
+$string['inquiry'] = "Title / Inquiry Question";
 $string['description'] = "Inquiry Question";
 $string['categories'] = "Choose one or more categories";
 $string['topics'] = "Keywords (eg. circulatory system, heart, blood)";

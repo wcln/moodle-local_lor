@@ -54,7 +54,7 @@ class game_form extends moodleform {
 		foreach ($grades_arr as $grade) {
 			$grade_item[] = &$mform->createElement('advcheckbox', $grade, '', $grade, array('name' => $grade, 'group' => 2), $grade);
 		}
-		$mform->addGroup($grade_item, 'grades', get_string('grade', 'local_projectspage'));
+		$mform->addGroup($grade_item, 'grades', get_string('grade', 'local_lor'));
 
 		// contributors
 		$mform->addElement('text', 'contributors', get_string('contributors', 'local_lor'));

@@ -49,6 +49,9 @@ function local_lor_get_content($type, $categories, $grades, $order_by = "new", $
   if(!is_null($type) && $type == 1) {
     $where_clause .= ' AND {lor_content}.platform = ?';
     $params[] = 1; // always HTML5
+  } else {
+    $where_clause .= ' AND {lor_content}.platform != ?';
+    $params[] = 2; // never flash
   }
 
 

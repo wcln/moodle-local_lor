@@ -8,12 +8,12 @@ $string['title'] = "Title";
 $string['inquiry'] = "Title / Inquiry Question";
 $string['description'] = "Inquiry Question";
 $string['categories'] = "Choose one or more categories";
-$string['topics'] = "Keywords (eg. circulatory system, heart, blood)";
+$string['topics'] = "Keywords (Comma separated: eg. circulatory system, heart, blood)";
 $string['word'] = "Upload a Word document of the project";
 $string['pdf'] = "Attach a PDF version of the project";
 $string['icon'] = "Upload an icon (200x150px)";
 $string['grade'] = "Grade(s)";
-$string['contributors'] = "Contributor(s)";
+$string['contributors'] = "Contributor(s) (Comma separated)";
 $string['files'] = 'Files';
 $string['about'] = 'About';
 $string['submit'] = "Submit";
@@ -23,8 +23,6 @@ $string['image'] = 'Preview image (200x150px)';
 // type form
 $string['type'] = "Type";
 $string['next'] = 'Next';
-
-
 
 // errors
 $string['error_filenames'] = "All files must have the same name!";

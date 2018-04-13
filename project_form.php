@@ -65,15 +65,15 @@ class project_form extends moodleform {
 
 
     // word doc file
-    $mform->addElement('filepicker', 'word', get_string('word', 'local_lor'), null, array('maxbytes'=>1000000, 'accepted_types'=>array('.doc', '.docx')));
+    $mform->addElement('filepicker', 'word', get_string('word', 'local_lor'), null, array('maxbytes'=>10000000, 'accepted_types'=>array('.doc', '.docx')));
     $mform->addRule('word', get_string('required'), 'required', null);
 
 		// pdf file
-    $mform->addElement('filepicker', 'pdf', get_string('pdf', 'local_lor'), null, array('maxbytes'=>1000000, 'accepted_types'=>array('.pdf')));
+    $mform->addElement('filepicker', 'pdf', get_string('pdf', 'local_lor'), null, array('maxbytes'=>10000000, 'accepted_types'=>array('.pdf')));
     $mform->addRule('pdf', get_string('required'), 'required', null);
 
 		// image file
-    $mform->addElement('filepicker', 'icon', get_string('icon', 'local_lor'), null, array('maxbytes'=>1000000, 'accepted_types'=>array('.png', '.jpg')));
+    $mform->addElement('filepicker', 'icon', get_string('icon', 'local_lor'), null, array('maxbytes'=>10000000, 'accepted_types'=>array('.png', '.jpg')));
     $mform->addRule('icon', get_string('required'), 'required', null);
 
 

@@ -45,25 +45,16 @@ function local_lor_get_content($type, $categories, $grades, $order_by = "new", $
     $params[] = $type;
   }
 
-  // platform
-  if(!is_null($type) && $type == 1) {
-    $where_clause .= ' AND {lor_content}.platform = ?';
-    $params[] = 1; // always HTML5
-  } else {
-    $where_clause .= ' AND {lor_content}.platform != ?';
-    $params[] = 2; // never flash
-  }
+  // platform (make sure it is either NULL or HTML5 (no flash))
+  $where_clause .= ' AND ({lor_content}.platform = 1 OR {lor_content}.platform IS NULL)';
 
 
   // keywords
   if (!is_null($keywords) && $keywords !== "") {
     $tables .= ", {lor_content_keywords}";
-    // un comment when there are actually keywords in the database
-    // $where_clause .= ' AND {lor_content_keywords}.content = {lor_content}.id AND (keyword LIKE ? OR title LIKE ?)';
-    $where_clause .= ' AND title LIKE ?';
+    $where_clause .= ' AND {lor_content_keywords}.content = {lor_content}.id AND (keyword LIKE ? OR title LIKE ?)';
     $params[] = "%$keywords%";
-    // un comment when there are actrually keywords in the database
-    // $params[] = "%$keywords%";
+    $params[] = "%$keywords%";
   }
 
   // assemble query string

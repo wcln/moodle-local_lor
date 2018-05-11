@@ -35,14 +35,19 @@ echo $OUTPUT->header();
       <li><b>Date Created:</b> <?=date("F Y", strtotime($item->date_created))?></li> <!-- Date in format: June 2017 -->
     </ul>
 
-    <?php if ($item->type == 1): ?> <!-- game -->
+    <?php if ($item->type == 1): // GAME ?>
       <p>To include this <?=strtolower($item->name)?> in a course, or on any page, copy the text below and paste it into the page HTML.</p>
       <textarea rows="5" cols="70">
       </textarea>
       <p><iframe src="<?=$item->link?>" allowfullscreen="" frameborder="0"></iframe></p
-    <?php elseif ($item->type == 2): ?><!-- project -->
+    <?php elseif ($item->type == 2): // PROJECT ?>
       <embed src="<?=$item->link?>" width="700" height="800" type='application/pdf'>
-    <?php endif ?>
+    <?php elseif ($item->type == 4): // ANIMATION ?>
+      <p>To include this <?=strtolower($item->name)?> in a course, or on any page, copy the text below and paste it into the page HTML.</p>
+      <textarea rows="5" cols="70">
+      </textarea>
+      <p align="center"><img id="animation-img" src="<?=$item->link?>" class="img-responsive atto_image_button_middle"></p>​
+    <?php endif // todo: video section once implemented ?>
 
     <p><b><i>Note:</i></b> Please contact BCLN if you would like to use this <?=strtolower($item->name)?> outside of bclearningnetwork.com</p>
   </div>
@@ -59,6 +64,8 @@ echo $OUTPUT->header();
    */
 
   $(function() {
+
+      // iframe loaded (games)
       $("iframe").bind("load",function() {
         // defaults in case of Flash
         var width = 700;
@@ -77,6 +84,20 @@ echo $OUTPUT->header();
         $('textarea').val('<p><iframe src="<?=$item->link?>" allowfullscreen="" frameborder="0" width="'+width+'" height="'+height+'"></iframe></p>');
       });
   });
+  </script>
+<?php endif ?>
+
+<?php if ($item->type == 4): ?>
+  <script>
+      // image loaded (animations)
+      var img = new Image();
+      alert("this");
+      img.onload = function() {
+        $('#animation-img').attr('width', this.width);
+        $('#animation-img').attr('height', this.height);
+        $('textarea').val('<p align="center"><img src="<?=$item->link?>" width="'+this.width+'" height="'+this.height+'" class="img-responsive atto_image_button_middle"></p>​')
+      }
+      img.src = "<?=$item->link?>";
   </script>
 <?php endif ?>
 

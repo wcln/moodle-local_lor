@@ -35,18 +35,38 @@ echo $OUTPUT->header();
       <li><b>Date Created:</b> <?=date("F Y", strtotime($item->date_created))?></li> <!-- Date in format: June 2017 -->
     </ul>
 
+
     <?php if ($item->type == 1): // GAME ?>
+
       <p>To include this <?=strtolower($item->name)?> in a course, or on any page, copy the text below and paste it into the page HTML.</p>
       <textarea rows="5" cols="70">
       </textarea>
       <p><iframe src="<?=$item->link?>" allowfullscreen="" frameborder="0"></iframe></p
+
     <?php elseif ($item->type == 2): // PROJECT ?>
+
+
+      <p>To include this <?=strtolower($item->name)?> in a course, or on any page, copy the text below and paste it into the page HTML.</p>
+      <textarea rows="12" cols="100">
+        <table align="center" border="1" style="width: 600px;">
+          <tbody>
+            <tr>
+              <td width="200px"><a href="<?=$item->link?>"><img src="<?=$item->image?>" width="200" height="150" /></a></td>
+              <td><b><span style="background-color: transparent; color: #7d9fd3; font-size: 16px;"><?=$item->title?></span><br /></b><br /><span style="color: #c8c8c8;">Topics: <?=local_lor_get_keywords_string_for_item($item->id)?></span></td>
+            </tr>
+          </tbody>
+        </table>
+      </textarea>
       <embed src="<?=$item->link?>" width="700" height="800" type='application/pdf'>
+
     <?php elseif ($item->type == 4): // ANIMATION ?>
+
+
       <p>To include this <?=strtolower($item->name)?> in a course, or on any page, copy the text below and paste it into the page HTML.</p>
       <textarea rows="5" cols="70">
       </textarea>
       <p align="center"><img id="animation-img" src="<?=$item->link?>" class="img-responsive atto_image_button_middle"></p>​
+
     <?php endif // todo: video section once implemented ?>
 
     <p><b><i>Note:</i></b> Please contact BCLN if you would like to use this <?=strtolower($item->name)?> outside of bclearningnetwork.com</p>

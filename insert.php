@@ -26,15 +26,28 @@ $PAGE->navbar->add(get_string('insert', 'local_lor'), new moodle_url('/local/lor
 
 require_login();
 
+$from_gamecreator = false;
+
 $type_form = new type_form();
-$game_form = new game_form();
+
+// game form
+if (isset($_POST['link'])) { // check if there is a link from gamecreator
+  $from_gamecreator = true;
+  $game_form = new game_form(null, array('link' => $_POST['link'])); // send custom data to game form to pre-populate link field
+} else {
+  $game_form = new game_form();
+}
+
+// project form
 $project_form = new project_form();
 
 
-if ($fromform = $type_form->get_data()) {
+
+
+if (($fromform = $type_form->get_data()) || $from_gamecreator) {
 
   // update nav bar
-  if ($fromform->type == 1) { // game
+  if ($fromform->type == 1 || $from_gamecreator) { // game
     $PAGE->navbar->add(get_string('add_game', 'local_lor'));
   } else if ($fromform->type == 2) { // project
     $PAGE->navbar->add(get_string('add_project', 'local_lor'));
@@ -48,7 +61,7 @@ if ($fromform = $type_form->get_data()) {
   ?><link rel="stylesheet" href="styles.css"><?php
 
   // show insert form
-  if ($fromform->type == 1) { // game
+  if ($fromform->type == 1 || $from_gamecreator) { // game (check if linked to from gamecreator)
     $PAGE->navbar->add(get_string('add_game', 'local_lor'));
     $game_form->display();
   } else if ($fromform->type == 2) { // project

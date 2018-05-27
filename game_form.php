@@ -63,9 +63,11 @@ class game_form extends moodleform {
 		// header
 		$mform->addElement('header', 'files', get_string('files', 'local_lor'));
 
-
     // game link
     $mform->addElement('text', 'link', get_string('link', 'local_lor'));
+		if (!is_null($this->_customdata['link'])) {
+					$mform->setDefault('link', $this->_customdata['link']); // pre-populate link field if link given from gamecreator
+		}
     $mform->addRule('link', get_string('required'), 'required', null);
 
     // preview image link

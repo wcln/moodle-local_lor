@@ -41,7 +41,7 @@ echo $OUTPUT->header();
       <p>To include this <?=strtolower($item->name)?> in a course, or on any page, copy the text below and paste it into the page HTML.</p>
       <textarea rows="5" cols="70">
       </textarea>
-      <p><iframe src="<?=$item->link?>" allowfullscreen="" frameborder="0"></iframe></p
+      <p align="center"><iframe src="<?=$item->link?>" allowfullscreen="" frameborder="0"></iframe></p
 
     <?php elseif ($item->type == 2): // PROJECT ?>
 
@@ -101,7 +101,7 @@ echo $OUTPUT->header();
         }
         $('iframe').attr('width', width);
         $('iframe').attr('height', height);
-        $('textarea').val('<p><iframe src="<?=$item->link?>" allowfullscreen="" frameborder="0" width="'+width+'" height="'+height+'"></iframe></p>');
+        $('textarea').val('<p align="center"><iframe src="<?=$item->link?>" allowfullscreen="" frameborder="0" width="'+width+'" height="'+height+'"></iframe></p>');
       });
   });
   </script>

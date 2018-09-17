@@ -197,9 +197,6 @@ function local_lor_add_project($title, $categories, $topics, $contributors, $gra
   $form->save_file('pdf', $CFG->dirroot . '/LOR/projects/' . $form->get_new_filename('pdf'));
   $form->save_file('icon', $CFG->dirroot . '/LOR/projects/' . $form->get_new_filename('icon'));
 
-
-  $pid = str_replace(".pdf", "", $form->get_new_filename('pdf'));
-
   // insert into content table
   $record = new stdClass();
   $record->type = 2;
@@ -255,7 +252,7 @@ function local_lor_add_project($title, $categories, $topics, $contributors, $gra
   return $pid;
 }
 
-function local_lor_add_game($title, $categories, $topics, $contributors, $grades, $link, $image) {
+function local_lor_add_game($title, $categories, $topics, $contributors, $grades, $link, &$game_form) {
   global $DB;
   global $CFG;
 
@@ -265,11 +262,19 @@ function local_lor_add_game($title, $categories, $topics, $contributors, $grades
   $record = new stdClass();
   $record->type = 1;
   $record->title = $title;
-  $record->image = $image;
+  $record->image = ""; // will be replaced below.
   $record->link = $link;
   $record->date_created = date("Ymd");
   $record->platform = 1; // always HTML5
   $pid = $DB->insert_record('lor_content', $record);
+
+  // save preview image to server.
+  $game_form->save_file('image', "$CFG->dirroot/LOR/games/preview_images/$pid.png", true);
+
+  // update image link in content table
+  $record->image = "$CFG->wwwroot/LOR/games/preview_images/$pid.png";
+  $record->id = $pid;
+  $DB->update_record('lor_content', $record);
 
   // insert into categories table
   $categories = array_filter($categories);

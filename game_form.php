@@ -9,7 +9,6 @@ class game_form extends moodleform {
 
 	protected function definition() {
 		global $CFG;
-    global $SESSION;
 
 		// getting categories for later
     $categories = local_lor_get_categories();
@@ -44,6 +43,7 @@ class game_form extends moodleform {
 			$category_item[] = &$mform->createElement('advcheckbox', $id, '', $category_name, array('name' => $id, 'group' => 1), $id);
 		}
 		$mform->addGroup($category_item, 'categories', get_string('categories', 'local_lor'));
+		$mform->addRule('categories', get_string('required'), 'required', null);
 
 		// grade checkboxes (1 to 12)
     $grades_arr = [];
@@ -70,9 +70,9 @@ class game_form extends moodleform {
 		}
     $mform->addRule('link', get_string('required'), 'required', null);
 
-    // preview image link
-    $mform->addElement('text', 'image', get_string('image', 'local_lor'));
-    $mform->addRule('image', get_string('required'), 'required', null);
+		// preview image
+		$mform->addELement('filepicker', 'image', get_string('image', 'local_lor'), null, array('maxbytes' => 1000000, 'accepted_types' => array('.png')));
+		$mform->addRule('image', get_string('required'), 'required', null);
 
 
 		// submit button
@@ -81,42 +81,8 @@ class game_form extends moodleform {
 
 	public function validation($data, $files) {
 		global $CFG;
-		global $DB;
+
 		$errors = parent::validation($data, $files);
-
-    // check that all files have same ID
-		$sql = 'SELECT id, filename, filesize FROM {files} WHERE itemid=? OR itemid=? OR itemid=?';
-		$records = $DB->get_records_sql($sql, array($data['word'], $data['pdf'], $data['icon']));
-
-		foreach ($records as $r1) {
-			foreach ($records as $r2) {
-				if ($r1->filesize > 0 && $r2->filesize > 0 && explode(".", $r1->filename, 2)[0] != explode(".", $r2->filename, 2)[0]) {
-					$errors['word'] = $errors['pdf'] = $errors['icon'] = get_string('error_filenames', 'local_lor');
-					break 2;
-				} else {
-					// check that file doesnt already exist on server
-					if ($r1->filesize > 0 && file_exists($CFG->dirroot . '/LOR/projects/' . $r1->filename)) {
-						$errors['word'] = $errors['pdf'] = $errors['icon'] = get_string('error_file_exists', 'local_lor');
-						break 2;
-					}
-				}
-
-			}
-		}
-
-
-    // check that ID doesnt exist in database
-		// if (!isset($errors['word'])) { // only check if all files have same name
-		// 	$filename = explode(".", array_pop($records)->filename, 2)[0];
-    //
-		// 	$sql = 'SELECT id FROM {content} WHERE id=?';
-		// 	$records2 = $DB->get_records_sql($sql, array($filename));
-    //
-		// 	if (sizeof($records2) !== 0) {
-		// 		$errors['word'] = $errors['pdf'] = $errors['icon'] = get_string('error_filename_exists', 'local_lor');
-		// 	}
-    //
-		// }
 
 		// check that at least one checkbox is checked
 		 if(sizeof(array_filter($data['categories'])) === 0) {

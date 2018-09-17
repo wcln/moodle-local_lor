@@ -30,17 +30,9 @@ $from_gamecreator = false;
 
 $type_form = new type_form();
 
-// game form
-if (isset($_POST['link'])) { // check if there is a link from gamecreator
+if (isset($_POST['gamecreator'])) { // check if there is a link from gamecreator
   $from_gamecreator = true;
-  $game_form = new game_form(null, array('link' => $_POST['link'])); // send custom data to game form to pre-populate link field
-} else {
-  $game_form = new game_form();
 }
-
-// project form
-$project_form = new project_form();
-
 
 
 
@@ -55,34 +47,16 @@ if (($fromform = $type_form->get_data()) || $from_gamecreator) {
     $PAGE->navbar->add(get_string('add_video', 'local_lor'));
   }
 
-  echo $OUTPUT->header();
-  echo $OUTPUT->heading(get_string('heading', 'local_lor'));
-
-  ?><link rel="stylesheet" href="styles.css"><?php
-
   // show insert form
   if ($fromform->type == 1 || $from_gamecreator) { // game (check if linked to from gamecreator)
-    $PAGE->navbar->add(get_string('add_game', 'local_lor'));
-    $game_form->display();
+    $SESSION->current_type = "game";
   } else if ($fromform->type == 2) { // project
-    $PAGE->navbar->add(get_string('add_project', 'local_lor'));
-    $project_form->display();
-  } else { // video
-    $PAGE->navbar->add(get_string('add_video', 'local_lor'));
-    echo "Not available yet.";
+    $SESSION->current_type = "project";
+  } else { // video or animation
+    unset($SESSION->current_type);
   }
 
-  echo $OUTPUT->footer();
-
-} else if ($fromform = $game_form->get_data()) {
-
-  $pid = local_lor_add_game($fromform->title, $fromform->categories, $fromform->topics, $fromform->contributors, $fromform->grades, $_POST['link'], $_POST['image']);
-  redirect(new moodle_url($url, array('pid' => $pid)));
-
-} else if ($fromform = $project_form->get_data()) {
-
-  $pid = local_lor_add_project($fromform->title, $fromform->categories, $fromform->topics, $fromform->contributors, $fromform->grades, $project_form);
-  redirect(new moodle_url($url, array('pid' => $pid)));
+  redirect(new moodle_url("/local/lor/handleinsert.php", array('gamecreator' => $from_gamecreator)));
 
 } else {
 
@@ -93,10 +67,9 @@ if (($fromform = $type_form->get_data()) || $from_gamecreator) {
     $success_output = $PAGE->get_renderer('local_lor');
     $renderable = new \local_lor\output\success_html($_GET['pid']);
     echo $success_output->render($renderable);
+    unset($SESSION->current_type);
   }
 
   $type_form->display();
-
-
   echo $OUTPUT->footer();
 }

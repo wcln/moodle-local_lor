@@ -9,7 +9,6 @@ class project_form extends moodleform {
 
 	protected function definition() {
 		global $CFG;
-    global $SESSION;
 
 		// getting categories for later
     $categories = local_lor_get_categories();
@@ -44,6 +43,7 @@ class project_form extends moodleform {
 			$category_item[] = &$mform->createElement('advcheckbox', $id, '', $category_name, array('name' => $id, 'group' => 1), $id);
 		}
 		$mform->addGroup($category_item, 'categories', get_string('categories', 'local_lor'));
+		$mform->addRule('categories', get_string('required'), 'required', null);
 
 		// grade checkboxes (1 to 12)
     $grades_arr = [];
@@ -127,6 +127,6 @@ class project_form extends moodleform {
 		 }
 
 
-		return array(); // temp, need to do validation again
+		return $errors; // temp, need to do validation again
 	}
 }

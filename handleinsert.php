@@ -28,12 +28,8 @@ require_login();
 
 // game form
 if (isset($_GET['gamecreator'])) { // check if there is a link from gamecreator
-  if ($_GET['gamecreator'] == true) {
-    $from_gamecreator = true;
-    $game_form = new game_form(null, array('link' => $_POST['gamecreator'])); // send custom data to game form to pre-populate link field
-  } else {
-    $game_form = new game_form();
-  }
+  $from_gamecreator = true;
+  $game_form = new game_form(null, array('link' => $_GET['gamecreator'])); // send custom data to game form to pre-populate link field
 } else {
   $game_form = new game_form();
 }

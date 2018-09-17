@@ -56,7 +56,11 @@ if (($fromform = $type_form->get_data()) || $from_gamecreator) {
     unset($SESSION->current_type);
   }
 
-  redirect(new moodle_url("/local/lor/handleinsert.php", array('gamecreator' => $from_gamecreator)));
+  if ($from_gamecreator) {
+    redirect(new moodle_url("/local/lor/handleinsert.php", array('gamecreator' => $_POST['gamecreator'])));
+  } else {
+    redirect(new moodle_url("/local/lor/handleinsert.php"));
+  }
 
 } else {
 

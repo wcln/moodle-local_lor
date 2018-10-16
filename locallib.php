@@ -94,7 +94,8 @@ function local_lor_get_keywords_string_for_item($content_id) {
     $keywords_str = substr($keywords_str, 0, -2);
   }
 
-  return $keywords_str;
+  // Return the string with the first character of each word in uppercase.
+  return ucwords($keywords_str);
 }
 
 function local_lor_get_categories_string_for_item($content_id) {

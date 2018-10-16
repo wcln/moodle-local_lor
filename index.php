@@ -37,8 +37,8 @@ if (isset($_GET['keywords'])) {
 // setting up the page
 $PAGE->set_context(get_system_context());
 $PAGE->set_pagelayout('standard');
-$PAGE->set_title("BCLN: LOR");
-$PAGE->set_heading("BCLN Learning Material");
+$PAGE->set_title("WCLN: LOR");
+$PAGE->set_heading("WCLN Learning Material");
 $PAGE->set_url(new moodle_url('/local/lor/index.php'));
 
 // nav bar
@@ -64,7 +64,7 @@ $grades = local_lor_get_grades();
 <link href="lib/multiple-select/multiple-select.css" rel="stylesheet"/>
 
 
-<h1>BCLN Learning Material</h1>
+<h1>WCLN Learning Material</h1>
 <div class="container-fluid" id="content-container">
 
 

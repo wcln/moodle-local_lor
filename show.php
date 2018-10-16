@@ -9,7 +9,7 @@ $item = local_lor_get_content_from_id($id);
 // setting up the page
 $PAGE->set_context(get_system_context());
 $PAGE->set_pagelayout('standard');
-$PAGE->set_title("BCLN: " . $item->title);
+$PAGE->set_title("WCLN: " . $item->title);
 $PAGE->set_heading("LOR Item");
 $PAGE->set_url($CFG->wwwroot.'/local/lor/show.php?id='.$id);
 
@@ -69,7 +69,7 @@ echo $OUTPUT->header();
 
     <?php endif // todo: video section once implemented ?>
 
-    <p><b><i>Note:</i></b> Please contact BCLN if you would like to use this <?=strtolower($item->name)?> outside of bclearningnetwork.com</p>
+    <p><b><i>Note:</i></b> Please contact WCLN if you would like to use this <?=strtolower($item->name)?> outside of bclearningnetwork.com</p>
   </div>
 
 

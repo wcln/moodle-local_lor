@@ -111,7 +111,6 @@ echo $OUTPUT->header();
   <script>
       // image loaded (animations)
       var img = new Image();
-      alert("this");
       img.onload = function() {
         $('#animation-img').attr('width', this.width);
         $('#animation-img').attr('height', this.height);

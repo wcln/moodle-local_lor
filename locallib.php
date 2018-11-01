@@ -71,7 +71,7 @@ function local_lor_get_content($type, $categories, $grades, $order_by = "new", $
 function local_lor_get_content_from_id($id) {
   global $DB;
 
-  $sql = "SELECT DISTINCT {lor_content}.id, type, {lor_type}.name, title, image, link, platform, date_created
+  $sql = "SELECT DISTINCT {lor_content}.id, type, {lor_type}.name, title, image, link, platform, date_created, width, height
           FROM {lor_content}, {lor_type}
           WHERE {lor_content}.id=? AND {lor_content}.type = {lor_type}.id";
   $item = $DB->get_record_sql($sql, array($id));
@@ -253,7 +253,7 @@ function local_lor_add_project($title, $categories, $topics, $contributors, $gra
   return $pid;
 }
 
-function local_lor_add_game($title, $categories, $topics, $contributors, $grades, $link, &$game_form) {
+function local_lor_add_game($title, $categories, $topics, $contributors, $grades, $link, $width, $height, &$game_form) {
   global $DB;
   global $CFG;
 
@@ -267,6 +267,8 @@ function local_lor_add_game($title, $categories, $topics, $contributors, $grades
   $record->link = $link;
   $record->date_created = date("Ymd");
   $record->platform = 1; // always HTML5
+  $record->width = ($width == 0)? null : $width;
+  $record->height = ($height == 0)? null : $height;
   $pid = $DB->insert_record('lor_content', $record);
 
   // save preview image to server.

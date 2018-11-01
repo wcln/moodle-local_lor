@@ -39,7 +39,7 @@ $project_form = new project_form();
 
 if ($fromform = $game_form->get_data()) {
 
-  $pid = local_lor_add_game($fromform->title, $fromform->categories, $fromform->topics, $fromform->contributors, $fromform->grades, $fromform->link, $game_form);
+  $pid = local_lor_add_game($fromform->title, $fromform->categories, $fromform->topics, $fromform->contributors, $fromform->grades, $fromform->link, $fromform->width, $fromform->height, $game_form);
   redirect(new moodle_url('/local/lor/insert.php', array('pid' => $pid)));
 
 } else if ($fromform = $project_form->get_data()) {

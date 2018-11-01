@@ -74,6 +74,20 @@ class game_form extends moodleform {
 		$mform->addELement('filepicker', 'image', get_string('image', 'local_lor'), null, array('maxbytes' => 1000000, 'accepted_types' => array('.png')));
 		$mform->addRule('image', get_string('required'), 'required', null);
 
+		// header
+		$mform->addElement('header', 'iframe_size', get_string('iframe_size', 'local_lor'));
+		$mform->setExpanded('iframe_size');
+
+		// Paragraph
+		$mform->addElement('html', '<p>'.get_string('iframe_size_paragraph', 'local_lor').'</p>');
+
+		// width
+		$mform->addElement('text', 'width', get_string('width', 'local_lor'));
+		$mform->setType('width', PARAM_INT);
+
+		// height
+		$mform->addElement('text', 'height', get_string('height', 'local_lor'));
+		$mform->setType('height', PARAM_INT);
 
 		// submit button
 		$this->add_action_buttons(false, get_string('submit', 'local_lor'));

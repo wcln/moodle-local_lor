@@ -99,6 +99,17 @@ echo $OUTPUT->header();
             height = 630;
           }
         }
+
+        <?php
+        // Check if there is a manually set width and height, if so override the calculated ones.
+          if (!is_null($item->width)) {
+            echo "width = $item->width;";
+          }
+          if (!is_null($item->height)) {
+            echo "height = $item->height;";
+          }
+        ?>
+
         $('iframe').attr('width', width);
         $('iframe').attr('height', height);
         $('textarea').val('<p align="center"><iframe src="<?=$item->link?>" allowfullscreen="" frameborder="0" width="'+width+'" height="'+height+'"></iframe></p>');

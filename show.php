@@ -25,7 +25,7 @@ if (isset($_GET['id'])) {
     <script src="https://bclearningnetwork.com/lib/jquery/jquery-3.2.1.min.js"></script>
     <link rel="stylesheet" href="https://bclearningnetwork.com/lib/bootstrap/bootstrap.min.css">
     <script src="https://bclearningnetwork.com/lib/bootstrap/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style/styles.css">
 
 
     <div "container-fluid">

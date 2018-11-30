@@ -69,7 +69,7 @@ $number_of_pages = ceil(count($content) / ITEMS_PER_PAGE);
 <link rel="stylesheet" href="https://bclearningnetwork.com/lib/bootstrap/bootstrap.min.css">
 <script src="https://bclearningnetwork.com/lib/bootstrap/bootstrap.min.js"></script>
 
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="style/styles.css">
 
 <!-- multiple select -->
 <link href="lib/multiple-select/multiple-select.css" rel="stylesheet"/>

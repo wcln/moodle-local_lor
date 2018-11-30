@@ -76,12 +76,7 @@ $number_of_pages = ceil(count($content) / ITEMS_PER_PAGE);
 
 <!-- custom navigation -->
 <script src="navigation.js"></script>
-
-
-<h1>WCLN Learning Material</h1>
 <div class="container-fluid" id="content-container">
-
-
   <!-- Filter settings -->
   <div class="row-fluid">
     <div class="col-md-12" id="filters">

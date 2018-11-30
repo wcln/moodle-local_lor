@@ -22,56 +22,60 @@ if (isset($_GET['id'])) {
 
     echo $OUTPUT->header();
     ?>
-
+    <script src="https://bclearningnetwork.com/lib/jquery/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" href="https://bclearningnetwork.com/lib/bootstrap/bootstrap.min.css">
+    <script src="https://bclearningnetwork.com/lib/bootstrap/bootstrap.min.js"></script>
     <link rel="stylesheet" href="styles.css">
 
 
     <div "container-fluid">
       <div class="row-fluid" id="item-info">
-        <h1><?=$item->title?></h1>
-        <ul>
-          <li><b>Categories</b>: <?=local_lor_get_categories_string_for_item($item->id)?></li>
-          <li><b>Grades</b>: <?=local_lor_get_grades_string_for_item($item->id)?></li>
-          <li><b>Keywords</b>: <?=local_lor_get_keywords_string_for_item($item->id)?></li>
-          <li><b>Contributor(s)</b>: <?=local_lor_get_contributors_string_for_item($item->id)?></li>
-          <li><b>Date Created:</b> <?=date("F Y", strtotime($item->date_created))?></li> <!-- Date in format: June 2017 -->
-        </ul>
+        <div class="col-md-12">
+          <h1><?=$item->title?></h1>
+          <ul>
+            <li><b>Categories</b>: <?=local_lor_get_categories_string_for_item($item->id)?></li>
+            <li><b>Grades</b>: <?=local_lor_get_grades_string_for_item($item->id)?></li>
+            <li><b>Keywords</b>: <?=local_lor_get_keywords_string_for_item($item->id)?></li>
+            <li><b>Contributor(s)</b>: <?=local_lor_get_contributors_string_for_item($item->id)?></li>
+            <li><b>Date Created:</b> <?=date("F Y", strtotime($item->date_created))?></li> <!-- Date in format: June 2017 -->
+          </ul>
 
 
-        <?php if ($item->type == 1): // GAME ?>
+          <?php if ($item->type == 1): // GAME ?>
 
-          <p>To include this <?=strtolower($item->name)?> in a course, or on any page, copy the text below and paste it into the page HTML.</p>
-          <textarea rows="5" cols="70">
-          </textarea>
-          <p align="center"><iframe src="<?=$item->link?>" allowfullscreen="" frameborder="0"></iframe></p
+            <p>To include this <?=strtolower($item->name)?> in a course, or on any page, copy the text below and paste it into the page HTML.</p>
+            <textarea rows="5" cols="70">
+            </textarea>
+            <p align="center"><iframe src="<?=$item->link?>" allowfullscreen="" frameborder="0"></iframe></p
 
-        <?php elseif ($item->type == 2): // PROJECT ?>
-
-
-          <p>To include this <?=strtolower($item->name)?> in a course, or on any page, copy the text below and paste it into the page HTML.</p>
-          <textarea rows="12" cols="100">
-            <table align="center" border="1" style="width: 600px;">
-              <tbody>
-                <tr>
-                  <td width="200px"><a href="<?=$item->link?>"><img src="<?=$item->image?>" width="200" height="150" /></a></td>
-                  <td><b><span style="background-color: transparent; color: #7d9fd3; font-size: 16px;"><?=$item->title?></span><br /></b><br /><span style="color: #c8c8c8;">Topics: <?=local_lor_get_keywords_string_for_item($item->id)?></span></td>
-                </tr>
-              </tbody>
-            </table>
-          </textarea>
-          <embed src="<?=$item->link?>" width="700" height="800" type='application/pdf'>
-
-        <?php elseif ($item->type == 4): // ANIMATION ?>
+          <?php elseif ($item->type == 2): // PROJECT ?>
 
 
-          <p>To include this <?=strtolower($item->name)?> in a course, or on any page, copy the text below and paste it into the page HTML.</p>
-          <textarea rows="5" cols="70">
-          </textarea>
-          <p align="center"><img id="animation-img" src="<?=$item->link?>" class="img-responsive atto_image_button_middle"></p>​
+            <p>To include this <?=strtolower($item->name)?> in a course, or on any page, copy the text below and paste it into the page HTML.</p>
+            <textarea rows="12" cols="100">
+              <table align="center" border="1" style="width: 600px;">
+                <tbody>
+                  <tr>
+                    <td width="200px"><a href="<?=$item->link?>"><img src="<?=$item->image?>" width="200" height="150" /></a></td>
+                    <td><b><span style="background-color: transparent; color: #7d9fd3; font-size: 16px;"><?=$item->title?></span><br /></b><br /><span style="color: #c8c8c8;">Topics: <?=local_lor_get_keywords_string_for_item($item->id)?></span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </textarea>
+            <embed src="<?=$item->link?>" width="700" height="800" type='application/pdf'>
 
-        <?php endif // todo: video section once implemented ?>
+          <?php elseif ($item->type == 4): // ANIMATION ?>
 
-        <p><b><i>Note:</i></b> Please contact WCLN if you would like to use this <?=strtolower($item->name)?> outside of bclearningnetwork.com</p>
+
+            <p>To include this <?=strtolower($item->name)?> in a course, or on any page, copy the text below and paste it into the page HTML.</p>
+            <textarea rows="5" cols="70">
+            </textarea>
+            <p align="center"><img id="animation-img" src="<?=$item->link?>" class="img-responsive atto_image_button_middle"></p>​
+
+          <?php endif // todo: video section once implemented ?>
+
+          <p><b><i>Note:</i></b> Please contact WCLN if you would like to use this <?=strtolower($item->name)?> outside of bclearningnetwork.com</p>
+        </div>
       </div>
 
 

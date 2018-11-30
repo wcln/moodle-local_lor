@@ -105,3 +105,18 @@ div.multiple.lor-select {
 #pages-row {
   margin-top: 2em;
 }
+
+a.lor-icon > img {
+  height: 20px;
+  margin-right: 4px;
+}
+
+a.lor-icon {
+  margin-right: 10px;
+  cursor: pointer;
+  color: #113863;
+}
+
+#item-info > div > textarea {
+  width: 95%;
+}

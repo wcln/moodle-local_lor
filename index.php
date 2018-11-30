@@ -65,7 +65,9 @@ $grades = local_lor_get_grades();
 $number_of_pages = ceil(count($content) / ITEMS_PER_PAGE);
 
 ?>
-
+<script src="https://bclearningnetwork.com/lib/jquery/jquery-3.2.1.min.js"></script>
+<link rel="stylesheet" href="https://bclearningnetwork.com/lib/bootstrap/bootstrap.min.css">
+<script src="https://bclearningnetwork.com/lib/bootstrap/bootstrap.min.js"></script>
 
 <link rel="stylesheet" href="styles.css">
 
@@ -82,7 +84,7 @@ $number_of_pages = ceil(count($content) / ITEMS_PER_PAGE);
 
   <!-- Filter settings -->
   <div class="row-fluid">
-    <div class="span12" id="filters">
+    <div class="col-md-12" id="filters">
       <form action="index.php" method="GET">
 
         <b>Type:</b>
@@ -138,35 +140,43 @@ $number_of_pages = ceil(count($content) / ITEMS_PER_PAGE);
 
   <!-- Content -->
   <div class="row-fluid text-center">
-    <p id="count"><i><?=count($content)?> items match your search</i></p>
-
+    <div class="col-md-12 text-center">
+      <p id="count"><i><?=count($content)?> items match your search</i></p>
+    </div>
     <?php if (!is_null($content)): ?>
       <?php for ($i = $page * ITEMS_PER_PAGE; $i < (($page + 1) * ITEMS_PER_PAGE); $i++) { ?>
         <?php if ($i === count($content)) break; ?>
         <?php $item = array_values($content)[$i]; ?>
       </div>
       <div class="row text-center item">
-      <div class="span4 item-image">
+      <div class="col-md-4 item-image">
         <a href="show.php?id=<?=$item->id?>" target="_blank">
           <img class="lor-image" src="<?=$item->image?>" width="200px" height="150px" />
         </a>
 
       </div>
-      <div class="span7 project-about text-left">
+      <div class="col-md-7 project-about text-left">
         <a href="show.php?id=<?=$item->id?>" target="_blank"><h3><?=$item->title?></h3></a>
         <p><i>Topics: </i><?=local_lor_get_keywords_string_for_item($item->id)?></p>
+        <p>
+          <a class="lor-icon"><img src="images/icons/details.png">Details</a>
+          <a class="lor-icon"><img src="images/icons/related.png">Related</a>
+          <a class="lor-icon"><img src="images/icons/present.png">Present</a>
+          <a class="lor-icon"><img src="images/icons/share.png">Share</a>
+          <a class="lor-icon"><img src="images/icons/embed.png">Embed</a>
+        </p>
       </div>
     <?php } ?>
     <?php endif ?>
 </div>
 
 <div class="row-fluid text-center" id="pages-row">
-  <div class="span2" id="previous-page">
+  <div class="col-md-2" id="previous-page">
     <?php if ($page !== 0): ?>
       <a class="back round lor-nav" id="backBtn" onclick="back(<?=$page+1?>)">&#8249;</a>
     <?php endif ?>
   </div>
-  <div class="span8" id="pages">
+  <div class="col-md-8" id="pages">
     <p>Page:
       <?php for ($i = 1; $i <= $number_of_pages; $i++) { ?>
         <?php if ($i === $page + 1): ?>
@@ -177,7 +187,7 @@ $number_of_pages = ceil(count($content) / ITEMS_PER_PAGE);
       <?php } ?>
     </p>
   </div>
-  <div class="span2" id="next-page">
+  <div class="col-md-2" id="next-page">
     <?php if ($page != ($number_of_pages - 1)): ?>
       <a class="next round lor-nav" id="nextBtn" onclick="next(<?=$page+1?>)">&#8250;</a>
     <?php endif ?>

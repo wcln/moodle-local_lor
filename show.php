@@ -64,14 +64,6 @@ if (isset($_GET['id'])) {
             </textarea>
             <embed src="<?=$item->link?>" width="700" height="800" type='application/pdf'>
 
-          <?php elseif ($item->type == 4): // ANIMATION ?>
-
-
-            <p>To include this <?=strtolower($item->name)?> in a course, or on any page, copy the text below and paste it into the page HTML.</p>
-            <textarea rows="5" cols="70">
-            </textarea>
-            <p align="center"><img id="animation-img" src="<?=$item->link?>" class="img-responsive atto_image_button_middle"></p>​
-
           <?php endif // todo: video section once implemented ?>
 
           <p><b><i>Note:</i></b> Please contact WCLN if you would like to use this <?=strtolower($item->name)?> outside of bclearningnetwork.com</p>
@@ -88,7 +80,6 @@ if (isset($_GET['id'])) {
       /*
        * Compute width and height of iframe from the width and height of the canvas (for a game)
        */
-
       $(function() {
 
           // iframe loaded (games)
@@ -96,16 +87,12 @@ if (isset($_GET['id'])) {
             // defaults in case of Flash
             var width = 700;
             var height = 700;
-            // HTML5, assuming this is usually true
-            if (<?=$item->platform?> === 1) {
-              width = ($(this).contents().find('canvas').width()) + 10;
-              height = ($(this).contents().find('canvas').height()) + 10;
-              if (isNaN(width) || isNaN(height)) { // another check just in case gameshow
-                width = 1025;
-                height = 630;
-              }
+            width = ($(this).contents().find('canvas').width()) + 10;
+            height = ($(this).contents().find('canvas').height()) + 10;
+            if (isNaN(width) || isNaN(height)) { // another check just in case gameshow
+              width = 1025;
+              height = 630;
             }
-
             <?php
             // Check if there is a manually set width and height, if so override the calculated ones.
               if (!is_null($item->width)) {
@@ -123,21 +110,6 @@ if (isset($_GET['id'])) {
       });
       </script>
     <?php endif ?>
-
-    <?php if ($item->type == 4): ?>
-      <script>
-          // image loaded (animations)
-          var img = new Image();
-          img.onload = function() {
-            $('#animation-img').attr('width', this.width);
-            $('#animation-img').attr('height', this.height);
-            $('textarea').val('<p align="center"><img src="<?=$item->link?>" width="'+this.width+'" height="'+this.height+'" class="img-responsive atto_image_button_middle"></p>​')
-          }
-          img.src = "<?=$item->link?>";
-      </script>
-    <?php endif ?>
-
-
     <?php
     echo $OUTPUT->footer();
   } else {

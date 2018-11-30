@@ -82,53 +82,62 @@ $number_of_pages = ceil(count($content) / ITEMS_PER_PAGE);
     <div class="col-md-12" id="filters">
       <form action="index.php" method="GET">
 
-        <b>Type:</b>
-        <select class="lor-select" name="type" id="type-select">
-          <option value="-1">All Types</option>
-          <?php foreach($types as $type): ?>
-            <?php if ($type->id == $search_type): ?>
-              <option selected="selected" value="<?=$type->id?>"><?=$type->name?></option>
+        <div class="filter">
+          <label>Type:</label>
+          <select class="lor-select" name="type" id="type-select">
+            <option value="-1">All Types</option>
+            <?php foreach($types as $type): ?>
+              <?php if ($type->id == $search_type): ?>
+                <option selected="selected" value="<?=$type->id?>"><?=$type->name?></option>
+              <?php else: ?>
+                <option value="<?=$type->id?>"><?=$type->name?></option>
+              <?php endif ?>
+            <?php endforeach ?>
+          </select>
+        </div>
+
+        <div class="filter">
+          <label>Categories:</label>
+          <select name="categories[]" class="multiple lor-select" multiple="multiple">
+          <?php foreach ($categories as $category): ?>
+            <?php if (in_array($category->id, $search_categories)): ?>
+              <option selected="selected" value="<?=$category->id?>"><?=$category->name?></option>
             <?php else: ?>
-              <option value="<?=$type->id?>"><?=$type->name?></option>
+              <option value="<?=$category->id?>"><?=$category->name?></option>
             <?php endif ?>
           <?php endforeach ?>
-        </select>
+          </select>
+        </div>
 
-        <b>Categories:</b>
-        <select name="categories[]" class="multiple lor-select" multiple="multiple">
-        <?php foreach ($categories as $category): ?>
-          <?php if (in_array($category->id, $search_categories)): ?>
-            <option selected="selected" value="<?=$category->id?>"><?=$category->name?></option>
-          <?php else: ?>
-            <option value="<?=$category->id?>"><?=$category->name?></option>
-          <?php endif ?>
-        <?php endforeach ?>
-        </select>
+        <div class="filter">
+          <label>Grades:</label>
+          <select name="grades[]" class="multiple lor-select" multiple="multiple">
+            <?php foreach ($grades as $grade): ?>
+              <?php if (in_array($grade->grade, $search_grades)): ?>
+                <option selected="selected" value="<?=$grade->grade?>"><?=$grade->grade?></option>
+              <?php else: ?>
+                <option value="<?=$grade->grade?>"><?=$grade->grade?></option>
+              <?php endif ?>
+            <?php endforeach ?>
+          </select>
+        </div>
 
-        <b>Grades:</b>
-        <select name="grades[]" class="multiple lor-select" multiple="multiple">
-          <?php foreach ($grades as $grade): ?>
-            <?php if (in_array($grade->grade, $search_grades)): ?>
-              <option selected="selected" value="<?=$grade->grade?>"><?=$grade->grade?></option>
+        <div class="filter">
+          <label>Sort by:</label>
+          <select class="lor-select" name="order_by">
+            <option value="new">Recently Added</option>
+            <?php if ($order_by === "alphabetical"): ?>
+              <option value="alphabetical" selected="selected">Alphabetical</option>
             <?php else: ?>
-              <option value="<?=$grade->grade?>"><?=$grade->grade?></option>
+              <option value="alphabetical">Alphabetical</option>
             <?php endif ?>
-          <?php endforeach ?>
-        </select>
+          </select>
+        </div>
 
-        <b>Sort by:</b>
-        <select class="lor-select" name="order_by">
-          <option value="new">Recently Added</option>
-          <?php if ($order_by === "alphabetical"): ?>
-            <option value="alphabetical" selected="selected">Alphabetical</option>
-          <?php else: ?>
-            <option value="alphabetical">Alphabetical</option>
-          <?php endif ?>
-        </select>
-
-        <input type="text" placeholder="Keywords..." name="keywords" value="<?=$search_keywords?>">
-
-        <button type="submit" class="btn btn-primary">Search</button>
+        <div class="filter">
+          <input type="text" placeholder="Keywords..." name="keywords" value="<?=$search_keywords?>">
+          <button type="submit" class="btn btn-primary">Search</button>
+        </div>
     </form>
     </div>
   </div>

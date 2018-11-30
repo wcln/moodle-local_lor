@@ -1,11 +1,23 @@
 
 /* The filters div contains select boxes to apply filters to what projects are shown */
-#filters {
+div#filters {
     margin-bottom: 2em;
     padding: 1.5em 1em 1em 1em;
     background: linear-gradient(to bottom, #3b94f9, #113863);
-    border-radius: 5px; /* rounded corners */
-    color: white;
+}
+
+div#filters label {
+  color: white;
+}
+
+div#filters li > label {
+  color: black;
+}
+
+
+div.filter {
+  margin-right: 5px;
+  display: inline-block;
 }
 
 /* Each project div contains an image and the project title */

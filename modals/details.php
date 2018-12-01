@@ -18,67 +18,40 @@ if (isset($_GET['id'])) {
   <h4 class="modal-title col-12 text-center" id="myModalLabel"><?=$item->title?></h4>
   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 </div>
-<div class="modal-body col-12 text-center">
-
-  <!-- Item details. -->
-  <div id="item-details" class="text-left">
-    <ul>
-      <li><span class="label label-default">Categories:</span> <?=local_lor_get_categories_string_for_item($item->id)?></li>
-      <li><span class="label label-primary">Grades:</span> <?=local_lor_get_grades_string_for_item($item->id)?></li>
-      <li><span class="label label-success">Keywords:</span> <?=local_lor_get_keywords_string_for_item($item->id)?></li>
-      <li><span class="label label-info">Contributor(s):</span> <?=local_lor_get_contributors_string_for_item($item->id)?></li>
-      <li><span class="label label-warning">Date Created:</span> <?=date("F Y", strtotime($item->date_created))?></li> <!-- Date in format: June 2017 -->
-    </ul>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-md-12 text-center">
+      <!-- Item details. -->
+      <div id="item-details" class="text-left">
+        <ul>
+          <li><span class="label label-default">Categories:</span> <?=local_lor_get_categories_string_for_item($item->id)?></li>
+          <li><span class="label label-primary">Grades:</span> <?=local_lor_get_grades_string_for_item($item->id)?></li>
+          <li><span class="label label-success">Keywords:</span> <?=local_lor_get_keywords_string_for_item($item->id)?></li>
+          <li><span class="label label-info">Contributor(s):</span> <?=local_lor_get_contributors_string_for_item($item->id)?></li>
+          <li><span class="label label-warning">Date Created:</span> <?=date("F Y", strtotime($item->date_created))?></li> <!-- Date in format: June 2017 -->
+        </ul>
+      </div>
+    </div>
   </div>
+  <div class="row">
+    <div class="col-md-12 text-center">
+      <!-- Actual LOR item displayed/embedded. -->
+      <?php if ($item->type == 1): // Game ?>
 
-  <!-- Actual LOR item displayed/embedded. -->
-  <?php if ($item->type == 1): // Game ?>
+        <p align="center"><iframe width="<?=$item->width?>px" height="<?=$item->height?>px" src="<?=$item->link?>" allowfullscreen="" frameborder="0"></iframe></p>
 
-    <p align="center"><iframe src="<?=$item->link?>" allowfullscreen="" frameborder="0"></iframe></p
+      <?php elseif ($item->type == 2): // Project ?>
 
-  <?php elseif ($item->type == 2): // Project ?>
+        <embed src="<?=$item->link?>" width="700" height="800" type='application/pdf'>
 
-    <embed src="<?=$item->link?>" width="700" height="800" type='application/pdf'>
-
-  <?php endif // TODO: videos, lessons, learning guides. ?>
-
-  <p><b><i>Note:</i></b> Please contact WCLN if you would like to use this LOR item outside of bclearningnetwork.com</p>
-  <?php if ($item->type == 1): ?>
-        <script>
-        /*
-         * Compute width and height of iframe from the width and height of the canvas (for a game).
-         */
-        $(function() {
-
-            // iframe loaded.
-            $(".modal iframe").bind("load",function() {
-              // defaults in case of Flash
-              var width = 700;
-              var height = 700;
-              width = ($(this).contents().find('canvas').width()) + 10;
-              height = ($(this).contents().find('canvas').height()) + 10;
-              if (isNaN(width) || isNaN(height)) { // another check just in case gameshow
-                width = 1025;
-                height = 700;
-              }
-              <?php
-              // Check if there is a manually set width and height, if so override the calculated ones.
-                if (!is_null($item->width)) {
-                  echo "width = $item->width;";
-                }
-                if (!is_null($item->height)) {
-                  echo "height = $item->height;";
-                }
-              ?>
-
-              // Set the iframe width and height.
-              $('iframe').attr('width', width);
-              $('iframe').attr('height', height);
-            });
-        });
-        </script>
-      <?php endif ?>
-
+      <?php endif // TODO: videos, lessons, learning guides. ?>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 text-center">
+      <p><b><i>Note:</i></b> Please contact WCLN if you would like to use this LOR item outside of bclearningnetwork.com</p>
+    </div>
+  </div>
 <!-- End of modal HTML. -->
 </div>
 <div class="modal-footer">

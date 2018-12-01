@@ -170,6 +170,7 @@ $number_of_pages = ceil(count($content) / ITEMS_PER_PAGE);
 	$(document).ready(function(){
 		$('.modallink').click(function(e) { loadModal(e.currentTarget.href); });
 	});
+
 </script>
 
 <?php if (!is_null($id)): ?>

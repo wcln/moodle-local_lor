@@ -15,19 +15,21 @@ if (isset($_GET['id'])) {
 
 <!-- Modal -->
 <div class="modal-header">
-  <h4 class="modal-title" id="myModalLabel"><?=$item->title?></h4>
+  <h4 class="modal-title col-12 text-center" id="myModalLabel"><?=$item->title?></h4>
   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 </div>
-<div class="modal-body">
+<div class="modal-body col-12 text-center">
 
   <!-- Item details. -->
-  <ul>
-    <li><b>Categories</b>: <?=local_lor_get_categories_string_for_item($item->id)?></li>
-    <li><b>Grades</b>: <?=local_lor_get_grades_string_for_item($item->id)?></li>
-    <li><b>Keywords</b>: <?=local_lor_get_keywords_string_for_item($item->id)?></li>
-    <li><b>Contributor(s)</b>: <?=local_lor_get_contributors_string_for_item($item->id)?></li>
-    <li><b>Date Created:</b> <?=date("F Y", strtotime($item->date_created))?></li> <!-- Date in format: June 2017 -->
-  </ul>
+  <div id="item-details" class="text-left">
+    <ul>
+      <li><span class="label label-default">Categories:</span> <?=local_lor_get_categories_string_for_item($item->id)?></li>
+      <li><span class="label label-primary">Grades:</span> <?=local_lor_get_grades_string_for_item($item->id)?></li>
+      <li><span class="label label-success">Keywords:</span> <?=local_lor_get_keywords_string_for_item($item->id)?></li>
+      <li><span class="label label-info">Contributor(s):</span> <?=local_lor_get_contributors_string_for_item($item->id)?></li>
+      <li><span class="label label-warning">Date Created:</span> <?=date("F Y", strtotime($item->date_created))?></li> <!-- Date in format: June 2017 -->
+    </ul>
+  </div>
 
   <!-- Actual LOR item displayed/embedded. -->
   <?php if ($item->type == 1): // Game ?>

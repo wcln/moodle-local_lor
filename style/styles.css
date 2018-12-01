@@ -145,6 +145,23 @@ a.lor-icon {
   }
 }
 
-/* .modal-dialog {
-  margin-top: 1em;
-} */
+span.label {
+  width: 200px;
+  float: left;
+  margin-right: 1em;
+}
+
+div#item-details li {
+  list-style: none;
+  font-size: 18px;
+}
+
+div#item-details {
+  display: inline-block;
+}
+
+.modal-title {
+  font-size: 30px;
+  font-weight: bold;
+  flex: auto;
+}

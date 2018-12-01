@@ -186,7 +186,7 @@ $number_of_pages = ceil(count($content) / ITEMS_PER_PAGE);
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title" id="myModalLabel"><!-- To be replaced by jquery modal call. --></h4>
+        <h4 class="modal-title col-12 text-center" id="myModalLabel"><!-- To be replaced by jquery modal call. --></h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       </div>
       <div class="modal-body">

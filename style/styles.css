@@ -132,3 +132,19 @@ a.lor-icon {
 #item-info > div > textarea {
   width: 95%;
 }
+
+/* Modal styles */
+.modal-header .close {
+  margin-top: -1rem;
+}
+
+@media (min-width: 768px) {
+  .modal-xl {
+    width: 90%;
+   max-width:1200px;
+  }
+}
+
+/* .modal-dialog {
+  margin-top: 1em;
+} */

@@ -40,7 +40,6 @@ if (isset($_GET['id'])) {
             <li><b>Date Created:</b> <?=date("F Y", strtotime($item->date_created))?></li> <!-- Date in format: June 2017 -->
           </ul>
 
-
           <?php if ($item->type == 1): // GAME ?>
 
             <p>To include this <?=strtolower($item->name)?> in a course, or on any page, copy the text below and paste it into the page HTML.</p>

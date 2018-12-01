@@ -5,6 +5,7 @@ require_once(__DIR__ . '/locallib.php');
 
 
 // checking URL for variables
+$id = null;
 $search_categories = null;
 $search_type = null;
 $search_grades = null;
@@ -15,6 +16,9 @@ $page = 0;
 // Settings
 define("ITEMS_PER_PAGE", 25);
 
+if (isset($_GET['id'])) {
+  $id = $_GET['id'];
+}
 
 if (isset($_GET['categories'])) {
   if ($_GET['categories'] !== "-1") {
@@ -142,6 +146,60 @@ $number_of_pages = ceil(count($content) / ITEMS_PER_PAGE);
     </div>
   </div>
 
+
+
+<script type="text/javascript">
+  /*
+   * Modal handling script.
+   */
+   function loadModal(url) {
+
+     // Add listener to empty modal contents when it is closed.
+     $('#itemModal').on('hidden.bs.modal', function () {
+      $('.modal-body').empty();
+    });
+
+    // Load the modal content.
+     $('.modal-content').load(url);
+
+     // Ensure modal is shown.
+     $('#itemModal').modal('show');
+   }
+
+  // When a modal launcher is clicked.
+	$(document).ready(function(){
+		$('.modallink').click(function(e) { loadModal(e.currentTarget.href); });
+	});
+</script>
+
+<?php if (!is_null($id)): ?>
+  <script>
+    // If an id has been provided in URL, show the corresponding modal.
+    $(document).ready(function() {
+      loadModal("modals/details.php?id=<?=$id?>");
+    });
+  </script>
+<?php endif ?>
+
+<!-- Modal template to be rendered by click. -->
+<div class="modal fade" id="itemModal" tabindex="-1" role="dialog" aria-labelledby="itemModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel"><!-- To be replaced by jquery modal call. --></h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body">
+        <!-- To be replaced by jquery modal call. -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
   <!-- Content -->
   <div class="row-fluid text-center">
     <div class="col-md-12 text-center">
@@ -154,22 +212,27 @@ $number_of_pages = ceil(count($content) / ITEMS_PER_PAGE);
       </div>
       <div class="row text-center item">
       <div class="col-md-4 item-image">
-        <a href="show.php?id=<?=$item->id?>" target="_blank">
+        <a class="modallink" href="modals/details.php?id=<?=$item->id?>" data-remote="false" data-toggle="modal" data-target="#itemModal">
           <img class="lor-image" src="<?=$item->image?>" width="200px" height="150px" />
         </a>
 
       </div>
       <div class="col-md-7 project-about text-left">
-        <a href="show.php?id=<?=$item->id?>" target="_blank"><h3><?=$item->title?></h3></a>
+        <a class="modallink" href="modals/details.php?id=<?=$item->id?>" data-remote="false" data-toggle="modal" data-target="#itemModal">
+          <h3><?=$item->title?></h3>
+        </a>
         <p><i>Topics: </i><?=local_lor_get_keywords_string_for_item($item->id)?></p>
         <p>
-          <a class="lor-icon"><img src="images/icons/details.png">Details</a>
+          <a id="modallink" href="modals/details.php?id=<?=$item->id?>" data-remote="false" data-toggle="modal" data-target="#itemModal" class="modallink lor-icon">
+            <img src="images/icons/details.png">Details
+          </a>
           <a class="lor-icon"><img src="images/icons/related.png">Related</a>
           <a class="lor-icon"><img src="images/icons/present.png">Present</a>
           <a class="lor-icon"><img src="images/icons/share.png">Share</a>
           <a class="lor-icon"><img src="images/icons/embed.png">Embed</a>
         </p>
       </div>
+
     <?php } ?>
     <?php endif ?>
 </div>

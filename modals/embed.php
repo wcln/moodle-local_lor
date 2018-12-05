@@ -43,7 +43,6 @@ if (isset($_GET['id'])) {
             </tbody>
           </table>
         </textarea>
-        <embed src="<?=$item->link?>" width="700" height="800" type='application/pdf'>
 
       <?php endif // todo: video section once implemented ?>
     </div>

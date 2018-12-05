@@ -145,6 +145,17 @@ a.lor-icon {
   }
 }
 
+.modal-dialog {
+  max-width: 90%;
+  width: auto !important;
+  display: inline-block;
+}
+
+.modal {
+  text-align: center;
+}
+
+
 span.label {
   width: 200px;
   float: left;

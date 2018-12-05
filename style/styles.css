@@ -136,6 +136,8 @@ a.lor-icon {
 /* Details Modal styles */
 .modal-header .close {
   margin-top: -1rem;
+  position: absolute;
+  right: 10px;
 }
 
 @media (min-width: 768px) {
@@ -174,7 +176,6 @@ div#item-details {
 .modal-title {
   font-size: 30px;
   font-weight: bold;
-  flex: auto;
 }
 
 /* Embed modal styles */

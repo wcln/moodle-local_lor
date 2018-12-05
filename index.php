@@ -224,15 +224,21 @@ $number_of_pages = ceil(count($content) / ITEMS_PER_PAGE);
         </a>
         <p><i>Topics: </i><?=local_lor_get_keywords_string_for_item($item->id)?></p>
         <p>
-          <a id="modallink" href="modals/details.php?id=<?=$item->id?>" data-remote="false" data-toggle="modal" data-target="#itemModal" class="modallink lor-icon">
+          <a href="modals/details.php?id=<?=$item->id?>" data-remote="false" data-toggle="modal" data-target="#itemModal" class="modallink lor-icon">
             <img src="images/icons/details.png">Details
           </a>
           <a class="lor-icon" href="index.php<?=local_lor_get_related_parameters($item->id)?>">
             <img src="images/icons/related.png">Related
           </a>
-          <a class="lor-icon"><img src="images/icons/present.png">Present</a>
-          <a class="lor-icon"><img src="images/icons/share.png">Share</a>
-          <a class="lor-icon"><img src="images/icons/embed.png">Embed</a>
+          <a class="lor-icon" href="<?=$item->link?>" target="_blank">
+            <img src="images/icons/present.png">Present
+          </a>
+          <a href="modals/share.php?id=<?=$item->id?>"  data-remote="false" data-toggle="modal" data-target="#itemModal" class="modallink lor-icon">
+            <img src="images/icons/share.png">Share
+          </a>
+          <a href="modals/embed.php?id=<?=$item->id?>"  data-remote="false" data-toggle="modal" data-target="#itemModal" class="modallink lor-icon">
+            <img src="images/icons/embed.png">Embed
+          </a>
         </p>
       </div>
 

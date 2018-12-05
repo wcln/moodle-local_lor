@@ -133,7 +133,7 @@ a.lor-icon {
   width: 95%;
 }
 
-/* Modal styles */
+/* Details Modal styles */
 .modal-header .close {
   margin-top: -1rem;
 }
@@ -164,4 +164,11 @@ div#item-details {
   font-size: 30px;
   font-weight: bold;
   flex: auto;
+}
+
+/* Embed modal styles */
+p#copy-success {
+  visibility: hidden;
+  color: red;
+  margin: auto 1rem auto;
 }

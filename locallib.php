@@ -321,3 +321,35 @@ function local_lor_add_game($title, $categories, $topics, $contributors, $grades
 
   return $pid;
 }
+
+function local_lor_get_related_parameters($id) {
+  global $DB;
+
+  // Get keywords
+  $keywords = $DB->get_records_sql('SELECT {lor_content_keywords}.keyword FROM {lor_content_keywords} WHERE content=?', array($id));
+
+  // Get grades
+  $grades = $DB->get_records_sql('SELECT {lor_content_grades}.grade FROM {lor_content_grades} WHERE content=?', array($id));
+
+  // Get categories
+  $categories = $DB->get_records_sql('SELECT {lor_content_categories}.category FROM {lor_content_categories} WHERE content=?', array($id));
+
+  $keywords_string = "&keywords=";
+  $grades_string = "";
+  $categories_string = "";
+
+  foreach ($keywords as $keyword) {
+    $keywords_string .= $keyword->keyword . '+';
+  }
+
+  foreach ($grades as $grade) {
+    $grades_string .= "&grades[]=$grade->grade";
+  }
+
+  foreach ($categories as $category) {
+    $categories_string .= "&categories[]=$category->category";
+  }
+
+  // Currently not including keywords and the keyword search needs to be fixed.
+  return "?type=-1$grades_string$categories_string";
+}

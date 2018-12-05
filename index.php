@@ -227,7 +227,9 @@ $number_of_pages = ceil(count($content) / ITEMS_PER_PAGE);
           <a id="modallink" href="modals/details.php?id=<?=$item->id?>" data-remote="false" data-toggle="modal" data-target="#itemModal" class="modallink lor-icon">
             <img src="images/icons/details.png">Details
           </a>
-          <a class="lor-icon"><img src="images/icons/related.png">Related</a>
+          <a class="lor-icon" href="index.php<?=local_lor_get_related_parameters($item->id)?>">
+            <img src="images/icons/related.png">Related
+          </a>
           <a class="lor-icon"><img src="images/icons/present.png">Present</a>
           <a class="lor-icon"><img src="images/icons/share.png">Share</a>
           <a class="lor-icon"><img src="images/icons/embed.png">Embed</a>

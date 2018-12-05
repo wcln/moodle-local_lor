@@ -19,9 +19,9 @@ function local_lor_get_content($type, $categories, $grades, $order_by = "new", $
     $tables .= ", {lor_content_categories}, {lor_category}";
     $where_clause .= " AND {lor_content}.id = {lor_content_categories}.content
                         AND {lor_content_categories}.category={lor_category}.id AND (";
-    foreach ($categories as $cat) {
+    foreach ($categories as $category) {
       $where_clause .= "{lor_category}.id = ? OR ";
-      $params[] = $cat;
+      $params[] = $category;
     }
 
     $where_clause = substr($where_clause, 0, -4) . ")";
@@ -48,10 +48,24 @@ function local_lor_get_content($type, $categories, $grades, $order_by = "new", $
 
   // keywords
   if (!is_null($keywords) && $keywords !== "") {
-    $tables .= ", {lor_content_keywords}";
-    $where_clause .= ' AND {lor_content_keywords}.content = {lor_content}.id AND (keyword LIKE ? OR title LIKE ?)';
-    $params[] = "%$keywords%";
-    $params[] = "%$keywords%";
+    $keywords = explode(' ', $keywords);
+    if (strpos($tables, '{lor_category}') !== false) {
+      $tables .= ", {lor_content_keywords}, {lor_contributor}, {lor_content_contributors}";
+    } else {
+      $tables .= ", {lor_content_keywords}, {lor_content_categories}, {lor_category}, {lor_contributor}, {lor_content_contributors}";
+    }
+    $where_clause .= ' AND {lor_content_keywords}.content = {lor_content}.id
+                       AND {lor_content}.id = {lor_content_categories}.content AND {lor_content_categories}.category={lor_category}.id
+                       AND {lor_content}.id = {lor_content_contributors}.content AND {lor_content_contributors}.contributor={lor_contributor}.id';
+
+    foreach ($keywords as $keyword) {
+      $where_clause .= ' AND (LOWER(keyword) LIKE ? OR LOWER(title) LIKE ? OR LOWER({lor_category}.name) LIKE ? OR LOWER({lor_contributor}.name LIKE ?))';
+      $keyword = strtolower($keyword);
+      $params[] = "%$keyword%";
+      $params[] = "%$keyword%";
+      $params[] = "%$keyword%";
+      $params[] = "%$keyword%";
+    }
   }
 
   // assemble query string
@@ -338,6 +352,7 @@ function local_lor_get_related_parameters($id) {
   $grades_string = "";
   $categories_string = "";
 
+  // Currently not enabled see below.
   foreach ($keywords as $keyword) {
     $keywords_string .= $keyword->keyword . '+';
   }
@@ -350,6 +365,6 @@ function local_lor_get_related_parameters($id) {
     $categories_string .= "&categories[]=$category->category";
   }
 
-  // Currently not including keywords and the keyword search needs to be fixed.
+  // Currently not including keywords...
   return "?type=-1$grades_string$categories_string";
 }

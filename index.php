@@ -107,7 +107,11 @@ $number_of_pages = ceil(count($content) / ITEMS_PER_PAGE);
             <?php if (in_array($category->id, $search_categories)): ?>
               <option selected="selected" value="<?=$category->id?>"><?=$category->name?></option>
             <?php else: ?>
-              <option value="<?=$category->id?>"><?=$category->name?></option>
+              <?php if (is_null($search_categories)): ?>
+                <option selected="selected" value="<?=$category->id?>"><?=$category->name?></option>
+              <?php else: ?>
+                <option value="<?=$category->id?>"><?=$category->name?></option>
+              <?php endif?>
             <?php endif ?>
           <?php endforeach ?>
           </select>
@@ -120,7 +124,11 @@ $number_of_pages = ceil(count($content) / ITEMS_PER_PAGE);
               <?php if (in_array($grade->grade, $search_grades)): ?>
                 <option selected="selected" value="<?=$grade->grade?>"><?=$grade->grade?></option>
               <?php else: ?>
-                <option value="<?=$grade->grade?>"><?=$grade->grade?></option>
+                <?php if (is_null($search_categories)): ?>
+                  <option selected="selected" value="<?=$grade->grade?>"><?=$grade->grade?></option>
+                <?php else: ?>
+                  <option value="<?=$grade->grade?>"><?=$grade->grade?></option>
+                <?php endif ?>
               <?php endif ?>
             <?php endforeach ?>
           </select>

@@ -254,29 +254,31 @@ $number_of_pages = ceil(count($content) / ITEMS_PER_PAGE);
     <?php endif ?>
 </div>
 
-<div class="row-fluid text-center" id="pages-row">
-  <div class="col-md-2" id="previous-page">
-    <?php if ($page !== 0): ?>
-      <a class="back round lor-nav" id="backBtn" onclick="back(<?=$page+1?>)">&#8249;</a>
-    <?php endif ?>
+<?php if (!is_null($content) && count($content) > 0): ?>
+  <div class="row-fluid text-center" id="pages-row">
+    <div class="col-md-2" id="previous-page">
+      <?php if ($page !== 0): ?>
+        <a class="back round lor-nav" id="backBtn" onclick="back(<?=$page+1?>)">&#8249;</a>
+      <?php endif ?>
+    </div>
+    <div class="col-md-8" id="pages">
+      <p>Page:
+        <?php for ($i = 1; $i <= $number_of_pages; $i++) { ?>
+          <?php if ($i === $page + 1): ?>
+            <a class="page" id="current-page"><?=$i?></a>
+          <?php else: ?>
+            <a onclick="navigate(<?=$i?>)" class="page"><?=$i?></a>
+          <?php endif ?>
+        <?php } ?>
+      </p>
+    </div>
+    <div class="col-md-2" id="next-page">
+      <?php if ($page != ($number_of_pages - 1)): ?>
+        <a class="next round lor-nav" id="nextBtn" onclick="next(<?=$page+1?>)">&#8250;</a>
+      <?php endif ?>
+    </div>
   </div>
-  <div class="col-md-8" id="pages">
-    <p>Page:
-      <?php for ($i = 1; $i <= $number_of_pages; $i++) { ?>
-        <?php if ($i === $page + 1): ?>
-          <a class="page" id="current-page"><?=$i?></a>
-        <?php else: ?>
-          <a onclick="navigate(<?=$i?>)" class="page"><?=$i?></a>
-        <?php endif ?>
-      <?php } ?>
-    </p>
-  </div>
-  <div class="col-md-2" id="next-page">
-    <?php if ($page != ($number_of_pages - 1)): ?>
-      <a class="next round lor-nav" id="nextBtn" onclick="next(<?=$page+1?>)">&#8250;</a>
-    <?php endif ?>
-  </div>
-</div>
+<?php endif ?>
 <script src="lib/multiple-select/multiple-select.js"></script>
 <script>
     $('.multiple').multipleSelect();

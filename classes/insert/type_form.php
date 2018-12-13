@@ -1,9 +1,12 @@
 <?php
 
+namespace local_lor\insert;
+use moodleform;
+
 defined('MOODLE_INTERNAL') || die;
 
 require_once($CFG->libdir.'/formslib.php');
-require_once(__DIR__ . '/locallib.php');
+require_once(__DIR__ . '/../../locallib.php');
 
 class type_form extends moodleform {
 
@@ -11,6 +14,8 @@ class type_form extends moodleform {
 		global $CFG;
 
     $mform = $this->_form;
+
+		$mform->addElement('html', '<p>' . get_string('subheading', 'local_lor') . '</p>');
 
 		$types_arr = array();
 		$types = local_lor_get_types();

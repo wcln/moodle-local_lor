@@ -3,7 +3,8 @@
 $string['pluginname'] = "LOR Page";
 
 // insert form
-$string['heading'] = "Add to LOR";
+$string['heading'] = "Add to WCLN Learning Object Repository";
+$string['subheading'] = "Add an item to the WCLN Learning Object Repository. Start by selecting the type of item you would like to add.";
 $string['title'] = "Title";
 $string['inquiry'] = "Title / Inquiry Question";
 $string['description'] = "Inquiry Question";
@@ -25,7 +26,7 @@ $string['height'] = "Height";
 $string['iframe_size_paragraph'] = 'Specify a width and a height for the IFrame in which the game will be displayed. If these are left blank, the LOR page will attempt to automatically calculate dimensions. Automatic calculations generally work well for content in only a canvas. It is a good idea to specify these here if you know them.';
 
 // type form
-$string['type'] = "Type";
+$string['type'] = "Item Type";
 $string['next'] = 'Next';
 
 // errors
@@ -33,10 +34,10 @@ $string['error_filenames'] = "All files must have the same name!";
 $string['error_filename_exists'] = "This filename exists in the database already! Please change the filename of all files.";
 $string['error_file_exists'] = "This filename already exists on the server! Please change the filename of all files.";
 $string['error_categories'] = "You must choose AT LEAST one category.";
+$string['error_title_not_found'] = "[ERROR: TITLE NOT FOUND!]";
 
 // nav bar
 $string['lor'] = "LOR";
-$string['insert'] = "Insert Form";
-$string['add_project'] = "Add Project";
-$string['add_game'] = "Add Game";
-$string['add_video'] = "Add Video";
+$string['nav_insert_form'] = "Insert Form";
+$string['nav_default_type'] = "Item";
+$string['nav_insert'] = "Insert ";

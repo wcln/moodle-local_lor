@@ -1,10 +1,9 @@
 <?php
 
+use \local_lor\insert\handler;
+
 require_once(__DIR__ . '/../../config.php'); // standard config file
 require_once(__DIR__ . '/locallib.php');
-require_once('game_form.php');
-require_once('project_form.php');
-require_once('type_form.php');
 
 // set up the page
 $title = get_string('pluginname', 'local_lor');
@@ -16,64 +15,91 @@ $PAGE->set_url($url);
 $PAGE->set_title($title);
 $PAGE->set_heading($title);
 $PAGE->set_pagelayout('standard');
+$PAGE->requires->css('/local/lor/style/styles.css', true); // Require custom CSS stylesheet to style form.
 
 
 // nav bar
 $PAGE->navbar->ignore_active();
 $PAGE->navbar->add(get_string('lor', 'local_lor'), new moodle_url('/local/lor/index.php'));
-$PAGE->navbar->add(get_string('insert', 'local_lor'), new moodle_url('/local/lor/insert.php'));
-
+$PAGE->navbar->add(get_string('nav_insert_form', 'local_lor'), new moodle_url('/local/lor/insert.php'));
 
 require_login();
 
-// game form
-if (isset($_GET['gamecreator'])) { // check if there is a link from gamecreator
-  $from_gamecreator = true;
-  $game_form = new game_form(null, array('link' => $_GET['gamecreator'])); // send custom data to game form to pre-populate link field
-} else {
-  $game_form = new game_form();
+// Check if there is custom data from the game creator to send to a form.
+$custom_data = null;
+if (isset($_GET['gamecreator'])) {
+  $custom_data = array('link' => $_GET['gamecreator']);
 }
 
-// project form
-$project_form = new project_form();
 
-if ($fromform = $game_form->get_data()) {
 
-  $pid = local_lor_add_game($fromform->title, $fromform->categories, $fromform->topics, $fromform->contributors, $fromform->grades, $fromform->link, $fromform->width, $fromform->height, $game_form);
-  redirect(new moodle_url('/local/lor/insert.php', array('pid' => $pid)));
+// Try to load and display the current form.
+try {
+  // Try to load current form. Will throw an exception if form doesn't exist.
+  $current_form = handler::get_current_form();
 
-} else if ($fromform = $project_form->get_data()) {
+  if ($fromform = $current_form->get_data()) {
+    // Insert the new LOR item.
+    $inserted_id = handler::insert_item($fromform, $current_form);
+    // Redirect to type_form.
+    redirect(new moodle_url('/local/lor/insert.php', array('inserted_id' => $inserted_id)));
+  } else if ($current_form->is_cancelled()) {
+    // Go back to type_form.
+    redirect(new moodle_url('/local/lor/insert.php'));
+  } else {
 
-  $pid = local_lor_add_project($fromform->title, $fromform->categories, $fromform->topics, $fromform->contributors, $fromform->grades, $project_form);
-  redirect(new moodle_url('/local/lor/insert.php', array('pid' => $pid)));
+    // Update the nav bar using the type name as found in the database.
+    $PAGE->navbar->add(handler::get_navbar_string());
 
-} else {
+    // Output the page header.
+    echo $OUTPUT->header();
+    echo $OUTPUT->heading(get_string('heading', 'local_lor'));
 
-  // update nav bar
-  if ($SESSION->current_type == "game" || $from_gamecreator) { // game
-    $PAGE->navbar->add(get_string('add_game', 'local_lor'));
-  } else if ($SESSION->current_type == "project") { // project
-    $PAGE->navbar->add(get_string('add_project', 'local_lor'));
-  } else { // video
-    $PAGE->navbar->add(get_string('add_video', 'local_lor'));
+    // Display the current form.
+    $current_form->display();
   }
 
+
+} catch (Exception $e) {
+
+  // Output the page header.
   echo $OUTPUT->header();
   echo $OUTPUT->heading(get_string('heading', 'local_lor'));
 
-  ?><link rel="stylesheet" href="styles.css"><?php
+  // No form with matching type ID.
+  // TODO show error message.
+    echo $e;
 
-  // show insert form
-  if ($SESSION->current_type == "game" || $from_gamecreator) { // game (check if linked to from gamecreator)
-    $PAGE->navbar->add(get_string('add_game', 'local_lor'));
-    $game_form->display();
-  } else if ($SESSION->current_type == "project") { // project
-    $PAGE->navbar->add(get_string('add_project', 'local_lor'));
-    $project_form->display();
-  } else { // video or animation
-    $PAGE->navbar->add(get_string('add_video', 'local_lor'));
-    echo "Not available yet.";
-  }
+}
+
+
+// project form
+// $project_form = new project_form();
+//
+// if ($fromform = $game_form->get_data()) {
+//
+//   $pid = local_lor_add_game($fromform->title, $fromform->categories, $fromform->topics, $fromform->contributors, $fromform->grades, $fromform->link, $fromform->width, $fromform->height, $game_form);
+//   redirect(new moodle_url('/local/lor/insert.php', array('pid' => $pid)));
+//
+// } else if ($fromform = $project_form->get_data()) {
+//
+//   $pid = local_lor_add_project($fromform->title, $fromform->categories, $fromform->topics, $fromform->contributors, $fromform->grades, $project_form);
+//   redirect(new moodle_url('/local/lor/insert.php', array('pid' => $pid)));
+//
+// } else {
+
+  // update nav bar
+  // if ($SESSION->current_type == "game" || $from_gamecreator) { // game
+  //   $PAGE->navbar->add(get_string('add_game', 'local_lor'));
+  // } else if ($SESSION->current_type == "project") { // project
+  //   $PAGE->navbar->add(get_string('add_project', 'local_lor'));
+  // } else { // video
+  //   $PAGE->navbar->add(get_string('add_video', 'local_lor'));
+  // }
+
+
+
+
+
 
   echo $OUTPUT->footer();
-}

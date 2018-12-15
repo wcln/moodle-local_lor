@@ -9,8 +9,7 @@ require_once(__DIR__ . '/locallib.php');
 $title = get_string('pluginname', 'local_lor');
 $pagetitle = $title;
 $url = new moodle_url("/local/lor/handleinsert.php");
-$context = context_system::instance();
-$PAGE->set_context($context);
+$PAGE->set_context(context_system::instance());
 $PAGE->set_url($url);
 $PAGE->set_title($title);
 $PAGE->set_heading($title);
@@ -36,7 +35,7 @@ if (isset($_GET['gamecreator'])) {
 // Try to load and display the current form.
 try {
   // Try to load current form.
-  $current_form = handler::get_current_form();
+  $current_form = handler::get_current_form($custom_data);
   if ($current_form !== false) {
     if ($fromform = $current_form->get_data()) {
       // Insert the new LOR item.

@@ -72,6 +72,7 @@ class form_1 extends moodleform {
 					$mform->setDefault('link', $this->_customdata['link']); // pre-populate link field if link given from gamecreator
 		}
     $mform->addRule('link', get_string('required'), 'required', null);
+		$mform->setType('link', PARAM_NOTAGS);
 
 		// Preview image.
 		$mform->addELement('filepicker', 'image', get_string('image', 'local_lor'), null, array('maxbytes' => 1000000, 'accepted_types' => array('.png')));

@@ -1,6 +1,6 @@
 <?php
 
-$string['pluginname'] = "LOR Page";
+$string['pluginname'] = "WCLN Learning Object Repository";
 
 // insert form
 $string['heading'] = "Add to WCLN Learning Object Repository";

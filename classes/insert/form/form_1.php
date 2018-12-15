@@ -108,6 +108,11 @@ class form_1 extends moodleform {
 			 $errors['categories'] = get_string('error_categories', 'local_lor');
 		 }
 
+		 // Check length of title.
+		 if (strlen($data['title']) >= 150) {
+			 $errors['title'] = get_string('error_title_length', 'local_lor');
+		 }
+
 
 		return $errors;
 	}

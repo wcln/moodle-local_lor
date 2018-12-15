@@ -109,6 +109,11 @@ class form_2 extends moodleform {
 			}
 		}
 
+		// Check length of title.
+		if (strlen($data['title']) >= 150) {
+			$errors['title'] = get_string('error_title_length', 'local_lor');
+		}
+
     // Check that ID doesnt exist in database.
 		// if (!isset($errors['word'])) { // only check if all files have same name
 		// 	$filename = explode(".", array_pop($records)->filename, 2)[0];

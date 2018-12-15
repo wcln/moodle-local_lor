@@ -37,6 +37,7 @@ $string['error_categories'] = "You must choose AT LEAST one category.";
 $string['error_title_not_found'] = "[ERROR: TITLE NOT FOUND!]";
 $string['error_missing_form'] = 'Error: That insert form is not yet available.';
 $string['error_unexpected'] = 'An unexpected occured. Please contact a WCLN admin. The following exception occurred: ';
+$string['error_title_length'] = 'Title is too long!';
 
 // nav bar
 $string['lor'] = "LOR";

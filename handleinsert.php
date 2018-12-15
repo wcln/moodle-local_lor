@@ -35,30 +35,39 @@ if (isset($_GET['gamecreator'])) {
 
 // Try to load and display the current form.
 try {
-  // Try to load current form. Will throw an exception if form doesn't exist.
+  // Try to load current form.
   $current_form = handler::get_current_form();
+  if ($current_form !== false) {
+    if ($fromform = $current_form->get_data()) {
+      // Insert the new LOR item.
+      $inserted_id = handler::insert_item($fromform, $current_form);
+      // Redirect to type_form.
+      redirect(new moodle_url('/local/lor/insert.php', array('inserted_id' => $inserted_id)));
+    } else if ($current_form->is_cancelled()) {
+      // Go back to type_form.
+      redirect(new moodle_url('/local/lor/insert.php'));
+    } else {
 
-  if ($fromform = $current_form->get_data()) {
-    // Insert the new LOR item.
-    $inserted_id = handler::insert_item($fromform, $current_form);
-    // Redirect to type_form.
-    redirect(new moodle_url('/local/lor/insert.php', array('inserted_id' => $inserted_id)));
-  } else if ($current_form->is_cancelled()) {
-    // Go back to type_form.
-    redirect(new moodle_url('/local/lor/insert.php'));
+      // Update the nav bar using the type name as found in the database.
+      $PAGE->navbar->add(handler::get_navbar_string());
+
+      // Output the page header.
+      echo $OUTPUT->header();
+      echo $OUTPUT->heading(get_string('heading', 'local_lor'));
+
+      // Display the current form.
+      $current_form->display();
+    }
   } else {
-
-    // Update the nav bar using the type name as found in the database.
-    $PAGE->navbar->add(handler::get_navbar_string());
+    // Error loading form. No form with matching ID.
 
     // Output the page header.
     echo $OUTPUT->header();
     echo $OUTPUT->heading(get_string('heading', 'local_lor'));
 
-    // Display the current form.
-    $current_form->display();
-  }
+    echo get_string('error_missing_form', 'local_lor');
 
+  }
 
 } catch (Exception $e) {
 
@@ -66,9 +75,8 @@ try {
   echo $OUTPUT->header();
   echo $OUTPUT->heading(get_string('heading', 'local_lor'));
 
-  // No form with matching type ID.
-  // TODO show error message.
-    echo $e;
+  // Output exception.
+  echo get_string('error_unexpected', 'local_lor') . $e;
 
 }
 

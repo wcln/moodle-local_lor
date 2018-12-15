@@ -35,6 +35,8 @@ $string['error_filename_exists'] = "This filename exists in the database already
 $string['error_file_exists'] = "This filename already exists on the server! Please change the filename of all files.";
 $string['error_categories'] = "You must choose AT LEAST one category.";
 $string['error_title_not_found'] = "[ERROR: TITLE NOT FOUND!]";
+$string['error_missing_form'] = 'Error: That insert form is not yet available.';
+$string['error_unexpected'] = 'An unexpected occured. Please contact a WCLN admin. The following exception occurred: ';
 
 // nav bar
 $string['lor'] = "LOR";

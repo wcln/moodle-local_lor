@@ -29,7 +29,7 @@ class handler {
     if (class_exists($class)) {
         return new $class(null, $custom_data);
     } else {
-      throw new \Exception;
+      return false;
     }
   }
 
@@ -45,7 +45,7 @@ class handler {
   }
 
   public static function insert_item($data, &$form) {
-    return call_user_func_array('\\' . __NAMESPACE__ . '\\insert_functions::insert_'. handler::get_current_type(), array($data, $form));
+    return call_user_func_array('\\' . __NAMESPACE__ . '\\insert_functions::insert_'. handler::get_current_type(), array($data, &$form));
   }
 
 }

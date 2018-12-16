@@ -70,7 +70,7 @@ $number_of_pages = ceil(count($content) / ITEMS_PER_PAGE);
 
 ?>
 <script src="https://bclearningnetwork.com/lib/jquery/jquery-3.2.1.min.js"></script>
-<link rel="stylesheet" href="https://bclearningnetwork.com/lib/bootstrap/bootstrap.min.css">
+<link rel="stylesheet" href="style/bootstrap-lor.css">
 <script src="https://bclearningnetwork.com/lib/bootstrap/bootstrap.min.js"></script>
 
 <link rel="stylesheet" href="style/styles.css">
@@ -80,7 +80,7 @@ $number_of_pages = ceil(count($content) / ITEMS_PER_PAGE);
 
 <!-- custom navigation -->
 <script src="navigation.js"></script>
-<div class="container-fluid" id="content-container">
+<div class="container-fluid bootstrap-lor" id="content-container">
   <!-- Filter settings -->
   <div class="row-fluid">
     <div class="col-md-12" id="filters">
@@ -283,6 +283,7 @@ $number_of_pages = ceil(count($content) / ITEMS_PER_PAGE);
 <script>
     $('.multiple').multipleSelect();
 </script>
+</div>
 
 <?php
 echo $OUTPUT->footer();

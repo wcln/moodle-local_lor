@@ -1,27 +1,27 @@
 
 /* The filters div contains select boxes to apply filters to what projects are shown */
-div#filters {
+#content-container div#filters {
     margin-bottom: 2em;
     padding: 1.5em 1em 1em 1em;
     background: linear-gradient(to bottom, #3b94f9, #113863);
 }
 
-div#filters label {
+#content-container div#filters label {
   color: white;
 }
 
-div#filters li > label {
+#content-container div#filters li > label {
   color: black;
 }
 
 
-div.filter {
+#content-container div.filter {
   margin-right: 5px;
   display: inline-block;
 }
 
 /* Each project div contains an image and the project title */
-.item {
+#content-container .item {
   border: 1px solid #bcbcbc;
   margin: 0 1em .5em 1em;
   padding: 1em 0 1em 0;
@@ -30,7 +30,7 @@ div.filter {
 }
 
 /* Used to apply filters, contained in the filters div */
-.lor-select {
+#content-container .lor-select {
   margin-right: 1em;
 }
 
@@ -38,11 +38,11 @@ div.filter {
   background-color: #ffffff;
 }
 
-#item-info {
+#content-container #item-info {
   padding: 1em;
 }
 
-.lor-image {
+#content-container .lor-image {
   border-radius: 3px;
   border: 1px solid #bcbcbc;
 }
@@ -67,22 +67,22 @@ div.filter {
   margin-right: 4px;
 }
 
-div#pages {
+#content-container div#pages {
   font-size: 16px;
   font-weight: bold;
 }
 
-div#pages > p a {
+#content-container div#pages > p a {
   cursor: pointer;
 }
 
-div#pages > p a#current-page {
+#content-container div#pages > p a#current-page {
   font-size: 18px;
   cursor: default;
   color: #382700;
 }
 
-.lor-nav {
+#content-container .lor-nav {
   text-decoration: none;
   display: inline-block;
   padding: 8px 16px;
@@ -90,96 +90,96 @@ div#pages > p a#current-page {
   line-height: normal;
 }
 
-.lor-nav:hover {
+#content-container .lor-nav:hover {
   background-color: #ddd;
   color: black;
   text-decoration: none;
 }
 
-.back {
+#content-container .back {
     background-color: #f1f1f1;
     color: black;
 }
 
-.next {
+#content-container .next {
     background-color: #fed101;
     color: white;
 }
 
-.round {
+#content-container .round {
     border-radius: 50%;
 }
 
-div.multiple.lor-select {
+#content-container div.multiple.lor-select {
   min-width: 70px;
 }
 
-#pages-row {
+#content-container #pages-row {
   margin-top: 2em;
 }
 
-a.lor-icon > img {
+#content-container a.lor-icon > img {
   height: 20px;
   margin-right: 4px;
 }
 
-a.lor-icon {
+#content-container a.lor-icon {
   margin-right: 10px;
   cursor: pointer;
   color: #113863;
 }
 
-#item-info > div > textarea {
+#content-container #item-info > div > textarea {
   width: 95%;
 }
 
 /* Details Modal styles */
-.modal-header .close {
+#content-container .modal-header .close {
   margin-top: -1rem;
   position: absolute;
   right: 10px;
 }
 
 @media (min-width: 768px) {
-  .modal-xl {
+  #content-container .modal-xl {
     width: 90%;
    max-width:1200px;
   }
 }
 
-.modal-dialog {
+#content-container .modal-dialog {
   max-width: 90%;
   width: auto !important;
   display: inline-block;
 }
 
-.modal {
+#content-container .modal {
   text-align: center;
 }
 
 
-span.label {
+#content-container span.label {
   width: 200px;
   float: left;
   margin-right: 1em;
 }
 
-div#item-details li {
+#content-container div#item-details li {
   list-style: none;
   font-size: 18px;
 }
 
-div#item-details {
+#content-container div#item-details {
   display: inline-block;
 }
 
-.modal-title {
+#content-container .modal-title {
   font-size: 30px;
   font-weight: bold;
 }
 
 /* Embed modal styles */
-p#copy-success {
+#content-container p#copy-success {
   visibility: hidden;
   color: red;
   margin: auto 1rem auto;

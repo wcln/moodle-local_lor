@@ -93,14 +93,14 @@ if (isset($_GET['id'])) {
             var width = 700;
             var height = 700;
             // HTML5, assuming this is usually true
-            if (<?=$item->platform?> === 1) {
-              width = ($(this).contents().find('canvas').width()) + 10;
-              height = ($(this).contents().find('canvas').height()) + 10;
-              if (isNaN(width) || isNaN(height)) { // another check just in case gameshow
-                width = 1025;
-                height = 630;
-              }
+
+            width = ($(this).contents().find('canvas').width()) + 10;
+            height = ($(this).contents().find('canvas').height()) + 10;
+            if (isNaN(width) || isNaN(height)) { // another check just in case gameshow
+              width = 1025;
+              height = 630;
             }
+
 
             <?php
             // Check if there is a manually set width and height, if so override the calculated ones.

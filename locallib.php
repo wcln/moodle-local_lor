@@ -45,8 +45,6 @@ function local_lor_get_content($type, $categories, $grades, $order_by = "new", $
     $params[] = $type;
   }
 
-  // platform (make sure it is either NULL or HTML5 (no flash))
-  $where_clause .= ' AND ({lor_content}.platform = 1 OR {lor_content}.platform IS NULL)';
 
 
   // keywords
@@ -71,7 +69,7 @@ function local_lor_get_content($type, $categories, $grades, $order_by = "new", $
 function local_lor_get_content_from_id($id) {
   global $DB;
 
-  $sql = "SELECT DISTINCT {lor_content}.id, type, {lor_type}.name, title, image, link, platform, date_created, width, height
+  $sql = "SELECT DISTINCT {lor_content}.id, type, {lor_type}.name, title, image, link, date_created, width, height
           FROM {lor_content}, {lor_type}
           WHERE {lor_content}.id=? AND {lor_content}.type = {lor_type}.id";
   $item = $DB->get_record_sql($sql, array($id));
@@ -266,7 +264,6 @@ function local_lor_add_game($title, $categories, $topics, $contributors, $grades
   $record->image = ""; // will be replaced below.
   $record->link = $link;
   $record->date_created = date("Ymd");
-  $record->platform = 1; // always HTML5
   $record->width = ($width == 0)? null : $width;
   $record->height = ($height == 0)? null : $height;
   $pid = $DB->insert_record('lor_content', $record);

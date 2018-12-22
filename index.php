@@ -184,6 +184,7 @@ $number_of_pages = ceil(count($content) / ITEMS_PER_PAGE);
     // If an id has been provided in URL, show the corresponding modal.
     $(document).ready(function() {
       loadModal("modals/details.php?id=<?=$id?>");
+      $('#itemModal').modal('show');
     });
   </script>
 <?php endif ?>

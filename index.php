@@ -52,6 +52,7 @@ $PAGE->set_pagelayout('standard');
 $PAGE->set_title("WCLN: LOR");
 $PAGE->set_heading("WCLN Learning Material");
 $PAGE->set_url(new moodle_url('/local/lor/index.php'));
+$PAGE->requires->jquery();
 
 // nav bar
 $PAGE->navbar->ignore_active();
@@ -69,7 +70,7 @@ $grades = local_lor_get_grades();
 $number_of_pages = ceil(count($content) / ITEMS_PER_PAGE);
 
 ?>
-<script src="https://bclearningnetwork.com/lib/jquery/jquery-3.2.1.min.js"></script>
+<!-- <script src="https://bclearningnetwork.com/lib/jquery/jquery-3.2.1.min.js"></script> -->
 <link rel="stylesheet" href="style/bootstrap-lor.css">
 <script src="https://bclearningnetwork.com/lib/bootstrap/bootstrap.min.js"></script>
 
@@ -164,14 +165,11 @@ $number_of_pages = ceil(count($content) / ITEMS_PER_PAGE);
 
      // Add listener to empty modal contents when it is closed.
      $('#itemModal').on('hidden.bs.modal', function () {
-      $('.modal-body').empty();
+      $('.lor-modal-body').empty();
     });
 
     // Load the modal content.
-     $('.modal-content').load(url);
-
-     // Ensure modal is shown.
-     $('#itemModal').modal('show');
+    $('.lor-modal-content').load(url);
    }
 
   // When a modal launcher is clicked.
@@ -191,17 +189,17 @@ $number_of_pages = ceil(count($content) / ITEMS_PER_PAGE);
 <?php endif ?>
 
 <!-- Modal template to be rendered by click. -->
-<div class="modal fade" id="itemModal" tabindex="-1" role="dialog" aria-labelledby="itemModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title col-12 text-center" id="myModalLabel"><!-- To be replaced by jquery modal call. --></h4>
+<div class="lor-modal fade" id="itemModal" tabindex="-1" role="dialog" aria-labelledby="itemModalLabel" aria-hidden="true">
+  <div class="lor-modal-dialog lor-modal-xl">
+    <div class="lor-modal-content">
+      <div class="lor-modal-header">
+        <h4 class="lor-modal-title col-12 text-center" id="myModalLabel"><!-- To be replaced by jquery modal call. --></h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       </div>
-      <div class="modal-body">
+      <div class="lor-modal-body">
         <!-- To be replaced by jquery modal call. -->
       </div>
-      <div class="modal-footer">
+      <div class="lor-modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>

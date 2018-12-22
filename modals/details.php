@@ -14,11 +14,11 @@ if (isset($_GET['id'])) {
 ?>
 
 <!-- Modal -->
-<div class="modal-header">
-  <h4 class="modal-title col-12 text-center" id="myModalLabel"><?=$item->title?></h4>
+<div class="lor-modal-header">
+  <h4 class="lor-modal-title col-12 text-center" id="myModalLabel"><?=$item->title?></h4>
   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 </div>
-<div class="modal-body">
+<div class="lor-modal-body">
   <div class="row">
     <div class="col-md-12 text-center">
       <!-- Item details. -->
@@ -54,7 +54,7 @@ if (isset($_GET['id'])) {
   </div>
 <!-- End of modal HTML. -->
 </div>
-<div class="modal-footer">
+<div class="lor-modal-footer">
   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 </div>
 
@@ -62,28 +62,28 @@ if (isset($_GET['id'])) {
 // Error handling in case of missing ID.
   } else {
 ?>
-<div class="modal-header">
-  <h4 class="modal-title" id="myModalLabel">Error</h4>
+<div class="lor-modal-header">
+  <h4 class="lor-modal-title" id="myModalLabel">Error</h4>
   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 </div>
-<div class="modal-body">
+<div class="lor-modal-body">
     <p>Invalid LOR item ID provided.</p>
 </div>
-<div class="modal-footer">
+<div class="lor-modal-footer">
   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 </div>
 <?php
   }
 } else {
 ?>
-  <div class="modal-header">
-    <h4 class="modal-title" id="myModalLabel">Error</h4>
+  <div class="lor-modal-header">
+    <h4 class="lor-modal-title" id="myModalLabel">Error</h4>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
   </div>
-  <div class="modal-body">
+  <div class="lor-modal-body">
       <p>Missing LOR item ID.</p>
   </div>
-  <div class="modal-footer">
+  <div class="lor-modal-footer">
     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
   </div>
 <?php

@@ -993,7 +993,7 @@
 .bootstrap-lor .glyphicon-menu-hamburger:before {
   content: "\e236";
 }
-.bootstrap-lor .glyphicon-modal-window:before {
+.bootstrap-lor .glyphicon-lor-modal-window:before {
   content: "\e237";
 }
 .bootstrap-lor .glyphicon-oil:before {
@@ -3552,13 +3552,13 @@
 .bootstrap-lor input[type=submit].btn-block {
   width: 100%;
 }
-.bootstrap-lor .fade {
+.fade {
   opacity: 0;
   -webkit-transition: opacity .15s linear;
   -o-transition: opacity .15s linear;
   transition: opacity 0.15s linear;
 }
-.bootstrap-lor .fade.in {
+.fade.in {
   opacity: 1;
 }
 .bootstrap-lor .collapse {
@@ -5949,10 +5949,10 @@
   background: 0 0;
   border: 0;
 }
-.bootstrap-lor .modal-open {
+.bootstrap-lor .lor-modal-open {
   overflow: hidden;
 }
-.bootstrap-lor .modal {
+.bootstrap-lor .lor-modal {
   position: fixed;
   top: 0;
   right: 0;
@@ -5960,11 +5960,13 @@
   left: 0;
   z-index: 1050;
   display: none;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   outline: 0;
 }
-.bootstrap-lor .modal.fade .modal-dialog {
+
+.bootstrap-lor .lor-modal.fade .lor-modal-dialog {
   -webkit-transition: -webkit-transform 0.3s ease-out;
   -o-transition: -o-transform 0.3s ease-out;
   transition: transform 0.3s ease-out;
@@ -5973,22 +5975,22 @@
   -o-transform: translate(0, -25%);
   transform: translate(0, -25%);
 }
-.bootstrap-lor .modal.in .modal-dialog {
+.bootstrap-lor .lor-modal.in .lor-modal-dialog {
   -webkit-transform: translate(0, 0);
   -ms-transform: translate(0, 0);
   -o-transform: translate(0, 0);
   transform: translate(0, 0);
 }
-.bootstrap-lor .modal-open .modal {
+.bootstrap-lor .lor-modal-open .lor-modal {
   overflow-x: hidden;
   overflow-y: auto;
 }
-.bootstrap-lor .modal-dialog {
+.bootstrap-lor .lor-modal-dialog {
   position: relative;
   width: auto;
   margin: 10px;
 }
-.bootstrap-lor .modal-content {
+.bootstrap-lor .lor-modal-content {
   position: relative;
   background-color: #fff;
   -webkit-background-clip: padding-box;
@@ -6000,7 +6002,7 @@
   -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
   box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
 }
-.bootstrap-lor .modal-backdrop {
+.bootstrap-lor .lor-modal-backdrop {
   position: fixed;
   top: 0;
   right: 0;
@@ -6009,45 +6011,45 @@
   z-index: 1040;
   background-color: #000;
 }
-.bootstrap-lor .modal-backdrop.fade {
+.lor-modal-backdrop.fade {
   filter: alpha(opacity=0);
   opacity: 0;
 }
-.bootstrap-lor .modal-backdrop.in {
+.lor-modal-backdrop.in {
   filter: alpha(opacity=50);
   opacity: 0.5;
 }
-.bootstrap-lor .modal-header {
+.bootstrap-lor .lor-modal-header {
   padding: 15px;
   border-bottom: 1px solid #e5e5e5;
 }
-.bootstrap-lor .modal-header .close {
+.bootstrap-lor .lor-modal-header .close {
   margin-top: -2px;
 }
-.bootstrap-lor .modal-title {
+.bootstrap-lor .lor-modal-title {
   margin: 0;
   line-height: 1.42857143;
 }
-.bootstrap-lor .modal-body {
+.bootstrap-lor .lor-modal-body {
   position: relative;
   padding: 15px;
 }
-.bootstrap-lor .modal-footer {
+.bootstrap-lor .lor-modal-footer {
   padding: 15px;
   text-align: right;
   border-top: 1px solid #e5e5e5;
 }
-.bootstrap-lor .modal-footer .btn + .btn {
+.bootstrap-lor .lor-modal-footer .btn + .btn {
   margin-bottom: 0;
   margin-left: 5px;
 }
-.bootstrap-lor .modal-footer .btn-group .btn + .btn {
+.bootstrap-lor .lor-modal-footer .btn-group .btn + .btn {
   margin-left: -1px;
 }
-.bootstrap-lor .modal-footer .btn-block + .btn-block {
+.bootstrap-lor .lor-modal-footer .btn-block + .btn-block {
   margin-left: 0;
 }
-.bootstrap-lor .modal-scrollbar-measure {
+.bootstrap-lor .lor-modal-scrollbar-measure {
   position: absolute;
   top: -9999px;
   width: 50px;
@@ -6055,20 +6057,20 @@
   overflow: scroll;
 }
 @media (min-width: 768px) {
-  .bootstrap-lor .modal-dialog {
+  .bootstrap-lor .lor-modal-dialog {
     width: 600px;
     margin: 30px auto;
   }
-  .bootstrap-lor .modal-content {
+  .bootstrap-lor .lor-modal-content {
     -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
   }
-  .bootstrap-lor .modal-sm {
+  .bootstrap-lor .lor-modal-sm {
     width: 300px;
   }
 }
 @media (min-width: 992px) {
-  .bootstrap-lor .modal-lg {
+  .bootstrap-lor .lor-modal-lg {
     width: 900px;
   }
 }
@@ -6554,10 +6556,10 @@
 .bootstrap-lor .dl-horizontal dd:before,
 .bootstrap-lor .form-horizontal .form-group:after,
 .bootstrap-lor .form-horizontal .form-group:before,
-.bootstrap-lor .modal-footer:after,
-.bootstrap-lor .modal-footer:before,
-.bootstrap-lor .modal-header:after,
-.bootstrap-lor .modal-header:before,
+.bootstrap-lor .lor-modal-footer:after,
+.bootstrap-lor .lor-modal-footer:before,
+.bootstrap-lor .lor-modal-header:after,
+.bootstrap-lor .lor-modal-header:before,
 .bootstrap-lor .nav:after,
 .bootstrap-lor .nav:before,
 .bootstrap-lor .navbar-collapse:after,
@@ -6582,8 +6584,8 @@
 .bootstrap-lor .container:after,
 .bootstrap-lor .dl-horizontal dd:after,
 .bootstrap-lor .form-horizontal .form-group:after,
-.bootstrap-lor .modal-footer:after,
-.bootstrap-lor .modal-header:after,
+.bootstrap-lor .lor-modal-footer:after,
+.bootstrap-lor .lor-modal-header:after,
 .bootstrap-lor .nav:after,
 .bootstrap-lor .navbar-collapse:after,
 .bootstrap-lor .navbar-header:after,

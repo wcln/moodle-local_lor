@@ -134,26 +134,27 @@
 }
 
 /* Details Modal styles */
-#content-container .modal-header .close {
-  margin-top: -1rem;
+#content-container .lor-modal-header .close {
+  margin: 0;
   position: absolute;
   right: 10px;
+  top: 10px;
 }
 
 @media (min-width: 768px) {
-  #content-container .modal-xl {
+  #content-container .lor-modal-xl {
     width: 90%;
    max-width:1200px;
   }
 }
 
-#content-container .modal-dialog {
+#content-container .lor-modal-dialog {
   max-width: 90%;
   width: auto !important;
   display: inline-block;
 }
 
-#content-container .modal {
+#content-container .lor-modal {
   text-align: center;
 }
 
@@ -173,7 +174,7 @@
   display: inline-block;
 }
 
-#content-container .modal-title {
+#content-container .lor-modal-title {
   font-size: 30px;
   font-weight: bold;
 }
@@ -183,4 +184,8 @@
   visibility: hidden;
   color: red;
   margin: auto 1rem auto;
+}
+
+#content-container li {
+  line-height: normal;
 }

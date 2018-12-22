@@ -52,7 +52,7 @@ $PAGE->set_pagelayout('standard');
 $PAGE->set_title("WCLN: LOR");
 $PAGE->set_heading("WCLN Learning Material");
 $PAGE->set_url(new moodle_url('/local/lor/index.php'));
-$PAGE->requires->jquery();
+// $PAGE->requires->jquery();
 
 // nav bar
 $PAGE->navbar->ignore_active();
@@ -161,33 +161,34 @@ $number_of_pages = ceil(count($content) / ITEMS_PER_PAGE);
   /*
    * Modal handling script.
    */
-   function loadModal(url) {
+   $(document).ready(function() {
+     $('#itemModal').modal({ show: false});
 
-     // Add listener to empty modal contents when it is closed.
-     $('#itemModal').on('hidden.bs.modal', function () {
-      $('.lor-modal-body').empty();
-    });
+     function loadModal(url) {
 
-    // Load the modal content.
-    $('.lor-modal-content').load(url);
-   }
+       // Add listener to empty modal contents when it is closed.
+       $('#itemModal').on('hidden.bs.modal', function () {
+        $('.lor-modal-body').empty();
+      });
 
-  // When a modal launcher is clicked.
-	$(document).ready(function(){
-		$('.modallink').click(function(e) { loadModal(e.currentTarget.href); });
-	});
+      // Load the modal content.
+      $('.lor-modal-content').load(url);
+
+      // Show the modal.
+      $('#itemModal').modal('show');
+     }
+
+     // When a modal launcher is clicked.
+     $('.modallink').click(function(e) { loadModal(e.currentTarget.href); });
+   });
+
+   <?php if (!is_null($id)): ?>
+     // If an id has been provided in URL, show the corresponding modal.
+     loadModal("modals/details.php?id=<?=$id?>");
+     $('#itemModal').modal('show');
+   <?php endif ?>
 
 </script>
-
-<?php if (!is_null($id)): ?>
-  <script>
-    // If an id has been provided in URL, show the corresponding modal.
-    $(document).ready(function() {
-      loadModal("modals/details.php?id=<?=$id?>");
-      $('#itemModal').modal('show');
-    });
-  </script>
-<?php endif ?>
 
 <!-- Modal template to be rendered by click. -->
 <div class="lor-modal fade" id="itemModal" tabindex="-1" role="dialog" aria-labelledby="itemModalLabel" aria-hidden="true">
@@ -220,18 +221,18 @@ $number_of_pages = ceil(count($content) / ITEMS_PER_PAGE);
       </div>
       <div class="row text-center item">
       <div class="col-md-4 item-image">
-        <a class="modallink" href="modals/details.php?id=<?=$item->id?>" data-remote="false" data-toggle="modal" data-target="#itemModal">
+        <a class="modallink" href="modals/details.php?id=<?=$item->id?>" data-remote="false" data-target="#itemModal">
           <img class="lor-image" src="<?=$item->image?>" width="200px" height="150px" />
         </a>
 
       </div>
       <div class="col-md-7 project-about text-left">
-        <a class="modallink" href="modals/details.php?id=<?=$item->id?>" data-remote="false" data-toggle="modal" data-target="#itemModal">
+        <a class="modallink" href="modals/details.php?id=<?=$item->id?>" data-remote="false" data-target="#itemModal">
           <h3><?=$item->title?></h3>
         </a>
         <p><i>Topics: </i><?=local_lor_get_keywords_string_for_item($item->id)?></p>
         <p>
-          <a href="modals/details.php?id=<?=$item->id?>" data-remote="false" data-toggle="modal" data-target="#itemModal" class="modallink lor-icon">
+          <a href="modals/details.php?id=<?=$item->id?>" data-remote="false" data-target="#itemModal" class="modallink lor-icon">
             <img src="images/icons/details.png">Details
           </a>
           <a class="lor-icon" href="index.php<?=local_lor_get_related_parameters($item->id)?>">
@@ -240,10 +241,10 @@ $number_of_pages = ceil(count($content) / ITEMS_PER_PAGE);
           <a class="lor-icon" href="<?=$item->link?>" target="_blank">
             <img src="images/icons/present.png">Present
           </a>
-          <a href="modals/share.php?id=<?=$item->id?>"  data-remote="false" data-toggle="modal" data-target="#itemModal" class="modallink lor-icon">
+          <a href="modals/share.php?id=<?=$item->id?>"  data-remote="false" data-target="#itemModal" class="modallink lor-icon">
             <img src="images/icons/share.png">Share
           </a>
-          <a href="modals/embed.php?id=<?=$item->id?>"  data-remote="false" data-toggle="modal" data-target="#itemModal" class="modallink lor-icon">
+          <a href="modals/embed.php?id=<?=$item->id?>"  data-remote="false" data-target="#itemModal" class="modallink lor-icon">
             <img src="images/icons/embed.png">Embed
           </a>
         </p>

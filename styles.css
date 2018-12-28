@@ -133,6 +133,10 @@
   width: 95%;
 }
 
+body.no-scroll {
+  overflow-y: hidden;
+}
+
 /* Details Modal styles */
 #content-container .lor-modal-header .close {
   margin: 0;
@@ -184,6 +188,7 @@
   visibility: hidden;
   color: red;
   margin: auto 1rem auto;
+  display: inline;
 }
 
 #content-container li {

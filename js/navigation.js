@@ -10,10 +10,11 @@ function back(currentPage) {
 
 function navigate(page) {
   var loc = window.location;
+  console.log(loc.pathname);
   if (loc.search === "") {
     window.location = loc.protocol + '//' + loc.host + loc.pathname + "?page=" + page;
   } else {
-    window.location = (loc.protocol + '//' + loc.host + loc.pathname + loc.search).replace(/&page=[0-9]+/, "") + "&page=" + page;
+    // Check if URL includes an ID. If so, remove it before navigating to prevent re-opening a "linked to" LOR item.
+    window.location = (loc.protocol + '//' + loc.host + loc.pathname + loc.search.replace(/id=([^&]+)/, "")).replace(/&page=[0-9]+/, "") + "&page=" + page;
   }
-
 }

@@ -58,8 +58,8 @@ $PAGE->set_url(new moodle_url('/local/lor/index.php'));
 $PAGE->requires->jquery();
 $PAGE->requires->js(new moodle_url("https://bclearningnetwork.com/lib/bootstrap/bootstrap.min.js"));
 $PAGE->requires->css(new moodle_url("lib/multiple-select/multiple-select.css"));
-$PAGE->requires->js(new moodle_url("navigation.js"));
-$PAGE->requires->js(new moodle_url("modal_handler.js"));
+$PAGE->requires->js(new moodle_url("js/navigation.js"));
+$PAGE->requires->js(new moodle_url("js/modal_handler.js"));
 
 // Configuring the Nav bar.
 $PAGE->navbar->ignore_active();
@@ -151,18 +151,6 @@ $number_of_pages = ceil(count($content) / ITEMS_PER_PAGE);
     </div>
   </div>
 
-
-
-<script type="text/javascript">
-
-   <?php if (!is_null($id)): ?>
-     // If an id has been provided in URL, show the corresponding modal.
-     loadModal("modals/details.php?id=<?=$id?>");
-     $('#itemModal').modal('show');
-   <?php endif ?>
-
-</script>
-
 <!-- Modal template to be rendered by click. -->
 <div class="lor-modal fade" id="itemModal" tabindex="-1" role="dialog" aria-labelledby="itemModalLabel" aria-hidden="true">
   <div class="lor-modal-dialog lor-modal-xl">
@@ -205,7 +193,7 @@ $number_of_pages = ceil(count($content) / ITEMS_PER_PAGE);
         </a>
         <p><i>Topics: </i><?=local_lor_get_keywords_string_for_item($item->id)?></p>
         <p>
-          <a href="modals/details.php?id=<?=$item->id?>" data-remote="false" data-toggle="modal" data-target="#itemModal" class="modallink lor-icon">
+          <a href="modals/details.php?id=<?=$item->id?>" data-remote="false" data-target="#itemModal" class="modallink lor-icon">
             <img src="images/icons/details.png">Details
           </a>
           <a class="lor-icon" href="index.php<?=local_lor_get_related_parameters($item->id)?>">

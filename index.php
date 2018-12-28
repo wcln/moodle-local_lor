@@ -1,10 +1,10 @@
 <?php
 
-require_once(__DIR__ . '/../../config.php'); // standard config file
+require_once(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/locallib.php');
 
 
-// checking URL for variables
+// Initialize search variables.
 $id = null;
 $search_categories = null;
 $search_type = null;
@@ -16,6 +16,7 @@ $page = 0;
 // Settings
 define("ITEMS_PER_PAGE", 25);
 
+// Check the URL for search arguments.
 if (isset($_GET['id'])) {
   $id = $_GET['id'];
 }
@@ -46,23 +47,28 @@ if (isset($_GET['page'])) {
   $page = (int) $_GET['page'] - 1;
 }
 
-// setting up the page
+// Setting up the page.
 $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('standard');
 $PAGE->set_title("WCLN: LOR");
 $PAGE->set_heading("WCLN Learning Material");
 $PAGE->set_url(new moodle_url('/local/lor/index.php'));
-// $PAGE->requires->jquery();
 
-// nav bar
+// Require Javascript and CSS files.
+$PAGE->requires->jquery();
+$PAGE->requires->js(new moodle_url("https://bclearningnetwork.com/lib/bootstrap/bootstrap.min.js"));
+$PAGE->requires->css(new moodle_url("lib/multiple-select/multiple-select.css"));
+$PAGE->requires->js(new moodle_url("navigation.js"));
+$PAGE->requires->js(new moodle_url("modal_handler.js"));
+
+// Configuring the Nav bar.
 $PAGE->navbar->ignore_active();
 $PAGE->navbar->add(get_string('lor', 'local_lor'), new moodle_url('/local/lor/index.php'));
 
+// Ouput the header.
 echo $OUTPUT->header();
 
-
-
-// setting variables
+// Call locallib functions to set variables.
 $content = local_lor_get_content($search_type, $search_categories, $search_grades, $order_by, $search_keywords);
 $categories = local_lor_get_categories();
 $types = local_lor_get_types();
@@ -70,17 +76,7 @@ $grades = local_lor_get_grades();
 $number_of_pages = ceil(count($content) / ITEMS_PER_PAGE);
 
 ?>
-<!-- <script src="https://bclearningnetwork.com/lib/jquery/jquery-3.2.1.min.js"></script> -->
-<link rel="stylesheet" href="style/bootstrap-lor.css">
-<script src="https://bclearningnetwork.com/lib/bootstrap/bootstrap.min.js"></script>
 
-<link rel="stylesheet" href="style/styles.css">
-
-<!-- multiple select -->
-<link href="lib/multiple-select/multiple-select.css" rel="stylesheet"/>
-
-<!-- custom navigation -->
-<script src="navigation.js"></script>
 <div class="container-fluid bootstrap-lor" id="content-container">
   <!-- Filter settings -->
   <div class="row-fluid">
@@ -158,29 +154,6 @@ $number_of_pages = ceil(count($content) / ITEMS_PER_PAGE);
 
 
 <script type="text/javascript">
-  /*
-   * Modal handling script.
-   */
-   $(document).ready(function() {
-     $('#itemModal').modal({ show: false});
-
-     function loadModal(url) {
-
-       // Add listener to empty modal contents when it is closed.
-       $('#itemModal').on('hidden.bs.modal', function () {
-        $('.lor-modal-body').empty();
-      });
-
-      // Load the modal content.
-      $('.lor-modal-content').load(url);
-
-      // Show the modal.
-      $('#itemModal').modal('show');
-     }
-
-     // When a modal launcher is clicked.
-     $('.modallink').click(function(e) { loadModal(e.currentTarget.href); });
-   });
 
    <?php if (!is_null($id)): ?>
      // If an id has been provided in URL, show the corresponding modal.
@@ -232,7 +205,7 @@ $number_of_pages = ceil(count($content) / ITEMS_PER_PAGE);
         </a>
         <p><i>Topics: </i><?=local_lor_get_keywords_string_for_item($item->id)?></p>
         <p>
-          <a href="modals/details.php?id=<?=$item->id?>" data-remote="false" data-target="#itemModal" class="modallink lor-icon">
+          <a href="modals/details.php?id=<?=$item->id?>" data-remote="false" data-toggle="modal" data-target="#itemModal" class="modallink lor-icon">
             <img src="images/icons/details.png">Details
           </a>
           <a class="lor-icon" href="index.php<?=local_lor_get_related_parameters($item->id)?>">

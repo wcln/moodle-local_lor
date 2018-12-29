@@ -43,7 +43,11 @@ $( document ).ready(function() {
       .addClass('no-scroll');
 
     // Show the modal.
-    $('#itemModal').modal({show: true});
+    $('#itemModal').modal({
+      show: true,
+      backdrop: true,
+      keyboard: true
+    });
   }
 
   // When a modal launcher is clicked.
@@ -53,4 +57,13 @@ $( document ).ready(function() {
    loadModal(e.currentTarget.href);
   });
 
+  // Logic to handle clicking on modal backdrop to close modal.
+  $(document).mouseup(function(e) {
+      var container = $(".lor-modal-dialog");
+
+      // If the target of the click isn't the container nor a descendant of the container.
+      if (!container.is(e.target) && container.has(e.target).length === 0) {
+          $('.modal-backdrop').click();
+      }
+  });
 });

@@ -148,7 +148,7 @@ body.no-scroll {
 @media (min-width: 768px) {
   #content-container .lor-modal-xl {
     width: 90%;
-   max-width:1200px;
+    max-width:1200px;
   }
 }
 

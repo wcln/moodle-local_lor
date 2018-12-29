@@ -44,7 +44,27 @@ if (isset($_GET['id'])) {
 
         <embed src="<?=$item->link?>" width="700" height="800" type='application/pdf'>
 
-      <?php endif // TODO: videos, lessons, learning guides. ?>
+      <?php elseif ($item->type == 3): // TODO Video ?>
+
+      <?php elseif ($item->type == 5): // Lesson ?>
+        <form id="lti-form" target="lesson_iframe" method="post" action="https://bclearningnetwork.com/local/LTI/request.php">
+          <input type="hidden" name="oauth_consumer_key" value="consumerkey" />
+          <input type="hidden" name="custom_book_id" value="12942" />
+          <input type="submit">
+        </form>
+        <iframe name="lesson_iframe" width="500px" height="500px" src="#">
+        </iframe>
+        <script>
+          // Hide the form and do the submit.
+         $(document).ready(function(){
+           var lessonForm= document.getElementById("lti-form");
+           lessonForm.style.display = "none";
+           lessonForm.submit();
+         });
+        </script>
+      <?php elseif ($item->type == 5): // TODO Learning Guide ?>
+
+      <?php endif ?>
     </div>
   </div>
   <div class="row">

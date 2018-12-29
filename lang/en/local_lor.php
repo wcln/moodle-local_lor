@@ -25,6 +25,9 @@ $string['width'] = "Width";
 $string['height'] = "Height";
 $string['iframe_size_paragraph'] = 'Specify a width and a height for the IFrame in which the game will be displayed.';
 
+// lessons insert form.
+$string['book_id'] = "Book ID";
+
 // type form
 $string['type'] = "Item Type";
 $string['next'] = 'Next';
@@ -36,7 +39,7 @@ $string['error_file_exists'] = "This filename already exists on the server! Plea
 $string['error_categories'] = "You must choose AT LEAST one category.";
 $string['error_title_not_found'] = "[ERROR: TITLE NOT FOUND!]";
 $string['error_missing_form'] = 'Error: That insert form is not yet available.';
-$string['error_unexpected'] = 'An unexpected occured. Please contact a WCLN admin. The following exception occurred: ';
+$string['error_unexpected'] = 'An unexpected error occured. Please contact a WCLN admin. The following exception occurred: ';
 $string['error_title_length'] = 'Title is too long!';
 
 // nav bar

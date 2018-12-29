@@ -49,18 +49,26 @@ if (isset($_GET['id'])) {
       <?php elseif ($item->type == 5): // Lesson ?>
         <form id="lti-form" target="lesson_iframe" method="post" action="https://bclearningnetwork.com/local/LTI/request.php">
           <input type="hidden" name="oauth_consumer_key" value="consumerkey" />
-          <input type="hidden" name="custom_book_id" value="12942" />
+          <input type="hidden" name="custom_book_id" value="<?=local_lor_get_book_id_from_content_id($item->id)?>" /><!-- temp book id -->
           <input type="submit">
         </form>
-        <iframe name="lesson_iframe" width="500px" height="500px" src="#">
+        <iframe id="lessonFrame" name="lesson_iframe" width="1200px" height="500px" src="#" scrolling="no">
         </iframe>
         <script>
-          // Hide the form and do the submit.
+          // Hide the form and perform the submit.
          $(document).ready(function(){
            var lessonForm= document.getElementById("lti-form");
            lessonForm.style.display = "none";
            lessonForm.submit();
          });
+
+         // IFrame resizing script.
+         window.addEventListener("message", resizeIframe);
+         function resizeIframe() {
+           // $(".lor-modal").scrollTop($("#lessonFrame").offset().top);
+           document.getElementById("lessonFrame").height = event.data;
+           document.getElementById("lessonFrame").style.height = event.data + "px";
+         }
         </script>
       <?php elseif ($item->type == 5): // TODO Learning Guide ?>
 

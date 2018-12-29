@@ -33,7 +33,7 @@ if (isset($_GET['gamecreator'])) {
 
 
 // Try to load and display the current form.
-try {
+// try {
   // Try to load current form.
   $current_form = handler::get_current_form($custom_data);
   if ($current_form !== false) {
@@ -68,16 +68,16 @@ try {
 
   }
 
-} catch (Exception $e) {
-
-  // Output the page header.
-  echo $OUTPUT->header();
-  echo $OUTPUT->heading(get_string('heading', 'local_lor'));
-
-  // Output exception.
-  echo get_string('error_unexpected', 'local_lor') . $e;
-
-}
+// } catch (Exception $e) {
+//
+//   // Output the page header.
+//   echo $OUTPUT->header();
+//   echo $OUTPUT->heading(get_string('heading', 'local_lor'));
+//
+//   // Output exception.
+//   echo get_string('error_unexpected', 'local_lor') . $e;
+//
+// }
 
 
 // project form

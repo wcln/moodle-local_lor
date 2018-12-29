@@ -88,10 +88,12 @@ class form_1 extends moodleform {
 		// Width.
 		$mform->addElement('text', 'width', get_string('width', 'local_lor'));
 		$mform->setType('width', PARAM_INT);
+		$mform->addRule('width', get_string('required'), 'required', null);
 
 		// Height.
 		$mform->addElement('text', 'height', get_string('height', 'local_lor'));
 		$mform->setType('height', PARAM_INT);
+		$mform->addRule('height', get_string('required'), 'required', null);
 
 		// Submit and cancel buttons.
 		$this->add_action_buttons(true, get_string('submit', 'local_lor'));

@@ -23,7 +23,7 @@ $string['image'] = 'Preview image (200x150px)';
 $string['iframe_size'] = 'IFrame Size';
 $string['width'] = "Width";
 $string['height'] = "Height";
-$string['iframe_size_paragraph'] = 'Specify a width and a height for the IFrame in which the game will be displayed. If these are left blank, the LOR page will attempt to automatically calculate dimensions. Automatic calculations generally work well for content in only a canvas. It is a good idea to specify these here if you know them.';
+$string['iframe_size_paragraph'] = 'Specify a width and a height for the IFrame in which the game will be displayed.';
 
 // type form
 $string['type'] = "Item Type";

@@ -127,4 +127,64 @@ class insert_functions {
 
     return $id;
   }
+
+  /*
+   * Insert a Lesson.
+   */
+  public static function insert_5($data, &$form) {
+    global $DB;
+    global $CFG;
+
+    date_default_timezone_set('America/Los_Angeles'); // PST
+
+    // Insert into lor_content table.
+    $record = new \stdClass();
+    $record->type = 5;
+    $record->title = $data->title;
+    $record->image = ""; // Will be replaced below.
+    $record->link = null;
+    $record->date_created = date("Ymd");
+    $record->width = null;
+    $record->height = null;
+    $id = $DB->insert_record('lor_content', $record);
+
+    // Insert into lor_content_lessons table.
+    $DB->execute('INSERT INTO {lor_content_lessons}(content, book_id) VALUES (?, ?)', array($id, $data->book_id));
+
+    // Save preview image to server.
+    $form->save_file('image', "$CFG->dirroot/LOR/games/preview_images/$id.png", true);
+
+    // Update image link in content table.
+    $record->image = "$CFG->wwwroot/LOR/games/preview_images/$id.png";
+    $record->id = $id;
+    $DB->update_record('lor_content', $record);
+
+    // Insert into categories table.
+    $categories = array_filter($data->categories);
+    foreach ($categories as $category) {
+      $DB->execute('INSERT INTO {lor_content_categories}(content, category) VALUES (?,?)', array($id, (int)$category));
+    }
+
+    // Insert into grades table.
+    $grades = array_filter($data->grades);
+    foreach ($grades as $grade) {
+      $DB->execute('INSERT INTO {lor_content_grades}(content, grade) VALUES (?,?)', array($id, (int)$grade));
+    }
+
+    // Insert into lor_keyword table and lor_content_keywords table.
+    $keywords = explode(',', $data->topics);
+    foreach ($keywords as $word) {
+
+      // check if keyword exists already, if not then insert
+      $existing_record = $DB->get_record_sql('SELECT name FROM {lor_keyword} WHERE name=?', array($word));
+      if($existing_record) {
+        $DB->execute('INSERT INTO {lor_content_keywords}(content, keyword) VALUES (?,?)', array($id, $word));
+      } else {
+        $DB->execute('INSERT INTO {lor_keyword}(name) VALUES (?)', array($word));
+        $DB->execute('INSERT INTO {lor_content_keywords}(content, keyword) VALUES (?,?)', array($id, $word));
+      }
+    }
+
+    return $id;
+  }
 }

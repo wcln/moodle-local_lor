@@ -30,10 +30,8 @@ if (isset($_GET['gamecreator'])) {
   $custom_data = array('link' => $_GET['gamecreator']);
 }
 
-
-
 // Try to load and display the current form.
-// try {
+try {
   // Try to load current form.
   $current_form = handler::get_current_form($custom_data);
   if ($current_form !== false) {
@@ -68,45 +66,15 @@ if (isset($_GET['gamecreator'])) {
 
   }
 
-// } catch (Exception $e) {
-//
-//   // Output the page header.
-//   echo $OUTPUT->header();
-//   echo $OUTPUT->heading(get_string('heading', 'local_lor'));
-//
-//   // Output exception.
-//   echo get_string('error_unexpected', 'local_lor') . $e;
-//
-// }
+} catch (Exception $e) {
 
+  // Output the page header.
+  echo $OUTPUT->header();
+  echo $OUTPUT->heading(get_string('heading', 'local_lor'));
 
-// project form
-// $project_form = new project_form();
-//
-// if ($fromform = $game_form->get_data()) {
-//
-//   $pid = local_lor_add_game($fromform->title, $fromform->categories, $fromform->topics, $fromform->contributors, $fromform->grades, $fromform->link, $fromform->width, $fromform->height, $game_form);
-//   redirect(new moodle_url('/local/lor/insert.php', array('pid' => $pid)));
-//
-// } else if ($fromform = $project_form->get_data()) {
-//
-//   $pid = local_lor_add_project($fromform->title, $fromform->categories, $fromform->topics, $fromform->contributors, $fromform->grades, $project_form);
-//   redirect(new moodle_url('/local/lor/insert.php', array('pid' => $pid)));
-//
-// } else {
+  // Output exception.
+  echo get_string('error_unexpected', 'local_lor') . $e;
 
-  // update nav bar
-  // if ($SESSION->current_type == "game" || $from_gamecreator) { // game
-  //   $PAGE->navbar->add(get_string('add_game', 'local_lor'));
-  // } else if ($SESSION->current_type == "project") { // project
-  //   $PAGE->navbar->add(get_string('add_project', 'local_lor'));
-  // } else { // video
-  //   $PAGE->navbar->add(get_string('add_video', 'local_lor'));
-  // }
+}
 
-
-
-
-
-
-  echo $OUTPUT->footer();
+echo $OUTPUT->footer();

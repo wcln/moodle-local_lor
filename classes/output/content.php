@@ -1,6 +1,4 @@
 <?php
-
-
 namespace local_lor\output;
 
 use renderable;
@@ -8,14 +6,15 @@ use renderer_base;
 use templatable;
 use stdClass;
 
+require_once(__DIR__ . '/../../locallib.php');
+
 class content implements renderable, templatable {
 
     // The ID of the item that was just inserted.
     var $items = null;
-    var $count = null;
 
     public function __construct($items) {
-        $this->id = $id;
+        $this->items = $items;
     }
 
     /**
@@ -27,7 +26,19 @@ class content implements renderable, templatable {
       global $DB;
 
       $data = new stdClass();
-      $data->items = $this->items;
+      $data->items = [];
+
+      // Convert to format for mustache template.
+      foreach ($this->items as $item) {
+        $data->items[] = [
+          'id' => $item->id,
+          'title' => $item->title,
+          'link' => $item->link,
+          'image' => $item->image,
+          'keywords' => local_lor_get_keywords_string_for_item($item->id)
+        ];
+      }
+
       $data->count = count($this->items);
 
       return $data;

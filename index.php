@@ -64,17 +64,21 @@ if ($search_data = $search_form->get_data()) {
   }
 
   // Search for specific content.
-  $content = local_lor_get_content($search_data->type, $search_data->categories, $search_data->grades, $search_data->sort_by, $search_data->keywords);
+  $items = local_lor_get_content($search_data->type, $search_data->categories, $search_data->grades, $search_data->sort_by, $search_data->keywords);
 
 } else { // Search form was not submitted.
 
   // Get all content.
-  $content = local_lor_get_content(null, null, null, null, null);
+  $items = local_lor_get_content(null, null, null, null, null);
 
 }
 
 // Calculate the total number of pages.
-$number_of_pages = ceil(count($content) / ITEMS_PER_PAGE);
+$number_of_pages = ceil(count($items) / ITEMS_PER_PAGE);
+
+$content_output = $PAGE->get_renderer('local_lor');
+$renderable = new \local_lor\output\content($items);
+echo $content_output->render($renderable);
 
 ?>
 

@@ -1,8 +1,9 @@
 <?php
 
+// General.
 $string['pluginname'] = "WCLN Learning Object Repository";
 
-// insert form
+// Insert form.
 $string['heading'] = "Add to WCLN Learning Object Repository";
 $string['subheading'] = "Add an item to the WCLN Learning Object Repository. Start by selecting the type of item you would like to add.";
 $string['title'] = "Title";
@@ -28,11 +29,11 @@ $string['iframe_size_paragraph'] = 'Specify a width and a height for the IFrame 
 // lessons insert form.
 $string['book_id'] = "Book ID";
 
-// type form
+// Type form.
 $string['type'] = "Item Type";
 $string['next'] = 'Next';
 
-// errors
+// Errors.
 $string['error_filenames'] = "All files must have the same name!";
 $string['error_filename_exists'] = "This filename exists in the database already! Please change the filename of all files.";
 $string['error_file_exists'] = "This filename already exists on the server! Please change the filename of all files.";
@@ -42,8 +43,18 @@ $string['error_missing_form'] = 'Error: That insert form is not yet available.';
 $string['error_unexpected'] = 'An unexpected error occured. Please contact a WCLN admin. The following exception occurred: ';
 $string['error_title_length'] = 'Title is too long!';
 
-// nav bar
+// Navigation bar.
 $string['lor'] = "LOR";
 $string['nav_insert_form'] = "Insert Form";
 $string['nav_default_type'] = "Item";
 $string['nav_insert'] = "Insert ";
+
+// Search form.
+$string['search'] = "Search";
+$string['sort_by'] = "Sort by";
+$string['recently_added'] = "Recently added";
+$string['alphabetical'] = "Alphabetical";
+$string['keywords'] = "Keywords";
+$string['search_categories'] = "Categories";
+$string['search_grades'] = "Grades";
+$string['all'] = "All";

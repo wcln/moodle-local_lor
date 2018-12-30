@@ -6,44 +6,15 @@ require_once(__DIR__ . '/locallib.php');
 // Search form.
 require_once('search_form.php');
 
-
-// Initialize search variables.
-$id = null;
-$search_categories = null;
-$search_type = null;
-$search_grades = null;
-$search_keywords = null;
-$order_by = "new";
-$page = 0;
-
 // Settings
 define("ITEMS_PER_PAGE", 25);
 
 // Check the URL for search arguments.
+$id = null;
+$page = 0;
+
 if (isset($_GET['id'])) {
   $id = $_GET['id'];
-}
-
-if (isset($_GET['categories'])) {
-  if ($_GET['categories'] !== "-1") {
-    $search_categories = $_GET['categories'];
-  }
-}
-
-if (isset($_GET['order_by'])) {
-  $order_by = $_GET['order_by'];
-}
-
-if (isset($_GET['type'])) {
-  $search_type = $_GET['type'];
-}
-
-if (isset($_GET['grades'])) {
-  $search_grades = $_GET['grades'];
-}
-
-if (isset($_GET['keywords'])) {
-  $search_keywords = $_GET['keywords'];
 }
 
 if (isset($_GET['page'])) {
@@ -70,7 +41,6 @@ $PAGE->navbar->add(get_string('lor', 'local_lor'), new moodle_url('/local/lor/in
 
 // Ouput the header.
 echo $OUTPUT->header();
-
 
 // Initialize and display the search form.
 $search_form = new search_form();

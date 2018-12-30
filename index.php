@@ -3,6 +3,9 @@
 require_once(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/locallib.php');
 
+// Search form.
+require_once('search_form.php');
+
 
 // Initialize search variables.
 $id = null;
@@ -68,88 +71,44 @@ $PAGE->navbar->add(get_string('lor', 'local_lor'), new moodle_url('/local/lor/in
 // Ouput the header.
 echo $OUTPUT->header();
 
-// Call locallib functions to set variables.
-$content = local_lor_get_content($search_type, $search_categories, $search_grades, $order_by, $search_keywords);
-$categories = local_lor_get_categories();
-$types = local_lor_get_types();
-$grades = local_lor_get_grades();
+
+// Initialize and display the search form.
+$search_form = new search_form();
+$search_form->display();
+
+// Check if search form was submitted.
+if ($search_data = $search_form->get_data()) {
+
+  // Remove grade and category items if checkbox is not set.
+  foreach (array_keys($search_data->categories, "", true) as $key) {
+    unset($search_data->categories[$key]);
+  }
+  if (count($search_data->categories) === 0) {
+    $search_data->categories = null;
+  }
+  foreach (array_keys($search_data->grades, "", true) as $key) {
+    unset($search_data->grades[$key]);
+  }
+  if (count($search_data->grades) === 0) {
+    $search_data->grades = null;
+  }
+
+  // Search for specific content.
+  $content = local_lor_get_content($search_data->type, $search_data->categories, $search_data->grades, $search_data->sort_by, $search_data->keywords);
+
+} else { // Search form was not submitted.
+
+  // Get all content.
+  $content = local_lor_get_content(null, null, null, null, null);
+
+}
+
+// Calculate the total number of pages.
 $number_of_pages = ceil(count($content) / ITEMS_PER_PAGE);
 
 ?>
 
 <div class="container-fluid bootstrap-lor" id="content-container">
-  <!-- Filter settings -->
-  <div class="row-fluid">
-    <div class="col-md-12" id="filters">
-      <form action="index.php" method="GET">
-
-        <div class="filter">
-          <label>Type:</label>
-          <select class="lor-select" name="type" id="type-select">
-            <option value="-1">All Types</option>
-            <?php foreach($types as $type): ?>
-              <?php if ($type->id == $search_type): ?>
-                <option selected="selected" value="<?=$type->id?>"><?=$type->name?></option>
-              <?php else: ?>
-                <option value="<?=$type->id?>"><?=$type->name?></option>
-              <?php endif ?>
-            <?php endforeach ?>
-          </select>
-        </div>
-
-        <div class="filter">
-          <label>Categories:</label>
-          <select name="categories[]" class="multiple lor-select" multiple="multiple">
-          <?php foreach ($categories as $category): ?>
-            <?php if (in_array($category->id, $search_categories)): ?>
-              <option selected="selected" value="<?=$category->id?>"><?=$category->name?></option>
-            <?php else: ?>
-              <?php if (is_null($search_categories)): ?>
-                <option selected="selected" value="<?=$category->id?>"><?=$category->name?></option>
-              <?php else: ?>
-                <option value="<?=$category->id?>"><?=$category->name?></option>
-              <?php endif?>
-            <?php endif ?>
-          <?php endforeach ?>
-          </select>
-        </div>
-
-        <div class="filter">
-          <label>Grades:</label>
-          <select name="grades[]" class="multiple lor-select" multiple="multiple">
-            <?php foreach ($grades as $grade): ?>
-              <?php if (in_array($grade->grade, $search_grades)): ?>
-                <option selected="selected" value="<?=$grade->grade?>"><?=$grade->grade?></option>
-              <?php else: ?>
-                <?php if (is_null($search_categories)): ?>
-                  <option selected="selected" value="<?=$grade->grade?>"><?=$grade->grade?></option>
-                <?php else: ?>
-                  <option value="<?=$grade->grade?>"><?=$grade->grade?></option>
-                <?php endif ?>
-              <?php endif ?>
-            <?php endforeach ?>
-          </select>
-        </div>
-
-        <div class="filter">
-          <label>Sort by:</label>
-          <select class="lor-select" name="order_by">
-            <option value="new">Recently Added</option>
-            <?php if ($order_by === "alphabetical"): ?>
-              <option value="alphabetical" selected="selected">Alphabetical</option>
-            <?php else: ?>
-              <option value="alphabetical">Alphabetical</option>
-            <?php endif ?>
-          </select>
-        </div>
-
-        <div class="filter">
-          <input type="text" placeholder="Keywords..." name="keywords" value="<?=$search_keywords?>">
-          <button type="submit" class="btn btn-primary">Search</button>
-        </div>
-    </form>
-    </div>
-  </div>
 
 <!-- Modal template to be rendered by click. -->
 <div class="lor-modal fade" id="itemModal" tabindex="-1" role="dialog" aria-labelledby="itemModalLabel" aria-hidden="true">

@@ -108,101 +108,13 @@ $number_of_pages = ceil(count($content) / ITEMS_PER_PAGE);
 
 ?>
 
-<div class="container-fluid bootstrap-lor" id="content-container">
-
-<!-- Modal template to be rendered by click. -->
-<div class="lor-modal fade" id="itemModal" tabindex="-1" role="dialog" aria-labelledby="itemModalLabel" aria-hidden="true">
-  <div class="lor-modal-dialog lor-modal-xl">
-    <div class="lor-modal-content">
-      <div class="lor-modal-header">
-        <h4 class="lor-modal-title col-12 text-center" id="myModalLabel"><!-- To be replaced by jquery modal call. --></h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      </div>
-      <div class="lor-modal-body">
-        <!-- To be replaced by jquery modal call. -->
-      </div>
-      <div class="lor-modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 
-  <!-- Content -->
-  <div class="row-fluid text-center">
-    <div class="col-md-12 text-center">
-      <p id="count"><i><?=count($content)?> items match your search</i></p>
-    </div>
-    <?php if (!is_null($content)): ?>
-      <?php for ($i = $page * ITEMS_PER_PAGE; $i < (($page + 1) * ITEMS_PER_PAGE); $i++) { ?>
-        <?php if ($i === count($content)) break; ?>
-        <?php $item = array_values($content)[$i]; ?>
-      </div>
-      <div class="row text-center item">
-      <div class="col-md-4 item-image">
-        <a class="modallink" href="modals/details.php?id=<?=$item->id?>" data-remote="false" data-target="#itemModal">
-          <img class="lor-image" src="<?=$item->image?>" width="200px" height="150px" />
-        </a>
+<!-- Modal template here -->
+<!-- Content template here -->
 
-      </div>
-      <div class="col-md-7 project-about text-left">
-        <a class="modallink" href="modals/details.php?id=<?=$item->id?>" data-remote="false" data-target="#itemModal">
-          <h3><?=$item->title?></h3>
-        </a>
-        <p><i>Topics: </i><?=local_lor_get_keywords_string_for_item($item->id)?></p>
-        <p>
-          <a href="modals/details.php?id=<?=$item->id?>" data-remote="false" data-target="#itemModal" class="modallink lor-icon">
-            <img src="images/icons/details.png">Details
-          </a>
-          <a href="modals/related.php?id=<?=$item->id?>" data-remote="false" data-target="#itemModal" class="modallink lor-icon">
-            <img src="images/icons/related.png">Related
-          </a>
-          <a class="lor-icon" href="<?=$item->link?>" target="_blank">
-            <img src="images/icons/present.png">Present
-          </a>
-          <a href="modals/share.php?id=<?=$item->id?>"  data-remote="false" data-target="#itemModal" class="modallink lor-icon">
-            <img src="images/icons/share.png">Share
-          </a>
-          <a href="modals/embed.php?id=<?=$item->id?>"  data-remote="false" data-target="#itemModal" class="modallink lor-icon">
-            <img src="images/icons/embed.png">Embed
-          </a>
-        </p>
-      </div>
 
-    <?php } ?>
-    <?php endif ?>
-</div>
 
-<?php if (!is_null($content) && count($content) > 0): ?>
-  <div class="row-fluid text-center" id="pages-row">
-    <div class="col-md-2" id="previous-page">
-      <?php if ($page !== 0): ?>
-        <a class="back round lor-nav" id="backBtn" onclick="back(<?=$page+1?>)">&#8249;</a>
-      <?php endif ?>
-    </div>
-    <div class="col-md-8" id="pages">
-      <p>Page:
-        <?php for ($i = 1; $i <= $number_of_pages; $i++) { ?>
-          <?php if ($i === $page + 1): ?>
-            <a class="page" id="current-page"><?=$i?></a>
-          <?php else: ?>
-            <a onclick="navigate(<?=$i?>)" class="page"><?=$i?></a>
-          <?php endif ?>
-        <?php } ?>
-      </p>
-    </div>
-    <div class="col-md-2" id="next-page">
-      <?php if ($page != ($number_of_pages - 1)): ?>
-        <a class="next round lor-nav" id="nextBtn" onclick="next(<?=$page+1?>)">&#8250;</a>
-      <?php endif ?>
-    </div>
-  </div>
-<?php endif ?>
-<script src="lib/multiple-select/multiple-select.js"></script>
-<script>
-    $('.multiple').multipleSelect();
-</script>
 </div>
 
 <?php

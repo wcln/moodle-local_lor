@@ -1,5 +1,6 @@
 <?php
 
+// Standard config file and local library.
 require_once(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/locallib.php');
 
@@ -31,7 +32,6 @@ $PAGE->set_url(new moodle_url('/local/lor/index.php'));
 // Require Javascript and CSS files.
 $PAGE->requires->jquery();
 $PAGE->requires->js(new moodle_url("https://bclearningnetwork.com/lib/bootstrap/bootstrap.min.js"));
-$PAGE->requires->css(new moodle_url("lib/multiple-select/multiple-select.css"));
 $PAGE->requires->js(new moodle_url("js/navigation.js"));
 $PAGE->requires->js(new moodle_url("js/modal_handler.js"));
 
@@ -70,27 +70,19 @@ if ($search_data = $search_form->get_data()) {
 
   // Get all content.
   $items = local_lor_get_content(null, null, null, null, null);
-
 }
 
-// Calculate the total number of pages.
-$number_of_pages = ceil(count($items) / ITEMS_PER_PAGE);
+// Determine which items to send (which are on this page).
 
+// Retrieve the renderer for the page.
 $content_output = $PAGE->get_renderer('local_lor');
-$renderable = new \local_lor\output\content($items);
+
+// Send all of the items, the current page, and the number of items to be displayed per page.
+$renderable = new \local_lor\output\content($items, $page, ITEMS_PER_PAGE);
+
+// Ouput the template.
 echo $content_output->render($renderable);
 
-?>
-
-
-
-<!-- Modal template here -->
-<!-- Content template here -->
-
-
-
-</div>
-
-<?php
+// Output the page footer.
 echo $OUTPUT->footer();
 ?>

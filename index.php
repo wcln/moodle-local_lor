@@ -74,7 +74,7 @@ if ($search_data = $search_form->get_data()) {
 } else { // Search form was not submitted.
 
   // Get all content.
-  $items = local_lor_get_content($type, null, null, null, null);
+  $items = local_lor_get_content($type, null, null, "new", null);
 }
 
 // Retrieve the renderer for the page.

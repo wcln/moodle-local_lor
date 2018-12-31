@@ -26,11 +26,9 @@ iframe#lessonFrame {
 
 /* Each project div contains an image and the project title */
 #content-container .item {
-  border: 1px solid #bcbcbc;
   margin: 0 1em .5em 1em;
   padding: 1em 0 1em 0;
-  border-radius: 5px;
-  background: linear-gradient(to bottom right, #f7f7f7, #d8d8d8);
+  border-top: 1px solid #bcbcbc;
 }
 
 /* Used to apply filters, contained in the filters div */

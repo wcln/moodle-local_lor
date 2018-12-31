@@ -17,7 +17,7 @@ class content implements renderable, templatable {
     var $count = null;
 
     // The number of LOR items to be displayed per page.
-    var $items_per_page;
+    var $items_per_page = null;
 
     // An array of integers.
     var $pages = null;
@@ -70,6 +70,9 @@ class content implements renderable, templatable {
 
       // The total number of results.
       $data->count = $this->count;
+
+      // The page the user is currently on. Used for next/back buttons.
+      $data->current_page = $this->current_page + 1;
 
       // Are we are on the first or last page?
       // This determines if the back and next buttons are displayed or not.

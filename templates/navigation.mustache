@@ -2,7 +2,7 @@
 <div class="row-fluid text-center" id="pages-row">
   <div class="col-md-2" id="previous-page">
     {{^is_first_page}}
-      <a class="back round lor-nav" id="backBtn" onclick="back({{page}})">&#8249;</a>
+      <a class="back round lor-nav" id="backBtn" onclick="back({{current_page}})">&#8249;</a>
     {{/is_first_page}}
   </div>
   <div class="col-md-8" id="pages">
@@ -19,7 +19,7 @@
   </div>
   <div class="col-md-2" id="next-page">
     {{^is_last_page}}
-      <a class="next round lor-nav" id="nextBtn" onclick="next({{page}})">&#8250;</a>
+      <a class="next round lor-nav" id="nextBtn" onclick="next({{current_page}})">&#8250;</a>
     {{/is_last_page}}
   </div>
 </div>

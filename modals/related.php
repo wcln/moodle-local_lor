@@ -22,7 +22,8 @@ if (isset($_GET['id'])) {
   <div class="row">
     <div class="col-md-12 text-center">
       <img src="images/under_construction.png" height="150px">
-      <p style="max-width: 815px"><b>What will this page look like?</b> Items in the Learning Object Repository which are often used in conjunction with the item you clicked will be shown here. For examle, if you clicked on a video, the lesson in which that video is referenced may appear here, as well as any other items which also appear in that lesson.</p>
+      <h5>What will this page look like?</h5>
+      <p style="max-width: 815px">Items in the Learning Object Repository which are often used in conjunction with the item you clicked will be shown here. For examle, if you clicked on a video, the lesson in which that video is referenced may appear here, as well as any other items which also appear in that lesson.</p>
     </div>
   </div>
 <!-- End of modal HTML. -->

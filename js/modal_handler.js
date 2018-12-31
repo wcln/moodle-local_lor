@@ -4,7 +4,7 @@
 $( document ).ready(function() {
 
   // Check if there is an ID to load in the URL.
-  var id = /id=([^&]+)/.exec(window.location.href);
+  var id = /[?&]id=([^&]+)/.exec(window.location.href);
 
   // If an ID exists, open the corresponding item modal.
   if (typeof id !== 'undefined' && id !== null) {

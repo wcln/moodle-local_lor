@@ -69,7 +69,7 @@ class content implements renderable, templatable {
       }
 
       // The total number of results.
-      $data->count = $this->count;
+      $data->count = ($this->count == 0)? false : $this->count;
 
       // The page the user is currently on. Used for next/back buttons.
       $data->current_page = $this->current_page + 1;

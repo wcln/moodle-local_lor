@@ -18,4 +18,9 @@ class renderer extends plugin_renderer_base {
         $data = $page->export_for_template($this);
         return parent::render_from_template('local_lor/success_html', $data);
     }
+
+    public function render_content($page) {
+        $data = $page->export_for_template($this);
+        return parent::render_from_template('local_lor/content', $data);
+    }
 }

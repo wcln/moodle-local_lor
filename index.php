@@ -72,8 +72,6 @@ if ($search_data = $search_form->get_data()) {
   $items = local_lor_get_content(null, null, null, null, null);
 }
 
-// Determine which items to send (which are on this page).
-
 // Retrieve the renderer for the page.
 $content_output = $PAGE->get_renderer('local_lor');
 

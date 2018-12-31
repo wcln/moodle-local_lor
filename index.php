@@ -13,6 +13,7 @@ define("ITEMS_PER_PAGE", 25);
 // Check the URL for search arguments.
 $id = null;
 $page = 0;
+$type = null;
 
 if (isset($_GET['id'])) {
   $id = $_GET['id'];
@@ -20,6 +21,10 @@ if (isset($_GET['id'])) {
 
 if (isset($_GET['page'])) {
   $page = (int) $_GET['page'] - 1;
+}
+
+if (isset($_GET['type'])) {
+  $type = (int) $_GET['type'];
 }
 
 // Setting up the page.
@@ -43,7 +48,7 @@ $PAGE->navbar->add(get_string('lor', 'local_lor'), new moodle_url('/local/lor/in
 echo $OUTPUT->header();
 
 // Initialize and display the search form.
-$search_form = new search_form();
+$search_form = new search_form(null, array('type' => $type));
 $search_form->display();
 
 // Check if search form was submitted.
@@ -69,7 +74,7 @@ if ($search_data = $search_form->get_data()) {
 } else { // Search form was not submitted.
 
   // Get all content.
-  $items = local_lor_get_content(null, null, null, null, null);
+  $items = local_lor_get_content($type, null, null, null, null);
 }
 
 // Retrieve the renderer for the page.

@@ -38,6 +38,9 @@ class search_form extends moodleform {
 			$types_arr[$type->id] = $type->name;
 		}
 		$mform->addElement('select', 'type', get_string('type', 'local_lor'), $types_arr);
+		if (!is_null($this->_customdata['type'])) {
+			$mform->setDefault('type', $this->_customdata['type']);
+		}
 
 		// Category checkboxes.
 		$category_item = array();

@@ -3,6 +3,10 @@ iframe#lessonFrame {
   border: none;
 }
 
+#content-container .item a {
+  text-decoration: none;
+}
+
 /* The filters div contains select boxes to apply filters to what projects are shown */
 #content-container div#filters {
     margin-bottom: 2em;

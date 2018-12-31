@@ -1,0 +1,25 @@
+
+<div class="row-fluid text-center" id="pages-row">
+  <div class="col-md-2" id="previous-page">
+    {{^is_first_page}}
+      <a class="back round lor-nav" id="backBtn" onclick="back({{current_page}})">&#8249;</a>
+    {{/is_first_page}}
+  </div>
+  <div class="col-md-8" id="pages">
+    <p>Page:
+      {{#pages}}
+        {{#is_current_page}}
+          <a class="page" id="current-page">{{page}}</a>
+        {{/is_current_page}}
+        {{^is_current_page}}
+          <a onclick="navigate({{page}})" class="page">{{page}}</a>
+        {{/is_current_page}}
+      {{/pages}}
+    </p>
+  </div>
+  <div class="col-md-2" id="next-page">
+    {{^is_last_page}}
+      <a class="next round lor-nav" id="nextBtn" onclick="next({{current_page}})">&#8250;</a>
+    {{/is_last_page}}
+  </div>
+</div>

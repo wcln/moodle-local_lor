@@ -57,6 +57,21 @@ class insert_functions {
       }
     }
 
+    // insert into lor_contributor and lor_content_contributors
+    $contributors = explode(',', $data->contributors);
+    foreach ($contributors as $contributor) {
+
+      // check if contributor exists already, if not then insert
+      $existing_record = $DB->get_record_sql('SELECT id FROM {lor_contributor} WHERE name=?', array($contributor));
+      if($existing_record) {
+        $cid = $existing_record->id;
+      } else {
+        $cid = $DB->insert_record_raw('lor_contributor', array('id' => null, 'name' => $contributor), true, false, false);
+      }
+
+      $DB->execute('INSERT INTO {lor_content_contributors}(content, contributor) VALUES (?,?)', array($id, $cid));
+    }
+
     return $id;
   }
 

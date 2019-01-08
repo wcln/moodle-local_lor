@@ -37,7 +37,7 @@ if (isset($_GET['id'])) {
 
           <p>To include this game/media in a course, or on any page, copy the text below and paste it into the page HTML.</p>
           <textarea rows="5" cols="70">
-            <p align="center"><iframe src="<?=$item->link?>" allowfullscreen="" frameborder="0"></iframe></p>
+            <p align="center"><iframe src="<?=$item->link?>" width="<?=$item->width?>px" height="<?=$item->height?>px" allowfullscreen="" frameborder="0"></iframe></p>
           </textarea>
 
 

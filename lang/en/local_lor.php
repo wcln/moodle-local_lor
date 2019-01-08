@@ -59,3 +59,7 @@ $string['keywords'] = "Keywords";
 $string['search_categories'] = "Categories";
 $string['search_grades'] = "Grades";
 $string['all'] = "All";
+
+// Not allowed template.
+$string['not_allowed_header'] = 'You do not have permission to access this page.';
+$string['not_allowed_paragraph'] = 'Please contact a site administrator if you believe this is incorrect.';

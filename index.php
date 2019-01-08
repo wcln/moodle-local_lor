@@ -43,6 +43,9 @@ $PAGE->requires->js(new moodle_url("js/modal_handler.js"));
 // Fetch the current system context.
 $systemcontext = context_system::instance();
 
+// Retrieve the renderer for the page.
+$renderer = $PAGE->get_renderer('local_lor');
+
 // Configuring the Nav bar.
 $PAGE->navbar->ignore_active();
 $PAGE->navbar->add(get_string('lor', 'local_lor'), new moodle_url('/local/lor/index.php'));
@@ -50,12 +53,17 @@ $PAGE->navbar->add(get_string('lor', 'local_lor'), new moodle_url('/local/lor/in
 // Ouput the header.
 echo $OUTPUT->header();
 
+// Check if the user is a teacher anywhere on the site.
+$roleid = $DB->get_field('role', 'id', ['shortname' => 'editingteacher']);
+$isteacheranywhere = $DB->record_exists('role_assignments', ['userid' => $USER->id, 'roleid' => $roleid]);
 
-if (has_capability('local/lor:insert', $systemcontext)) {
-  // Show a link to the insert page.
-  
+// Check if the user has the ability to insert into the LOR.
+if (has_capability('local/lor:insert', $systemcontext) || $isteacheranywhere) {
+
+  // Ouput the template to show a link to the insert page.
+  $insert_link = new \local_lor\output\insert_link();
+  echo $renderer->render($insert_link);
 }
-
 
 // Initialize and display the search form.
 $search_form = new search_form(null, array('type' => $type));
@@ -87,14 +95,11 @@ if ($search_data = $search_form->get_data()) {
   $items = local_lor_get_content($type, null, null, "new", null);
 }
 
-// Retrieve the renderer for the page.
-$content_output = $PAGE->get_renderer('local_lor');
-
 // Send all of the items, the current page, and the number of items to be displayed per page.
-$renderable = new \local_lor\output\content($items, $page, ITEMS_PER_PAGE);
+$countent_output = new \local_lor\output\content($items, $page, ITEMS_PER_PAGE);
 
 // Ouput the template.
-echo $content_output->render($renderable);
+echo $renderer->render($countent_output);
 
 // Output the page footer.
 echo $OUTPUT->footer();

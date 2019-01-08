@@ -2,6 +2,7 @@
 
 // General.
 $string['pluginname'] = "WCLN Learning Object Repository";
+$string['local/lor:insert'] = "Add new items to the WCLN Learning Object Repository";
 
 // Insert form.
 $string['heading'] = "Add to WCLN Learning Object Repository";

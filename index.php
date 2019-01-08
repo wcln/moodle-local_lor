@@ -40,12 +40,22 @@ $PAGE->requires->js(new moodle_url("https://bclearningnetwork.com/lib/bootstrap/
 $PAGE->requires->js(new moodle_url("js/navigation.js"));
 $PAGE->requires->js(new moodle_url("js/modal_handler.js"));
 
+// Fetch the current system context.
+$systemcontext = context_system::instance();
+
 // Configuring the Nav bar.
 $PAGE->navbar->ignore_active();
 $PAGE->navbar->add(get_string('lor', 'local_lor'), new moodle_url('/local/lor/index.php'));
 
 // Ouput the header.
 echo $OUTPUT->header();
+
+if ('local/lor:insert', $systemcontext)) {
+  echo "Has capability";
+} else {
+  echo "Does not have capability";
+}
+
 
 // Initialize and display the search form.
 $search_form = new search_form(null, array('type' => $type));

@@ -50,10 +50,10 @@ $PAGE->navbar->add(get_string('lor', 'local_lor'), new moodle_url('/local/lor/in
 // Ouput the header.
 echo $OUTPUT->header();
 
-if ('local/lor:insert', $systemcontext)) {
-  echo "Has capability";
-} else {
-  echo "Does not have capability";
+
+if (has_capability('local/lor:insert', $systemcontext)) {
+  // Show a link to the insert page.
+  
 }
 
 

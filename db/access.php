@@ -9,7 +9,12 @@ $capabilities = array(
         'riskbitmask' => RISK_CONFIG,
         'captype' => 'write',
         'contextlevel' => CONTEXT_SYSTEM,
-        'archetypes' => array(),
+        'archetypes' => array(
+          'manager' => CAP_ALLOW,
+          'coursecreator' => CAP_ALLOW,
+          'editingteacher' => CAP_ALLOW,
+          'teacher' => CAP_ALLOW
+        ),
     )
 
 );

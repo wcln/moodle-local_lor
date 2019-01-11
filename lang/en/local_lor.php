@@ -65,4 +65,4 @@ $string['not_allowed_header'] = 'You do not have permission to access this page.
 $string['not_allowed_paragraph'] = 'Please contact a site administrator if you believe this is incorrect.';
 
 // Scheduled Task.
-$string['updatevideos'] = 'Update videos from YouTube.';
+$string['updatevideos'] = 'Update LOR videos from YouTube';

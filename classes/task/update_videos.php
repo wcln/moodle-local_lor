@@ -32,18 +32,19 @@ class update_videos extends \core\task\scheduled_task {
    */
   public function execute() {
     global $DB;
+    global $CFG;
 
     // Access the plugin configuration,
     $config = get_config('local_lor');
 
     // Construct the query URL using constants.
-    $query_url = YOUTUBE_API_URL
-                . "?part=" . PART
+    $query_url = self::YOUTUBE_API_URL
+                . "?part=" . self::PART
                 . "&key=" . $config->google_api_key
                 . "&channelId=" . $config->youtube_channel_id
-                . "&type=" . TYPE
+                . "&type=" . self::TYPE
                 . "&maxResults=" . $config->youtube_max_results
-                . "&order=" . ORDER;
+                . "&order=" . self::ORDER;
 
     // Initialize empty array to store videos in.
     $videos = [];
@@ -51,17 +52,23 @@ class update_videos extends \core\task\scheduled_task {
     // Get cURL resource.
     $curl = curl_init();
 
+    mtrace('cURL initialized.');
+
     // Set the URL.
     curl_setopt_array($curl, array(CURLOPT_RETURNTRANSFER => 1, CURLOPT_URL => $query_url));
 
     // Send the request & save response to $response after decoding from JSON.
     $response = json_decode(curl_exec($curl));
 
+    mtrace('Retrieved response.');
+
     // If videos were found (should always occur).
     if (property_exists($response, 'items') && count($response->items) != 0) {
 
       // Get all categories in database, to be used within loop.
       $categories = local_lor_get_categories();
+
+      mtrace('Categories retrieved from database.');
 
       // Loop through each video.
       foreach ($response->items as $video) {
@@ -80,11 +87,13 @@ class update_videos extends \core\task\scheduled_task {
           $title = $video->snippet->title;
           $description = $video->snippet->description;
 
+          mtrace("Found a new video: '$title'.");
+
           // The category of this video, initialized to null.
           $category_to_add = null;
 
           // Check if video is in a playlist.
-          $query = "https://www.googleapis.com/youtube/v3/search?type=playlist&part=snippet&maxResults=1&key=".API_KEY."&channelId=UCcQwU9RgnPlF8FNqX4YoXlg&q=" . rawurlencode($title);
+          $query = "https://www.googleapis.com/youtube/v3/search?type=playlist&part=snippet&maxResults=1&key=".$config->google_api_key."&channelId=".$config->youtube_channel_id."&q=" . rawurlencode($title);
           curl_setopt_array($curl, array(CURLOPT_RETURNTRANSFER => 1, CURLOPT_URL => $query));
 
           // Send the request & save response to $response.
@@ -105,6 +114,8 @@ class update_videos extends \core\task\scheduled_task {
 
                 // Retrieve the category ID.
                 $category_to_add = $category->id;
+
+                mtrace("Found a category for the video: '$category->name'");
 
                 // Ensure we only set one category.
                 break;
@@ -139,8 +150,10 @@ class update_videos extends \core\task\scheduled_task {
                 }
               }
 
+              mtrace("Found " . count($keywords) . " keywords.");
+
               // Create empty record to be inserted into lor_content.
-              $record = new stdClass();
+              $record = new \stdClass();
 
               // Video type.
               $record->type = 3;
@@ -157,8 +170,12 @@ class update_videos extends \core\task\scheduled_task {
               // Insert the record, and retrieve the generated id.
               $id = $DB->insert_record('lor_content', $record);
 
+              mtrace("Video added to lor_content table.");
+
               // Add the item category to the database.
               $DB->execute('INSERT INTO {lor_content_categories}(content, category) VALUES (?,?)', array($id, (int)$category_to_add));
+
+              mtrace("Video category added to lor_content_categories table.");
 
               // Insert into lor_keyword table and lor_content_keywords table.
               foreach ($keywords as $word) {
@@ -173,10 +190,18 @@ class update_videos extends \core\task\scheduled_task {
                 }
               }
 
+              mtrace("Keywords added to database.");
+
               // Insert into lor_content_videos table.
               $DB->execute('INSERT INTO {lor_content_videos}(content, video_id) VALUES (?, ?)', array($id, $video_id));
 
+              mtrace("Video ID added to lor_content_videos table.");
+
+            } else {
+              mtrace("No category found. Skipping.");
             }
+          } else {
+            mtrace("Video is not in a category playlist. Skipping.");
           }
         }
       }
@@ -184,5 +209,7 @@ class update_videos extends \core\task\scheduled_task {
 
     // Close request to clear up some resources
     curl_close($curl);
+
+    mtrace("cURL closed. Update complete.");
   }
 }

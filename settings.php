@@ -6,6 +6,8 @@ $settings = null;
 
 // Ensure the configurations for this site are set.
 if ($hassiteconfig) {
+
+	// Create new external page.
 	$lor_page = new admin_externalpage('local_lor', get_string('pluginname', 'local_lor'), "$CFG->wwwroot/local/lor/index.php");
 	$ADMIN->add('localplugins', $lor_page);
 

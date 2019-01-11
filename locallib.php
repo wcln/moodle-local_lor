@@ -96,6 +96,13 @@ function local_lor_get_book_id_from_content_id($id) {
   return $DB->get_record_sql($sql, array($id))->book_id;
 }
 
+function local_lor_get_video_id_from_content_id($id) {
+  global $DB;
+
+  $sql = "SELECT DISTINCT video_id FROM {lor_content_videos} WHERE content = ?";
+  return $DB->get_record_sql($sql, array($id))->video_id;
+}
+
 function local_lor_get_keywords_string_for_item($content_id) {
   global $DB;
 

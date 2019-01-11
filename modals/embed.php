@@ -33,7 +33,7 @@ if (isset($_GET['id'])) {
   <div class="lor-modal-body">
     <div class="row">
       <div class="col-md-12 text-center">
-        <?php if ($item->type == 1): // GAME ?>
+        <?php if ($item->type == 1): // Game. ?>
 
           <p>To include this game/media in a course, or on any page, copy the text below and paste it into the page HTML.</p>
           <textarea rows="5" cols="70">
@@ -41,7 +41,7 @@ if (isset($_GET['id'])) {
           </textarea>
 
 
-        <?php elseif ($item->type == 2): // PROJECT ?>
+        <?php elseif ($item->type == 2): // Project. ?>
 
 
           <p>To include this project in a course, or on any page, copy the text below and paste it into the page HTML.</p>
@@ -56,7 +56,11 @@ if (isset($_GET['id'])) {
             </table>
           </textarea>
 
-        <?php endif // todo: video section once implemented ?>
+        <?php elseif ($item->type == 3): // Video. ?>
+          <p>To include this video tutorial in a course, or on any page, copy the text below and paste it into the page HTML.</p>
+          <textarea rows="5" cols="70">
+            <p align="center"><iframe src="http://www.youtube.com/embed/<?=local_lor_get_video_id_from_content_id($item->id)?>?rel=0" allowfullscreen="" frameborder="0" height="360" width="640" longdesc="<?=$item->title?>"></iframe></p>          </textarea>
+        <?php endif // TODO: lesson and learning guide ?>
       </div>
     </div>
     <div class="row">

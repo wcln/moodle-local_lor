@@ -36,10 +36,10 @@ class update_videos extends \core\task\scheduled_task {
     // Construct the query URL using constants.
     $query_url = YOUTUBE_API_URL
                 . "?part=" . PART
-                . "&key=" . $config->google_api_key;
-                . "&channelId=" . $config->youtube_channel_id;
+                . "&key=" . $config->google_api_key
+                . "&channelId=" . $config->youtube_channel_id
                 . "&type=" . TYPE
-                . "&maxResults=" . $config->youtube_max_results;
+                . "&maxResults=" . $config->youtube_max_results
                 . "&order=" . ORDER;
 
     // Initialize empty array to store videos in.

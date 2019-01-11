@@ -5,7 +5,7 @@ namespace local_lor\task;
 defined('MOODLE_INTERNAL') || die();
 
 // Require the local library. Will be used to retrieve categories.
-require_once(__DIR__ . '../../locallib.php');
+require_once(__DIR__ . '/../../locallib.php');
 
 // Require the config file for DB calls.
 require_once(__DIR__ . '/../../../../config.php');

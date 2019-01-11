@@ -59,7 +59,7 @@ if (isset($_GET['id'])) {
         <?php elseif ($item->type == 3): // Video. ?>
           <p>To include this video tutorial in a course, or on any page, copy the text below and paste it into the page HTML.</p>
           <textarea rows="5" cols="70">
-            <p align="center"><iframe src="http://www.youtube.com/embed/<?=local_lor_get_video_id_from_content_id($item->id)?>?rel=0" allowfullscreen="" frameborder="0" height="360" width="640" longdesc="<?=$item->title?>"></iframe></p>          </textarea>
+            <p align="center"><iframe src="https://www.youtube.com/embed/<?=local_lor_get_video_id_from_content_id($item->id)?>?rel=0" allowfullscreen="" frameborder="0" height="360" width="640" longdesc="<?=$item->title?>"></iframe></p>          </textarea>
         <?php endif // TODO: lesson and learning guide ?>
       </div>
     </div>

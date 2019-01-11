@@ -1,5 +1,7 @@
 <?php
 
+defined('MOODLE_INTERNAL') || die();
+
 $tasks = [
   // Run the update videos task every morning at 1AM.
   [
@@ -9,6 +11,7 @@ $tasks = [
       'hour' => '1',
       'day' => '*',
       'month' => '*',
-      'dayofweek' => '*'
-  ]
+      'dayofweek' => '*',
+      'disabled' => 0
+  ],
 ];

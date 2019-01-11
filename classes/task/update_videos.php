@@ -2,8 +2,10 @@
 
 namespace local_lor\task;
 
+defined('MOODLE_INTERNAL') || die();
+
 // Require the local library. Will be used to retrieve categories.
-require_once('../../locallib.php');
+require_once(__DIR__ . '../../locallib.php');
 
 // Require the config file for DB calls.
 require_once(__DIR__ . '/../../../../config.php');
@@ -29,6 +31,7 @@ class update_videos extends \core\task\scheduled_task {
    * Execute the task.
    */
   public function execute() {
+    global $DB;
 
     // Access the plugin configuration,
     $config = get_config('local_lor');

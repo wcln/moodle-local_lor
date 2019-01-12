@@ -8,7 +8,7 @@ defined('MOODLE_INTERNAL') || die;
 require_once($CFG->libdir.'/formslib.php');
 require_once(__DIR__ . '/../../../locallib.php');
 
-class form_5 extends moodleform {
+class form_3 extends moodleform {
 
 	protected function definition() {
 		global $CFG;
@@ -30,15 +30,11 @@ class form_5 extends moodleform {
 		// Header.
 		$mform->addElement('header', 'about', get_string('about', 'local_lor'));
 
-		// Title textarea.
-    $mform->addElement('textarea', 'title', get_string('title', 'local_lor'), 'wrap="virtual" rows="2" cols="50"');
-    $mform->setType('title', PARAM_TEXT);
-    $mform->addRule('title', get_string('required'), 'required', null);
-
-    // Book ID.
-    $mform->addElement('text', 'book_id', get_string('book_id', 'local_lor'));
-    $mform->addRule('book_id', get_string('required'), 'required', null);
-    $mform->setType('book_id', PARAM_INT);
+    // Video ID.
+    $mform->addElement('text', 'video_id', get_string('video_id', 'local_lor'));
+    $mform->addRule('video_id', get_string('required'), 'required', null);
+    $mform->setType('video_id', PARAM_TEXT);
+		$mform->addHelpButton('video_id', 'video_id', 'local_lor');
 
 		// Topics text.
 		$mform->addElement('text', 'topics', get_string('topics', 'local_lor'));
@@ -68,12 +64,6 @@ class form_5 extends moodleform {
 		$mform->addElement('text', 'contributors', get_string('contributors', 'local_lor'));
 		$mform->setType('contributors', PARAM_TEXT);
 
-    // Header.
-		$mform->addElement('header', 'files', get_string('files', 'local_lor'));
-
-		// Preview image.
-		$mform->addELement('filepicker', 'image', get_string('image', 'local_lor'), null, array('maxbytes' => 1000000, 'accepted_types' => array('.png')));
-
 		// Submit and cancel buttons.
 		$this->add_action_buttons(true, get_string('submit', 'local_lor'));
 
@@ -88,12 +78,6 @@ class form_5 extends moodleform {
 		 if(sizeof(array_filter($data['categories'])) === 0) {
 			 $errors['categories'] = get_string('error_categories', 'local_lor');
 		 }
-
-		 // Check length of title.
-		 if (strlen($data['title']) >= 150) {
-			 $errors['title'] = get_string('error_title_length', 'local_lor');
-		 }
-
 
 		return $errors;
 	}

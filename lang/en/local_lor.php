@@ -30,6 +30,10 @@ $string['iframe_size_paragraph'] = 'Specify a width and a height for the IFrame 
 // lessons insert form.
 $string['book_id'] = "Book ID";
 
+// Videos insert form.
+$string['video_id'] = "Video ID";
+$string['video_id_help'] = "The video ID is found by browsing to the YouTube video you would like to add, then copying the text from the URL after '?v='.";
+
 // Type form.
 $string['type'] = "Item Type";
 $string['next'] = 'Next';
@@ -43,6 +47,7 @@ $string['error_title_not_found'] = "[ERROR: TITLE NOT FOUND!]";
 $string['error_missing_form'] = 'Error: That insert form is not yet available.';
 $string['error_unexpected'] = 'An unexpected error occured. Please contact a WCLN admin. The following exception occurred: ';
 $string['error_title_length'] = 'Title is too long!';
+$string['error_no_video'] = 'Unable to insert: YouTube video with that video ID does not exist.';
 
 // Navigation bar.
 $string['lor'] = "LOR";
@@ -63,3 +68,6 @@ $string['all'] = "All";
 // Not allowed template.
 $string['not_allowed_header'] = 'You do not have permission to access this page.';
 $string['not_allowed_paragraph'] = 'Please contact a site administrator if you believe this is incorrect.';
+
+// Scheduled Task.
+$string['updatevideos'] = 'Update LOR videos from YouTube';

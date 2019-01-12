@@ -38,7 +38,7 @@ class form_5 extends moodleform {
     // Book ID.
     $mform->addElement('text', 'book_id', get_string('book_id', 'local_lor'));
     $mform->addRule('book_id', get_string('required'), 'required', null);
-    $mform->setType('contributors', PARAM_INT);
+    $mform->setType('book_id', PARAM_INT);
 
 		// Topics text.
 		$mform->addElement('text', 'topics', get_string('topics', 'local_lor'));

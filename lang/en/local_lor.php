@@ -47,6 +47,7 @@ $string['error_title_not_found'] = "[ERROR: TITLE NOT FOUND!]";
 $string['error_missing_form'] = 'Error: That insert form is not yet available.';
 $string['error_unexpected'] = 'An unexpected error occured. Please contact a WCLN admin. The following exception occurred: ';
 $string['error_title_length'] = 'Title is too long!';
+$string['error_no_video'] = 'Unable to insert: YouTube video with that video ID does not exist.';
 
 // Navigation bar.
 $string['lor'] = "LOR";

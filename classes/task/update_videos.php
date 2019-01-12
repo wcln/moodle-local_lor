@@ -83,9 +83,8 @@ class update_videos extends \core\task\scheduled_task {
         // If video does not exist in LOR, proceed.
         if (!$already_added) {
 
-          // Extract the title, description for ease of use.
+          // Extract the title for ease of use.
           $title = $video->snippet->title;
-          $description = $video->snippet->description;
 
           mtrace("Found a new video: '$title'.");
 

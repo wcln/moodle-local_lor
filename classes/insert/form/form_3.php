@@ -33,7 +33,7 @@ class form_3 extends moodleform {
     // Video ID.
     $mform->addElement('text', 'video_id', get_string('video_id', 'local_lor'));
     $mform->addRule('video_id', get_string('required'), 'required', null);
-    $mform->setType('video_id', PARAM_INT);
+    $mform->setType('video_id', PARAM_TEXT);
 		$mform->addHelpButton('video_id', 'video_id', 'local_lor');
 
 		// Topics text.
@@ -78,12 +78,6 @@ class form_3 extends moodleform {
 		 if(sizeof(array_filter($data['categories'])) === 0) {
 			 $errors['categories'] = get_string('error_categories', 'local_lor');
 		 }
-
-		 // Check length of title.
-		 if (strlen($data['title']) >= 150) {
-			 $errors['title'] = get_string('error_title_length', 'local_lor');
-		 }
-
 
 		return $errors;
 	}

@@ -30,6 +30,10 @@ $string['iframe_size_paragraph'] = 'Specify a width and a height for the IFrame 
 // lessons insert form.
 $string['book_id'] = "Book ID";
 
+// Videos insert form.
+$string['video_id'] = "Video ID";
+$string['video_id_help'] = "The video ID is found by browsing to the YouTube video you would like to add, then copying the text from the URL after '?v='.";
+
 // Type form.
 $string['type'] = "Item Type";
 $string['next'] = 'Next';

@@ -28,7 +28,7 @@ function local_lor_get_content($type, $categories, $grades, $order_by = "new", $
   }
 
   // grades
-  if(!is_null($grades)) {
+  if(!is_null($grades) && count($grades) !== count(local_lor_get_grades())) {
     $tables .= ", {lor_content_grades}";
     $where_clause .= " AND {lor_content}.id = {lor_content_grades}.content AND (";
     foreach ($grades as $grade) {

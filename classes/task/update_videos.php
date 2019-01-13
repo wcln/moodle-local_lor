@@ -16,7 +16,7 @@ class update_videos extends \core\task\scheduled_task {
   const ORDER = 'date';
   const PART = 'snippet';
   const TYPE = 'video';
-  const YOUTUBE_API_URL = 'https://www.googleapis.com/youtube/v3/search';
+  const YOUTUBE_API_URL = 'https://www.googleapis.com/youtube/v3/';
 
   /**
     * Return the task's name as shown in admin screens.
@@ -39,6 +39,7 @@ class update_videos extends \core\task\scheduled_task {
 
     // Construct the query URL using constants.
     $query_url = self::YOUTUBE_API_URL
+                . "search"
                 . "?part=" . self::PART
                 . "&key=" . $config->google_api_key
                 . "&channelId=" . $config->youtube_channel_id
@@ -92,7 +93,13 @@ class update_videos extends \core\task\scheduled_task {
           $category_to_add = null;
 
           // Check if video is in a playlist.
-          $query = "https://www.googleapis.com/youtube/v3/search?type=playlist&part=snippet&maxResults=1&key=".$config->google_api_key."&channelId=".$config->youtube_channel_id."&q=" . rawurlencode($title);
+          $query = self::YOUTUBE_API_URL
+                    . "playlists"
+                    . "?part=" . self::PART
+                    . "&maxResults=1"
+                    . "&key=" . $config->google_api_key
+                    . "&channelId=" . $config->youtube_channel_id
+                    . "&q=" . rawurlencode($title);
           curl_setopt_array($curl, array(CURLOPT_RETURNTRANSFER => 1, CURLOPT_URL => $query));
 
           // Send the request & save response to $response.

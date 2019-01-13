@@ -10,19 +10,17 @@ require_once('search_form.php');
 // Settings
 define("ITEMS_PER_PAGE", 25);
 
-// Check the URL for search arguments.
-$id = null;
+// Default page value.
 $page = 0;
-$type = null;
 
+// Check if an item ID was specified in the URL.
+$id = null;
 if (isset($_GET['id'])) {
   $id = $_GET['id'];
 }
 
-if (isset($_GET['page'])) {
-  $page = (int) $_GET['page'] - 1;
-}
-
+// Check if a type was specified in the URL.
+$type = null;
 if (isset($_GET['type'])) {
   $type = (int) $_GET['type'];
 }
@@ -85,6 +83,9 @@ if ($search_data = $search_form->get_data()) {
   if (count($search_data->grades) === 0) {
     $search_data->grades = null;
   }
+
+  // Get the current page.
+  $page = $search_data->page - 1;
 
   // Search for specific content.
   $items = local_lor_get_content($search_data->type, $search_data->categories, $search_data->grades, $search_data->sort_by, $search_data->keywords);

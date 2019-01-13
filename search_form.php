@@ -69,6 +69,10 @@ class search_form extends moodleform {
 		// Sort by.
 		$mform->addElement('select', 'sort_by', get_string('sort_by', 'local_lor'), array('new' => get_string('recently_added', 'local_lor'), 'alphabetical' => get_string('alphabetical', 'local_lor')));
 
+		// Page (to be set by JS).
+		$mform->addElement('hidden', 'page', 1);
+		$mform->setType('page', PARAM_INT);
+
 		// Search button.
 		$this->add_action_buttons(false, get_string('search', 'local_lor'));
 

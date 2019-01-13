@@ -7,14 +7,14 @@ function local_lor_get_content($type, $categories, $grades, $order_by = "new", $
   $where_clause = '1=1';
   $params = array();
 
-  // order by
+  // Order by.
   if ($order_by === "alphabetical") {
     $order_by = ' ORDER BY title ASC';
   } else if ($order_by === "new") {
     $order_by = ' ORDER BY date_created DESC';
   }
 
-  // categories
+  // Categories.
   if(!is_null($categories)) {
     $tables .= ", {lor_content_categories}, {lor_category}";
     $where_clause .= " AND {lor_content}.id = {lor_content_categories}.content
@@ -27,7 +27,7 @@ function local_lor_get_content($type, $categories, $grades, $order_by = "new", $
     $where_clause = substr($where_clause, 0, -4) . ")";
   }
 
-  // grades
+  // Grades.
   if(!is_null($grades) && count($grades) !== count(local_lor_get_grades())) {
     $tables .= ", {lor_content_grades}";
     $where_clause .= " AND {lor_content}.id = {lor_content_grades}.content AND (";
@@ -39,14 +39,14 @@ function local_lor_get_content($type, $categories, $grades, $order_by = "new", $
     $where_clause = substr($where_clause, 0, -4) . ")";
   }
 
-  // type
+  // Type.
   if(!is_null($type) && $type != -1) {
     $where_clause .= " AND {lor_content}.type = ?";
     $params[] = $type;
   }
 
 
-  // keywords
+  // Keywords.
   if (!is_null($keywords) && $keywords !== "") {
     $keywords = explode(' ', $keywords);
     if (strpos($tables, '{lor_category}') !== false) {
@@ -68,12 +68,12 @@ function local_lor_get_content($type, $categories, $grades, $order_by = "new", $
     }
   }
 
-  // assemble query string
+  // Assemble query string.
   $sql = "SELECT DISTINCT {lor_content}.id, type, title, image, link, date_created
           FROM $tables
           WHERE $where_clause $order_by";
 
-
+  // Execute the query.
   $content = $DB->get_records_sql($sql, $params);
 
   return $content;
@@ -216,13 +216,13 @@ function local_lor_get_grades() {
 function local_lor_get_related_parameters($id) {
   global $DB;
 
-  // Get keywords
+  // Get keywords.
   $keywords = $DB->get_records_sql('SELECT {lor_content_keywords}.keyword FROM {lor_content_keywords} WHERE content=?', array($id));
 
-  // Get grades
+  // Get grades.
   $grades = $DB->get_records_sql('SELECT {lor_content_grades}.grade FROM {lor_content_grades} WHERE content=?', array($id));
 
-  // Get categories
+  // Get categories.
   $categories = $DB->get_records_sql('SELECT {lor_content_categories}.category FROM {lor_content_categories} WHERE content=?', array($id));
 
   $keywords_string = "&keywords=";

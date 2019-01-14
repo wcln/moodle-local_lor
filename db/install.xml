@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="local/lor/db" VERSION="20190113" COMMENT="XMLDB file for Moodle local/lor"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="lor_category" COMMENT="lor_category table retrofitted from MySQL">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="18" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+    </TABLE>
+    <TABLE NAME="lor_content" COMMENT="lor_content table retrofitted from MySQL">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="18" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="type" TYPE="int" LENGTH="18" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="title" TYPE="char" LENGTH="250" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="image" TYPE="char" LENGTH="250" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="link" TYPE="char" LENGTH="250" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="date_created" TYPE="text" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="width" TYPE="int" LENGTH="9" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="height" TYPE="int" LENGTH="9" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <INDEXES>
+        <INDEX NAME="type" UNIQUE="false" FIELDS="type"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="lor_contributor" COMMENT="lor_contributor table retrofitted from MySQL">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="18" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="250" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+    </TABLE>
+    <TABLE NAME="lor_grade" COMMENT="lor_grade table retrofitted from MySQL">
+      <FIELDS>
+        <FIELD NAME="grade" TYPE="int" LENGTH="9" NOTNULL="true" SEQUENCE="false"/>
+      </FIELDS>
+    </TABLE>
+    <TABLE NAME="lor_type" COMMENT="lor_type table retrofitted from MySQL">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="18" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+    </TABLE>
+    <TABLE NAME="lor_keyword" COMMENT="lor_keyword table retrofitted from MySQL">
+      <FIELDS>
+        <FIELD NAME="name" TYPE="char" LENGTH="100" NOTNULL="true" DEFAULT="" SEQUENCE="false"/>
+      </FIELDS>
+    </TABLE>
+    <TABLE NAME="lor_content_categories" COMMENT="lor_content_categories table retrofitted from MySQL">
+      <FIELDS>
+        <FIELD NAME="content" TYPE="int" LENGTH="18" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="category" TYPE="int" LENGTH="18" NOTNULL="true" SEQUENCE="false"/>
+      </FIELDS>
+      <INDEXES>
+        <INDEX NAME="category" UNIQUE="false" FIELDS="category"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="lor_content_contributors" COMMENT="lor_content_contributors table retrofitted from MySQL">
+      <FIELDS>
+        <FIELD NAME="content" TYPE="int" LENGTH="18" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="contributor" TYPE="int" LENGTH="18" NOTNULL="true" SEQUENCE="false"/>
+      </FIELDS>
+      <INDEXES>
+        <INDEX NAME="contributor" UNIQUE="false" FIELDS="contributor"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="lor_content_grades" COMMENT="lor_content_grades table retrofitted from MySQL">
+      <FIELDS>
+        <FIELD NAME="content" TYPE="int" LENGTH="18" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="grade" TYPE="int" LENGTH="9" NOTNULL="true" SEQUENCE="false"/>
+      </FIELDS>
+      <INDEXES>
+        <INDEX NAME="grade" UNIQUE="false" FIELDS="grade"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="lor_content_keywords" COMMENT="lor_content_keywords table retrofitted from MySQL">
+      <FIELDS>
+        <FIELD NAME="content" TYPE="int" LENGTH="18" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="keyword" TYPE="char" LENGTH="100" NOTNULL="true" DEFAULT="" SEQUENCE="false"/>
+      </FIELDS>
+      <INDEXES>
+        <INDEX NAME="keyword" UNIQUE="false" FIELDS="keyword"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="lor_content_lessons" COMMENT="lor_content_lessons table retrofitted from MySQL">
+      <FIELDS>
+        <FIELD NAME="content" TYPE="int" LENGTH="18" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="book_id" TYPE="int" LENGTH="18" NOTNULL="true" SEQUENCE="false"/>
+      </FIELDS>
+    </TABLE>
+    <TABLE NAME="lor_content_videos" COMMENT="lor_content_videos table retrofitted from MySQL">
+      <FIELDS>
+        <FIELD NAME="content" TYPE="int" LENGTH="18" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="video_id" TYPE="char" LENGTH="25" NOTNULL="true" SEQUENCE="false"/>
+      </FIELDS>
+    </TABLE>
+  </TABLES>
+</XMLDB>

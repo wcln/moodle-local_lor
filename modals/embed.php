@@ -57,22 +57,41 @@ if (isset($_GET['id'])) {
           </textarea>
 
         <?php elseif ($item->type == 3): // Video. ?>
+
           <p>To include this video tutorial in a course, or on any page, copy the text below and paste it into the page HTML.</p>
           <textarea rows="5" cols="70">
             <p align="center"><iframe src="https://www.youtube.com/embed/<?=local_lor_get_video_id_from_content_id($item->id)?>?rel=0" allowfullscreen="" frameborder="0" height="360" width="640" longdesc="<?=$item->title?>"></iframe></p>          </textarea>
-        <?php endif // TODO: lesson and learning guide ?>
+
+        <?php elseif ($item->type == 5): // Lesson. ?>
+
+          <p>Lessons may not be embedded. For more information on including lessons in your course. Contact WCLN.</p>
+
+        <?php elseif ($item->type == 3): // Learning Guide. ?>
+          <p>Under construction...</p>
+        <?php endif ?>
       </div>
     </div>
-    <div class="row">
-      <div class="col-md-12 text-center">
-        <p><b><i>Note:</i></b> Please contact WCLN if you would like to use this LOR item outside of bclearningnetwork.com</p>
+
+    <?php if ($item->type != 5): // If the item is anything except a Lesson. ?>
+
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <p><b><i>Note:</i></b> Please contact WCLN if you would like to use this LOR item outside of bclearningnetwork.com</p>
+        </div>
       </div>
-    </div>
-    <div class="lor-modal-footer">
-      <p id="copy-success">Copied!</p>
-      <button type="button" class="btn btn-primary" onclick="copyToClipboard()">Copy to Clipboard</button>
-      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-    </div>
+      <div class="lor-modal-footer">
+        <p id="copy-success">Copied!</p>
+        <button type="button" class="btn btn-primary" onclick="copyToClipboard()">Copy to Clipboard</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+
+    <?php else: ?>
+
+      <div class="lor-modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+
+    <?php endif ?>
   <!-- End of modal HTML. -->
 <?php else: ?>
   <div class="lor-modal-header">

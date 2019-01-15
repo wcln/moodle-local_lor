@@ -71,6 +71,9 @@ class form_5 extends moodleform {
     // Header.
 		$mform->addElement('header', 'files', get_string('files', 'local_lor'));
 
+		// Output HTML to let user know that preview image is optional.
+		$mform->addElement('html', '<p>' . get_string('preview_image_optional', 'local_lor') . '</p>');
+
 		// Preview image.
 		$mform->addELement('filepicker', 'image', get_string('image', 'local_lor'), null, array('maxbytes' => 1000000, 'accepted_types' => array('.png')));
 

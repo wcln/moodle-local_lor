@@ -26,6 +26,7 @@ $string['iframe_size'] = 'IFrame Size';
 $string['width'] = "Width";
 $string['height'] = "Height";
 $string['iframe_size_paragraph'] = 'Specify a width and a height for the IFrame in which the game will be displayed.';
+$string['preview_image_optional'] = 'Uploading a preview image is optional. It is best to leave this empty unless you have a specific 200x150px image to use. A generic preview image will be used if you do not upload an image.';
 
 // lessons insert form.
 $string['book_id'] = "Book ID";

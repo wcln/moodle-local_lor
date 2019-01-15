@@ -66,7 +66,7 @@ if (isset($_GET['id'])) {
 
           <p>Lessons may not be embedded. For more information on including lessons in your course. Contact WCLN.</p>
 
-        <?php elseif ($item->type == 3): // Learning Guide. ?>
+        <?php elseif ($item->type == 6): // Learning Guide. ?>
           <p>Under construction...</p>
         <?php endif ?>
       </div>

@@ -67,7 +67,13 @@ if (isset($_GET['id'])) {
           <p>Lessons may not be embedded. For more information on including lessons in your course. Contact WCLN.</p>
 
         <?php elseif ($item->type == 6): // Learning Guide. ?>
-          <p>Under construction...</p>
+
+          <textarea rows="6" cols="100">
+            <a href="<?=$item->link?>">
+              <img src="<?=$item->image?>" width="200px" height="150px"/>
+            </a>
+          </textarea>
+
         <?php endif ?>
       </div>
     </div>

@@ -259,7 +259,7 @@ class insert_functions {
       $record->image = "$CFG->wwwroot/LOR/lessons/preview_images/$id.png";
     } else {
       // Use generic preview image.
-      $record->image = "$CFG->wwwroot/local/lor/images/preview_images/generic_lesson_preview.png";
+      $record->image = "$CFG->wwwroot/local/lor/images/generic_preview_images/generic_lesson_preview.png";
     }
 
     $record->link = null;

@@ -271,11 +271,6 @@ class insert_functions {
     // Insert into lor_content_lessons table.
     $DB->execute('INSERT INTO {lor_content_lessons}(content, book_id) VALUES (?, ?)', array($id, $data->book_id));
 
-    // Update image link in content table.
-    $record->image = "$CFG->wwwroot/LOR/games/preview_images/$id.png";
-    $record->id = $id;
-    $DB->update_record('lor_content', $record);
-
     // Insert into categories table.
     $categories = array_filter($data->categories);
     foreach ($categories as $category) {

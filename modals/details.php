@@ -36,17 +36,17 @@ if (isset($_GET['id'])) {
   <div class="row">
     <div class="col-md-12 text-center">
       <!-- Actual LOR item displayed/embedded. -->
-      <?php if ($item->type == 1): // Game ?>
+      <?php if ($item->type == 1): // Game. ?>
 
         <p align="center"><iframe width="<?=$item->width?>px" height="<?=$item->height?>px" src="<?=$item->link?>" allowfullscreen="" frameborder="0"></iframe></p>
 
-      <?php elseif ($item->type == 2): // Project ?>
+      <?php elseif ($item->type == 2): // Project. ?>
 
         <embed src="<?=$item->link?>" width="700" height="800" type='application/pdf'>
 
-      <?php elseif ($item->type == 3): // Video ?>
+      <?php elseif ($item->type == 3): // Video. ?>
         <p align="center"><iframe src="https://www.youtube.com/embed/<?=local_lor_get_video_id_from_content_id($item->id)?>?rel=0" allowfullscreen="" frameborder="0" height="360" width="640" longdesc="<?=$item->title?>"></iframe></p>
-      <?php elseif ($item->type == 5): // Lesson ?>
+      <?php elseif ($item->type == 5): // Lesson. ?>
         <form id="lti-form" target="lesson_iframe" method="post" action="https://bclearningnetwork.com/local/LTI/request.php">
           <input type="hidden" name="oauth_consumer_key" value="consumerkey" />
           <input type="hidden" name="custom_book_id" value="<?=local_lor_get_book_id_from_content_id($item->id)?>" /><!-- temp book id -->
@@ -70,8 +70,10 @@ if (isset($_GET['id'])) {
            document.getElementById("lessonFrame").style.height = event.data + "px";
          }
         </script>
-      <?php elseif ($item->type == 5): // TODO Learning Guide ?>
+      <?php elseif ($item->type == 6): // Learning Guide. ?>
 
+        <embed src="<?=$item->link?>" width="700" height="800" type='application/pdf'>
+          
       <?php endif ?>
     </div>
   </div>

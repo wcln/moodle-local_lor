@@ -8,7 +8,7 @@ defined('MOODLE_INTERNAL') || die;
 require_once($CFG->libdir.'/formslib.php');
 require_once(__DIR__ . '/../../../locallib.php');
 
-class form_5 extends moodleform {
+class form_6 extends moodleform {
 
 	protected function definition() {
 		global $CFG;
@@ -23,22 +23,17 @@ class form_5 extends moodleform {
 				$addlast = $category;
 			}
     }
-		$categories_arr[$addlast->id] = $addlast->name; // Ensure 'other' is at the end.
+		$categories_arr[$addlast->id] = $addlast->name; // Ensure 'Other' is at the end.
 
 		$mform = $this->_form;
 
 		// Header.
 		$mform->addElement('header', 'about', get_string('about', 'local_lor'));
 
-		// Title textarea.
+		// Description textarea.
     $mform->addElement('textarea', 'title', get_string('title', 'local_lor'), 'wrap="virtual" rows="2" cols="50"');
     $mform->setType('title', PARAM_TEXT);
     $mform->addRule('title', get_string('required'), 'required', null);
-
-    // Book ID.
-    $mform->addElement('text', 'book_id', get_string('book_id', 'local_lor'));
-    $mform->addRule('book_id', get_string('required'), 'required', null);
-    $mform->setType('book_id', PARAM_INT);
 
 		// Topics text.
 		$mform->addElement('text', 'topics', get_string('topics', 'local_lor'));
@@ -68,35 +63,67 @@ class form_5 extends moodleform {
 		$mform->addElement('text', 'contributors', get_string('contributors', 'local_lor'));
 		$mform->setType('contributors', PARAM_TEXT);
 
-    // Header.
+		// Header.
 		$mform->addElement('header', 'files', get_string('files', 'local_lor'));
 
-		// Output HTML to let user know that preview image is optional.
-		$mform->addElement('html', '<p>' . get_string('preview_image_optional', 'local_lor') . '</p>');
+    // Word Document.
+    $mform->addElement('filepicker', 'word', get_string('word', 'local_lor'), null, array('maxbytes'=>10000000, 'accepted_types'=>array('.doc', '.docx')));
+    $mform->addRule('word', get_string('required'), 'required', null);
 
-		// Preview image.
-		$mform->addELement('filepicker', 'image', get_string('image', 'local_lor'), null, array('maxbytes' => 1000000, 'accepted_types' => array('.png')));
+		// PDF.
+    $mform->addElement('filepicker', 'pdf', get_string('pdf', 'local_lor'), null, array('maxbytes'=>10000000, 'accepted_types'=>array('.pdf')));
+    $mform->addRule('pdf', get_string('required'), 'required', null);
 
 		// Submit and cancel buttons.
 		$this->add_action_buttons(true, get_string('submit', 'local_lor'));
-
 	}
 
 	public function validation($data, $files) {
 		global $CFG;
-
+		global $DB;
 		$errors = parent::validation($data, $files);
+
+    // Check that all files have same ID.
+		$sql = 'SELECT id, filename, filesize FROM {files} WHERE itemid=? OR itemid=?';
+		$records = $DB->get_records_sql($sql, array($data['word'], $data['pdf']));
+
+		foreach ($records as $r1) {
+			foreach ($records as $r2) {
+				if ($r1->filesize > 0 && $r2->filesize > 0 && explode(".", $r1->filename, 2)[0] != explode(".", $r2->filename, 2)[0]) {
+					$errors['word'] = $errors['pdf'] = get_string('error_filenames', 'local_lor');
+					break 2;
+				} else {
+					// Check that file doesnt already exist on server.
+					if ($r1->filesize > 0 && file_exists($CFG->dirroot . '/LOR/learning_guides/' . $r1->filename)) {
+						$errors['word'] = $errors['pdf'] = get_string('error_file_exists', 'local_lor');
+						break 2;
+					}
+				}
+			}
+		}
+
+		// Check length of title.
+		if (strlen($data['title']) >= 150) {
+			$errors['title'] = get_string('error_title_length', 'local_lor');
+		}
+
+    // Check that ID doesnt exist in database.
+		// if (!isset($errors['word'])) { // only check if all files have same name
+		// 	$filename = explode(".", array_pop($records)->filename, 2)[0];
+    //
+		// 	$sql = 'SELECT id FROM {content} WHERE id=?';
+		// 	$records2 = $DB->get_records_sql($sql, array($filename));
+    //
+		// 	if (sizeof($records2) !== 0) {
+		// 		$errors['word'] = $errors['pdf'] = $errors['icon'] = get_string('error_filename_exists', 'local_lor');
+		// 	}
+    //
+		// }
 
 		// Check that at least one checkbox is checked.
 		 if(sizeof(array_filter($data['categories'])) === 0) {
 			 $errors['categories'] = get_string('error_categories', 'local_lor');
 		 }
-
-		 // Check length of title.
-		 if (strlen($data['title']) >= 150) {
-			 $errors['title'] = get_string('error_title_length', 'local_lor');
-		 }
-
 
 		return $errors;
 	}

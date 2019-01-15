@@ -25,16 +25,23 @@ class content implements renderable, templatable {
     // The current page integer.
     var $current_page = null;
 
-    // Boolean if the logged in user is a site wide admin.
+    // Boolean if the logged in user is a site wide admin. Default false.
     var $is_admin = false;
 
-    public function __construct($items, $current_page, $items_per_page, $is_admin = false) {
+    public function __construct($items, $current_page, $items_per_page) {
         $this->count = count($items);
         $this->items = array_slice($items, $current_page * $items_per_page, $items_per_page);
         $this->current_page = $current_page;
         $this->pages = range(1, ceil(count($items) / $items_per_page));
         $this->items_per_page = $items_per_page;
-        $this->is_admin = $is_admin;
+
+        // Fetch the current system context.
+        $systemcontext = context_system::instance();
+
+        // If the user has permission to edit LOR items.
+        if (has_capability('local/lor:edit', $systemcontext)) {
+          $this->is_admin = true;
+        }
     }
 
     /**

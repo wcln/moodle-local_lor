@@ -325,7 +325,6 @@ class insert_functions {
 
     $form->save_file('word', $CFG->dirroot . '/LOR/learning_guides/' . $form->get_new_filename('word'));
     $form->save_file('pdf', $CFG->dirroot . '/LOR/learning_guides/' . $form->get_new_filename('pdf'));
-    $form->save_file('icon', $CFG->dirroot . '/LOR/learning_guides/' . $form->get_new_filename('icon'));
 
     // Insert into content table.
     $record = new \stdClass();

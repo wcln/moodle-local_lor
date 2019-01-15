@@ -74,10 +74,6 @@ class form_6 extends moodleform {
     $mform->addElement('filepicker', 'pdf', get_string('pdf', 'local_lor'), null, array('maxbytes'=>10000000, 'accepted_types'=>array('.pdf')));
     $mform->addRule('pdf', get_string('required'), 'required', null);
 
-		// Image file.
-    $mform->addElement('filepicker', 'icon', get_string('icon', 'local_lor'), null, array('maxbytes'=>10000000, 'accepted_types'=>array('.png', '.jpg')));
-    // $mform->addRule('icon', get_string('required'), 'required', null);
-
 		// Submit and cancel buttons.
 		$this->add_action_buttons(true, get_string('submit', 'local_lor'));
 	}
@@ -88,18 +84,18 @@ class form_6 extends moodleform {
 		$errors = parent::validation($data, $files);
 
     // Check that all files have same ID.
-		$sql = 'SELECT id, filename, filesize FROM {files} WHERE itemid=? OR itemid=? OR itemid=?';
-		$records = $DB->get_records_sql($sql, array($data['word'], $data['pdf'], $data['icon']));
+		$sql = 'SELECT id, filename, filesize FROM {files} WHERE itemid=? OR itemid=?';
+		$records = $DB->get_records_sql($sql, array($data['word'], $data['pdf']));
 
 		foreach ($records as $r1) {
 			foreach ($records as $r2) {
 				if ($r1->filesize > 0 && $r2->filesize > 0 && explode(".", $r1->filename, 2)[0] != explode(".", $r2->filename, 2)[0]) {
-					$errors['word'] = $errors['pdf'] = $errors['icon'] = get_string('error_filenames', 'local_lor');
+					$errors['word'] = $errors['pdf'] = get_string('error_filenames', 'local_lor');
 					break 2;
 				} else {
 					// Check that file doesnt already exist on server.
 					if ($r1->filesize > 0 && file_exists($CFG->dirroot . '/LOR/learning_guides/' . $r1->filename)) {
-						$errors['word'] = $errors['pdf'] = $errors['icon'] = get_string('error_file_exists', 'local_lor');
+						$errors['word'] = $errors['pdf'] = get_string('error_file_exists', 'local_lor');
 						break 2;
 					}
 				}

@@ -330,7 +330,7 @@ class insert_functions {
     $record = new \stdClass();
     $record->type = 6;
     $record->title = $data->title;
-    $record->image = $CFG->wwwroot . '/LOR/learning_guides/' . $form->get_new_filename('icon');
+    $record->image = "";
     $record->link = $CFG->wwwroot . '/LOR/learning_guides/' . $form->get_new_filename('pdf');
     $record->date_created = date("Ymd");
     $id = $DB->insert_record('lor_content', $record);

@@ -15,6 +15,15 @@ $capabilities = array(
           'editingteacher' => CAP_ALLOW,
           'teacher' => CAP_ALLOW
         ),
-    )
+    ),
 
+    /* Allows the user to edit existing LOR items. */
+    'local/lor:edit' => array(
+        'riskbitmask' => RISK_CONFIG,
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_SYSTEM,
+        'archetypes' => array(
+          'manager' => CAP_ALLOW
+        ),
+    )
 );

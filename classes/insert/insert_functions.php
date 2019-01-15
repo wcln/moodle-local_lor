@@ -253,7 +253,7 @@ class insert_functions {
     $record->title = $data->title;
 
     // Save preview image to server.
-    $file_exists = $form->save_file('image', "$CFG->dirroot/LOR/lessons/preview_images/$id.png", true);
+    $file_exists = $form->save_file('image', "$CFG->dirroot/LOR/lessons/preview_images/$id.png", false);
     if ($file_exists) {
       // Update image link in content table.
       $record->image = "$CFG->wwwroot/LOR/lessons/preview_images/$id.png";

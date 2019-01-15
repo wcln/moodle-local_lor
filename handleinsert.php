@@ -14,7 +14,6 @@ $PAGE->set_url($url);
 $PAGE->set_title($title);
 $PAGE->set_heading($title);
 $PAGE->set_pagelayout('standard');
-$PAGE->requires->css('/local/lor/style/styles.css', true); // Require custom CSS stylesheet to style form.
 
 // Navigation bar.
 $PAGE->navbar->ignore_active();

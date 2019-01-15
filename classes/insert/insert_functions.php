@@ -251,22 +251,27 @@ class insert_functions {
     $record = new \stdClass();
     $record->type = 5;
     $record->title = $data->title;
+    $record->image = ""; // Will be set below.
+    $record->link = null;
+    $record->date_created = date("Ymd");
+    $record->width = null;
+    $record->height = null;
+    $id = $DB->insert_record('lor_content', $record);
 
     // Save preview image to server.
-    $file_exists = $form->save_file('image', "$CFG->dirroot/LOR/lessons/preview_images/$id.png", false);
+    $file_exists = $form->save_file('image', "$CFG->dirroot/LOR/lessons/preview_images/$id.png", true);
     if ($file_exists) {
-      // Update image link in content table.
+      // Use custom image.
       $record->image = "$CFG->wwwroot/LOR/lessons/preview_images/$id.png";
     } else {
       // Use generic preview image.
       $record->image = "$CFG->wwwroot/local/lor/images/generic_preview_images/generic_lesson_preview.png";
     }
 
-    $record->link = null;
-    $record->date_created = date("Ymd");
-    $record->width = null;
-    $record->height = null;
-    $id = $DB->insert_record('lor_content', $record);
+    // Update image link in content table.
+    $record->image = "$CFG->wwwroot/LOR/games/preview_images/$id.png";
+    $record->id = $id;
+    $DB->update_record('lor_content', $record);
 
     // Insert into lor_content_lessons table.
     $DB->execute('INSERT INTO {lor_content_lessons}(content, book_id) VALUES (?, ?)', array($id, $data->book_id));

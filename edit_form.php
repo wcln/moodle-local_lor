@@ -9,6 +9,8 @@ class edit_form extends moodleform {
 	protected function definition() {
 		global $CFG;
 
+		$type = $this->_customdata['type'];
+
 		// Fetching categories for later.
     $categories = local_lor_get_categories();
     $categories_arr = [];
@@ -26,15 +28,22 @@ class edit_form extends moodleform {
 		// Header.
 		$mform->addElement('header', 'about', get_string('about', 'local_lor'));
 
-		// Description textarea.
-    $mform->addElement('textarea', 'title', get_string('title', 'local_lor'), 'wrap="virtual" rows="2" cols="50"');
+		// Title text.
+		if ($type == 2) {
+			// If the type being edited is a project, add a textarea instead, and use a different label string.
+			$mform->addElement('textarea', 'title', get_string('inquiry', 'local_lor'), 'wrap="virtual" rows="2" cols="50"');
+		} else {
+			$mform->addElement('text', 'title', get_string('title', 'local_lor'));
+		}
     $mform->setType('title', PARAM_TEXT);
     $mform->addRule('title', get_string('required'), 'required', null);
+		$mform->setDefault('title', $this->_customdata['title']);
 
 		// Topics text.
 		$mform->addElement('text', 'topics', get_string('topics', 'local_lor'));
 		$mform->setType('topics', PARAM_TEXT);
 		$mform->addRule('topics', get_string('required'), 'required', null);
+		$mform->setDefault('topics', $this->_customdata['topics']);
 
 		// Category checkboxes.
 		$category_item = array();
@@ -43,6 +52,11 @@ class edit_form extends moodleform {
 		}
 		$mform->addGroup($category_item, 'categories', get_string('categories', 'local_lor'));
 		$mform->addRule('categories', get_string('required'), 'required', null);
+		foreach ($categories_arr as $id => $category_name) {
+			if (in_array($id, $this->_customdata['categories'])){
+				$mform->setDefault("categories[$id]", true);
+			}
+		}
 
 		// Grade checkboxes (1 to 12).
     $grades_arr = [];
@@ -54,42 +68,19 @@ class edit_form extends moodleform {
 			$grade_item[] = &$mform->createElement('advcheckbox', $grade, '', $grade, array('name' => $grade, 'group' => 2), $grade);
 		}
 		$mform->addGroup($grade_item, 'grades', get_string('grade', 'local_lor'));
+		foreach ($grades_arr as $grade) {
+			if (in_array($grade, $this->_customdata['grades'])){
+				$mform->setDefault("grades[$grade]", true);
+			}
+		}
 
 		// Contributors.
 		$mform->addElement('text', 'contributors', get_string('contributors', 'local_lor'));
 		$mform->setType('contributors', PARAM_TEXT);
-
-		// Header.
-		$mform->addElement('header', 'files', get_string('files', 'local_lor'));
-
-    // Game link.
-    $mform->addElement('text', 'link', get_string('link', 'local_lor'));
-    $mform->addRule('link', get_string('required'), 'required', null);
-		$mform->setType('link', PARAM_NOTAGS);
-
-		// Preview image.
-		$mform->addELement('filepicker', 'image', get_string('image', 'local_lor'), null, array('maxbytes' => 1000000, 'accepted_types' => array('.png')));
-		$mform->addRule('image', get_string('required'), 'required', null);
-
-		// Header.
-		$mform->addElement('header', 'iframe_size', get_string('iframe_size', 'local_lor'));
-		$mform->setExpanded('iframe_size');
-
-		// Paragraph.
-		$mform->addElement('html', '<p>'.get_string('iframe_size_paragraph', 'local_lor').'</p>');
-
-		// Width.
-		$mform->addElement('text', 'width', get_string('width', 'local_lor'));
-		$mform->setType('width', PARAM_INT);
-		$mform->addRule('width', get_string('required'), 'required', null);
-
-		// Height.
-		$mform->addElement('text', 'height', get_string('height', 'local_lor'));
-		$mform->setType('height', PARAM_INT);
-		$mform->addRule('height', get_string('required'), 'required', null);
+		$mform->setDefault('contributors', $this->_customdata['contributors']);
 
 		// Submit and cancel buttons.
-		$this->add_action_buttons(true, get_string('submit', 'local_lor'));
+		$this->add_action_buttons(true, get_string('save', 'local_lor'));
 
 	}
 

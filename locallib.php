@@ -124,15 +124,8 @@ function local_lor_get_keywords_string_for_item($content_id) {
 }
 
 function local_lor_get_categories_string_for_item($content_id) {
-  global $DB;
 
-  $sql = "SELECT DISTINCT {lor_category}.name
-          FROM {lor_content}, {lor_content_categories}, {lor_category}
-          WHERE {lor_content}.id = {lor_content_categories}.content
-          AND {lor_content_categories}.category = {lor_category}.id
-          AND {lor_content}.id = ?";
-
-  $categories = $DB->get_records_sql($sql, array($content_id));
+  $categories = local_lor_get_categories_for_item($content_id);
 
   $categories_str = "";
   foreach ($categories as $category) {
@@ -146,16 +139,21 @@ function local_lor_get_categories_string_for_item($content_id) {
   return $categories_str;
 }
 
-function local_lor_get_grades_string_for_item($content_id) {
+function local_lor_get_categories_for_item($content_id) {
   global $DB;
 
-  $sql = "SELECT DISTINCT {lor_grade}.grade
-          FROM {lor_content}, {lor_content_grades}, {lor_grade}
-          WHERE {lor_content}.id = {lor_content_grades}.content
-          AND {lor_content_grades}.grade = {lor_grade}.grade
+  $sql = "SELECT DISTINCT {lor_category}.name
+          FROM {lor_content}, {lor_content_categories}, {lor_category}
+          WHERE {lor_content}.id = {lor_content_categories}.content
+          AND {lor_content_categories}.category = {lor_category}.id
           AND {lor_content}.id = ?";
 
-  $grades = $DB->get_records_sql($sql, array($content_id));
+  return $DB->get_records_sql($sql, array($content_id));
+}
+
+function local_lor_get_grades_string_for_item($content_id) {
+
+  $grades = local_lor_get_grades_for_item($content_id);
 
   $grades_str = "";
   foreach ($grades as $grade) {
@@ -167,6 +165,18 @@ function local_lor_get_grades_string_for_item($content_id) {
   }
 
   return $grades_str;
+}
+
+function local_lor_get_grades_for_item($content_id) {
+  global $DB;
+
+  $sql = "SELECT DISTINCT {lor_grade}.grade
+          FROM {lor_content}, {lor_content_grades}, {lor_grade}
+          WHERE {lor_content}.id = {lor_content_grades}.content
+          AND {lor_content_grades}.grade = {lor_grade}.grade
+          AND {lor_content}.id = ?";
+
+  return $DB->get_records_sql($sql, array($content_id));
 }
 
 function local_lor_get_contributors_string_for_item($content_id) {

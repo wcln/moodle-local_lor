@@ -30,11 +30,12 @@ class edit_form extends moodleform {
 
 		// Title text.
 		if ($type == 2) {
-			// If the type being edited is a project, add a textarea instead, and use a different label string.
-			$mform->addElement('textarea', 'title', get_string('inquiry', 'local_lor'), 'wrap="virtual" rows="2" cols="50"');
+			// If the type being edited is a project, show a different title string.
+			$titlestring = 'inquiry';
 		} else {
-			$mform->addElement('text', 'title', get_string('title', 'local_lor'));
+			$titlestring = 'title';
 		}
+		$mform->addElement('textarea', 'title', get_string($titlestring, 'local_lor'), 'wrap="virtual" rows="2" cols="50"');
     $mform->setType('title', PARAM_TEXT);
     $mform->addRule('title', get_string('required'), 'required', null);
 		$mform->setDefault('title', $this->_customdata['title']);
@@ -53,8 +54,10 @@ class edit_form extends moodleform {
 		$mform->addGroup($category_item, 'categories', get_string('categories', 'local_lor'));
 		$mform->addRule('categories', get_string('required'), 'required', null);
 		foreach ($categories_arr as $id => $category_name) {
-			if (in_array($id, $this->_customdata['categories'])){
-				$mform->setDefault("categories[$id]", true);
+			foreach ($this->_customdata['categories'] as $category) {
+				if ($id == $category->id) {
+					$mform->setDefault("categories[$id]", true);
+				}
 			}
 		}
 
@@ -69,8 +72,10 @@ class edit_form extends moodleform {
 		}
 		$mform->addGroup($grade_item, 'grades', get_string('grade', 'local_lor'));
 		foreach ($grades_arr as $grade) {
-			if (in_array($grade, $this->_customdata['grades'])){
-				$mform->setDefault("grades[$grade]", true);
+			foreach ($this->_customdata['grades'] as $existinggrade) {
+				if ($grade == $existinggrade->grade) {
+					$mform->setDefault("grades[$grade]", true);
+				}
 			}
 		}
 

@@ -142,7 +142,7 @@ function local_lor_get_categories_string_for_item($content_id) {
 function local_lor_get_categories_for_item($content_id) {
   global $DB;
 
-  $sql = "SELECT DISTINCT {lor_category}.name
+  $sql = "SELECT DISTINCT {lor_category}.name, {lor_category}.id
           FROM {lor_content}, {lor_content_categories}, {lor_category}
           WHERE {lor_content}.id = {lor_content_categories}.content
           AND {lor_content_categories}.category = {lor_category}.id

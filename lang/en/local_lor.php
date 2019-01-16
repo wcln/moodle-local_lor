@@ -71,7 +71,7 @@ $string['all'] = "All";
 // Edit form.
 $string['save'] = "Save";
 $string['delete'] = "Delete";
-$string['heading_edit'] = "Edit: '{$a->title}'";
+$string['heading_edit'] = 'Edit \'{$a->title}\'';
 
 // Not allowed template.
 $string['not_allowed_header'] = 'You do not have permission to access this page.';

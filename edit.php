@@ -34,7 +34,9 @@ $PAGE->navbar->add(get_string('nav_edit_form', 'local_lor'), new moodle_url("/lo
 
 // Ouput the header and custom heading.
 echo $OUTPUT->header();
-echo $OUTPUT->heading(get_string('heading_edit', 'local_lor', ['title' => $item->title]));
+$a = new stdClass();
+$a->title = $item->title;
+echo $OUTPUT->heading(get_string('heading_edit', 'local_lor', $a));
 
 // Ensure user is logged in.
 require_login();

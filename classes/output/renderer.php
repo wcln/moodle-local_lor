@@ -10,13 +10,13 @@ class renderer extends plugin_renderer_base {
     /**
      * Defer to template.
      *
-     * @param success_html $page
+     * @param insert_success $page
      *
      * @return string html for the page
      */
-    public function render_success_html($page) {
+    public function render_insert_success($page) {
         $data = $page->export_for_template($this);
-        return parent::render_from_template('local_lor/success_html', $data);
+        return parent::render_from_template('local_lor/insert_success', $data);
     }
 
     public function render_content($page) {

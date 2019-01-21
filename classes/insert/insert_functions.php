@@ -44,7 +44,7 @@ class insert_functions {
     }
 
     // insert into lor_keyword table and lor_content_keywords table
-    $keywords = explode(',', $data->topics);
+    $keywords = preg_split('/,\s*/', $data->topics);
     foreach ($keywords as $word) {
 
       // check if keyword exists already, if not then insert
@@ -58,7 +58,7 @@ class insert_functions {
     }
 
     // insert into lor_contributor and lor_content_contributors
-    $contributors = explode(',', $data->contributors);
+    $contributors = preg_split('/,\s*/', $data->contributors);
     foreach ($contributors as $contributor) {
 
       // check if contributor exists already, if not then insert
@@ -110,7 +110,7 @@ class insert_functions {
     }
 
     // insert into lor_keyword table and lor_content_keywords table
-    $keywords = explode(',', $data->topics);
+    $keywords = preg_split('/,\s*/', $data->topics);
     foreach ($keywords as $word) {
 
       // check if keyword exists already, if not then insert
@@ -125,7 +125,7 @@ class insert_functions {
     }
 
     // insert into lor_contributor and lor_content_contributors
-    $contributors = explode(',', $data->contributors);
+    $contributors = preg_split('/,\s*/', $data->contributors);
     foreach ($contributors as $contributor) {
 
       // check if contributor exists already, if not then insert
@@ -202,7 +202,7 @@ class insert_functions {
       }
 
       // Insert into lor_keyword table and lor_content_keywords table.
-      $keywords = explode(',', $data->topics);
+      $keywords = preg_split('/,\s*/', $data->topics);
       foreach ($keywords as $word) {
 
         // check if keyword exists already, if not then insert
@@ -216,7 +216,7 @@ class insert_functions {
       }
 
       // insert into lor_contributor and lor_content_contributors
-      $contributors = explode(',', $data->contributors);
+      $contributors = preg_split('/,\s*/', $data->contributors);
       foreach ($contributors as $contributor) {
 
         // check if contributor exists already, if not then insert
@@ -289,7 +289,7 @@ class insert_functions {
     }
 
     // Insert into lor_keyword table and lor_content_keywords table.
-    $keywords = explode(',', $data->topics);
+    $keywords = preg_split('/,\s*/', $data->topics);
     foreach ($keywords as $word) {
 
       // check if keyword exists already, if not then insert
@@ -303,7 +303,7 @@ class insert_functions {
     }
 
     // insert into lor_contributor and lor_content_contributors
-    $contributors = explode(',', $data->contributors);
+    $contributors = preg_split('/,\s*/', $data->contributors);
     foreach ($contributors as $contributor) {
 
       // check if contributor exists already, if not then insert
@@ -355,7 +355,7 @@ class insert_functions {
     }
 
     // insert into lor_keyword table and lor_content_keywords table
-    $keywords = explode(',', $data->topics);
+    $keywords = preg_split('/,\s*/', $data->topics);
     foreach ($keywords as $word) {
 
       // check if keyword exists already, if not then insert
@@ -370,7 +370,7 @@ class insert_functions {
     }
 
     // insert into lor_contributor and lor_content_contributors
-    $contributors = explode(',', $data->contributors);
+    $contributors = preg_split('/,\s*/', $data->contributors);
     foreach ($contributors as $contributor) {
 
       // check if contributor exists already, if not then insert

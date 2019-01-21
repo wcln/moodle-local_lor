@@ -38,13 +38,18 @@ class edit_form extends moodleform {
 		$mform->addElement('textarea', 'title', get_string($titlestring, 'local_lor'), 'wrap="virtual" rows="2" cols="50"');
     $mform->setType('title', PARAM_TEXT);
     $mform->addRule('title', get_string('required'), 'required', null);
-		$mform->setDefault('title', $this->_customdata['title']);
+		if (isset($this->_customdata['title'])) {
+				$mform->setDefault('title', $this->_customdata['title']);
+		}
+
 
 		// Topics text.
 		$mform->addElement('text', 'topics', get_string('topics', 'local_lor'));
 		$mform->setType('topics', PARAM_TEXT);
 		$mform->addRule('topics', get_string('required'), 'required', null);
-		$mform->setDefault('topics', $this->_customdata['topics']);
+		if (isset($this->_customdata['topics'])) {
+			$mform->setDefault('topics', $this->_customdata['topics']);
+		}
 
 		// Category checkboxes.
 		$category_item = array();
@@ -53,10 +58,12 @@ class edit_form extends moodleform {
 		}
 		$mform->addGroup($category_item, 'categories', get_string('categories', 'local_lor'));
 		$mform->addRule('categories', get_string('required'), 'required', null);
-		foreach ($categories_arr as $id => $category_name) {
-			foreach ($this->_customdata['categories'] as $category) {
-				if ($id == $category->id) {
-					$mform->setDefault("categories[$id]", true);
+		if (isset($this->_customdata['categories'])) {
+			foreach ($categories_arr as $id => $category_name) {
+				foreach ($this->_customdata['categories'] as $category) {
+					if ($id == $category->id) {
+						$mform->setDefault("categories[$id]", true);
+					}
 				}
 			}
 		}
@@ -71,10 +78,12 @@ class edit_form extends moodleform {
 			$grade_item[] = &$mform->createElement('advcheckbox', $grade, '', $grade, array('name' => $grade, 'group' => 2), $grade);
 		}
 		$mform->addGroup($grade_item, 'grades', get_string('grade', 'local_lor'));
-		foreach ($grades_arr as $grade) {
-			foreach ($this->_customdata['grades'] as $existinggrade) {
-				if ($grade == $existinggrade->grade) {
-					$mform->setDefault("grades[$grade]", true);
+		if (isset($this->_customdata['grades'])) {
+			foreach ($grades_arr as $grade) {
+				foreach ($this->_customdata['grades'] as $existinggrade) {
+					if ($grade == $existinggrade->grade) {
+						$mform->setDefault("grades[$grade]", true);
+					}
 				}
 			}
 		}
@@ -82,7 +91,14 @@ class edit_form extends moodleform {
 		// Contributors.
 		$mform->addElement('text', 'contributors', get_string('contributors', 'local_lor'));
 		$mform->setType('contributors', PARAM_TEXT);
-		$mform->setDefault('contributors', $this->_customdata['contributors']);
+		if (isset($this->_customdata['contributors'])) {
+			$mform->setDefault('contributors', $this->_customdata['contributors']);
+		}
+
+		if (isset($this->_customdata['id'])) {
+			$mform->addElement('hidden', 'id', $this->_customdata['id']);
+			$mform->setType('id', PARAM_INT);
+		}
 
 		// Submit and cancel buttons.
 		$this->add_action_buttons(true, get_string('save', 'local_lor'));
@@ -103,7 +119,6 @@ class edit_form extends moodleform {
 		 if (strlen($data['title']) >= 150) {
 			 $errors['title'] = get_string('error_title_length', 'local_lor');
 		 }
-
 
 		return $errors;
 	}

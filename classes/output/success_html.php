@@ -8,7 +8,7 @@ use renderer_base;
 use templatable;
 use stdClass;
 
-class success_html implements renderable, templatable {
+class insert_success implements renderable, templatable {
 
     // The ID of the item that was just inserted.
     var $id = null;

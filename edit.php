@@ -58,30 +58,63 @@ if (has_capability('local/lor:edit', $systemcontext)) {
   // temp
   $delete = false;
 
-  if ($data = $edit_form->get_data()) {
-    local_lor_update_item($item->id, $data->title, $data->topics, $data->categories, $data->grades, $data->contributors);
-    // redirect(new moodle_url('/local/lor/index.php'));
-  } else if ($delete) {
-    local_lor_delete_item($item->id);
-    redirect(new moodle_url('/local/lor/index.php'));
-  } else if ($edit_form->is_cancelled()) {
-    redirect(new moodle_url('/local/lor/index.php'));
-  } else {
-
-
-  }
-
   // Ouput the header and custom heading.
   echo $OUTPUT->header();
   $a = new stdClass();
   $a->title = $item->title;
   echo $OUTPUT->heading(get_string('heading_edit', 'local_lor', $a));
 
-  $edit_form->display();
+  if ($data = $edit_form->get_data()) {
+
+    // Check if the delete button was clicked.
+    if (isset($data->deletebutton)) {
+
+      // Delete the item.
+      local_lor_delete_item($id);
+
+      // Render success template.
+      $delete_success = new \local_lor\output\delete_success($item->title);
+      echo $renderer->render($delete_success);
+
+    } else { // The save button was clicked.
+
+      // Update the item.
+      local_lor_update_item($id, $data->title, $data->topics, $data->categories, $data->grades, $data->contributors);
+
+      // Render success template.
+      $update_success = new \local_lor\output\update_success($id);
+      echo $renderer->render($update_success);
+
+      // Display the form.
+      $edit_form->display();
+
+    }
+
+  } else if ($edit_form->is_cancelled()) {
+
+    // Cancel button clicked, redirect to the main LOR page.
+    redirect(new moodle_url('/local/lor/index.php'));
+
+  } else {
+
+    // Our first time here, or errors occurred, display the form.
+    $edit_form->display();
+  }
 
   // Ouput the footer.
   echo $OUTPUT->footer();
 
 } else {
-  die();
+
+  // Output the page header.
+  echo $OUTPUT->header();
+
+  // Render HTML to tell the user they do not have permission to be here (no data required).
+  echo $renderer->render_not_allowed(null);
+
+  // Output the page footer.
+  echo $OUTPUT->footer();
+
 }
+
+?>

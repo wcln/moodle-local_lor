@@ -13,9 +13,14 @@ class renderer extends plugin_renderer_base {
         return parent::render_from_template('local_lor/insert_success', $data);
     }
 
-    public function render_insert_update($page) {
+    public function render_update_success($page) {
         $data = $page->export_for_template($this);
         return parent::render_from_template('local_lor/update_success', $data);
+    }
+
+    public function render_delete_success($page) {
+        $data = $page->export_for_template($this);
+        return parent::render_from_template('local_lor/delete_success', $data);
     }
 
     public function render_content($page) {

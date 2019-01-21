@@ -100,8 +100,13 @@ class edit_form extends moodleform {
 			$mform->setType('id', PARAM_INT);
 		}
 
-		// Submit and cancel buttons.
-		$this->add_action_buttons(true, get_string('save', 'local_lor'));
+		// Buttons.
+		$buttonarray=array();
+		$buttonarray[] = $mform->createElement('submit', 'submitbutton', get_string('savechanges'));
+		$buttonarray[] = $mform->createElement('reset', 'resetbutton', get_string('revert'));
+		$buttonarray[] = $mform->createElement('submit', 'deletebutton', get_string('delete'));
+		$buttonarray[] = $mform->createElement('cancel');
+		$mform->addGroup($buttonarray, 'buttonar', '', ' ', false);
 
 	}
 

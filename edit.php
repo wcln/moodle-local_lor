@@ -5,7 +5,6 @@ require_once(__DIR__ . '/locallib.php');
 
 require_once('edit_form.php');
 
-
 // Get the item ID from the URL.
 $id = null;
 $item = null;
@@ -15,8 +14,12 @@ if (isset($_GET['id'])) {
 } else if (isset($_POST['id'])) {
   $id = $_POST['id'];
   $item = local_lor_get_content_from_id($id);
-} else {
-  // TODO error.
+}
+
+// If an ID was not provided, or an item with that ID does not exist, output an error message on a blank page.
+if (is_null($item) || !$item) {
+  echo get_string('error_no_item', 'local_lor');
+  die();
 }
 
 // Set up the page.

@@ -61,6 +61,12 @@ class insert_functions {
     $contributors = preg_split('/,\s*/', $data->contributors);
     foreach ($contributors as $contributor) {
 
+      // Remove white space from beginning and end of name.
+      $contributor = preg_replace('/^[ \t]+|[ \t]+$/', '', $contributor);
+
+      // If there is more than one space between first and last name, replace with one space.
+      $contributor = preg_replace('/[ \t]{2,}/', ' ', $contributor);
+
       // check if contributor exists already, if not then insert
       $existing_record = $DB->get_record_sql('SELECT id FROM {lor_contributor} WHERE name=?', array($contributor));
       if($existing_record) {
@@ -127,6 +133,12 @@ class insert_functions {
     // insert into lor_contributor and lor_content_contributors
     $contributors = preg_split('/,\s*/', $data->contributors);
     foreach ($contributors as $contributor) {
+
+      // Remove white space from beginning and end of name.
+      $contributor = preg_replace('/^[ \t]+|[ \t]+$/', '', $contributor);
+
+      // If there is more than one space between first and last name, replace with one space.
+      $contributor = preg_replace('/[ \t]{2,}/', ' ', $contributor);
 
       // check if contributor exists already, if not then insert
       $existing_record = $DB->get_record_sql('SELECT id FROM {lor_contributor} WHERE name=?', array($contributor));
@@ -219,6 +231,12 @@ class insert_functions {
       $contributors = preg_split('/,\s*/', $data->contributors);
       foreach ($contributors as $contributor) {
 
+        // Remove white space from beginning and end of name.
+        $contributor = preg_replace('/^[ \t]+|[ \t]+$/', '', $contributor);
+
+        // If there is more than one space between first and last name, replace with one space.
+        $contributor = preg_replace('/[ \t]{2,}/', ' ', $contributor);
+
         // check if contributor exists already, if not then insert
         $existing_record = $DB->get_record_sql('SELECT id FROM {lor_contributor} WHERE name=?', array($contributor));
         if($existing_record) {
@@ -306,6 +324,12 @@ class insert_functions {
     $contributors = preg_split('/,\s*/', $data->contributors);
     foreach ($contributors as $contributor) {
 
+      // Remove white space from beginning and end of name.
+      $contributor = preg_replace('/^[ \t]+|[ \t]+$/', '', $contributor);
+
+      // If there is more than one space between first and last name, replace with one space.
+      $contributor = preg_replace('/[ \t]{2,}/', ' ', $contributor);
+
       // check if contributor exists already, if not then insert
       $existing_record = $DB->get_record_sql('SELECT id FROM {lor_contributor} WHERE name=?', array($contributor));
       if($existing_record) {
@@ -372,6 +396,12 @@ class insert_functions {
     // insert into lor_contributor and lor_content_contributors
     $contributors = preg_split('/,\s*/', $data->contributors);
     foreach ($contributors as $contributor) {
+
+      // Remove white space from beginning and end of name.
+      $contributor = preg_replace('/^[ \t]+|[ \t]+$/', '', $contributor);
+
+      // If there is more than one space between first and last name, replace with one space.
+      $contributor = preg_replace('/[ \t]{2,}/', ' ', $contributor);
 
       // check if contributor exists already, if not then insert
       $existing_record = $DB->get_record_sql('SELECT id FROM {lor_contributor} WHERE name=?', array($contributor));

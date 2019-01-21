@@ -192,13 +192,23 @@ function local_lor_get_contributors_string_for_item($content_id) {
 
   $contributors_str = "";
   foreach ($contributors as $contributor) {
+
+    // Remove white space from beginning and end of name.
+    $contributor->name = preg_replace('/^[ \t]+|[ \t]+$/', '', $contributor->name);
+
+    // If there is more than one space between first and last name, replace with one space.
+    $contributor->name = preg_replace('/[ \t]{2,}/', ' ', $contributor->name);
+
+    // Append the name to the string with a comma.
     $contributors_str .= "$contributor->name, ";
   }
 
+  // Remove the trailing comma and space from the string.
   if (strlen($contributors_str) > 1) {
     $contributors_str = substr($contributors_str, 0, -2);
   }
 
+  // Return the complete string.
   return $contributors_str;
 }
 
@@ -306,6 +316,12 @@ function local_lor_update_item($id, $title, $topics, $categories, $grades, $cont
   // Re-insert contributors for the item.
   $contributors = preg_split('/,\s*/', $contributors);
   foreach ($contributors as $contributor) {
+
+    // Remove white space from beginning and end of name.
+    $contributor = preg_replace('/^[ \t]+|[ \t]+$/', '', $contributor);
+
+    // If there is more than one space between first and last name, replace with one space.
+    $contributor = preg_replace('/[ \t]{2,}/', ' ', $contributor);
 
     // check if contributor exists already, if not then insert
     $existing_record = $DB->get_record_sql('SELECT id FROM {lor_contributor} WHERE name=?', array($contributor));

@@ -58,13 +58,13 @@ if (has_capability('local/lor:edit', $systemcontext)) {
   // temp
   $delete = false;
 
-  // Ouput the header and custom heading.
-  echo $OUTPUT->header();
-  $a = new stdClass();
-  $a->title = $item->title;
-  echo $OUTPUT->heading(get_string('heading_edit', 'local_lor', $a));
-
   if ($data = $edit_form->get_data()) {
+
+    // Ouput the header and custom heading.
+    echo $OUTPUT->header();
+    $a = new stdClass();
+    $a->title = $item->title;
+    echo $OUTPUT->heading(get_string('heading_edit', 'local_lor', $a));
 
     // Check if the delete button was clicked.
     if (isset($data->deletebutton)) {
@@ -96,6 +96,12 @@ if (has_capability('local/lor:edit', $systemcontext)) {
     redirect(new moodle_url('/local/lor/index.php'));
 
   } else {
+
+    // Ouput the header and custom heading.
+    echo $OUTPUT->header();
+    $a = new stdClass();
+    $a->title = $item->title;
+    echo $OUTPUT->heading(get_string('heading_edit', 'local_lor', $a));
 
     // Our first time here, or errors occurred, display the form.
     $edit_form->display();

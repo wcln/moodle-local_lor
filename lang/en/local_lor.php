@@ -3,6 +3,7 @@
 // General.
 $string['pluginname'] = "WCLN Learning Object Repository";
 $string['lor:insert'] = "Add new items to the WCLN Learning Object Repository";
+$string['lor:edit'] = "Edit items in the WCLN Learning Object Repository";
 
 // Insert form.
 $string['heading'] = "Add to WCLN Learning Object Repository";
@@ -53,6 +54,7 @@ $string['error_no_video'] = 'Unable to insert: YouTube video with that video ID 
 // Navigation bar.
 $string['lor'] = "LOR";
 $string['nav_insert_form'] = "Insert Form";
+$string['nav_edit_form'] = "Edit Form";
 $string['nav_default_type'] = "Item";
 $string['nav_insert'] = "Insert ";
 
@@ -65,6 +67,11 @@ $string['keywords'] = "Keywords";
 $string['search_categories'] = "Categories";
 $string['search_grades'] = "Grades";
 $string['all'] = "All";
+
+// Edit form.
+$string['save'] = "Save";
+$string['delete'] = "Delete";
+$string['heading_edit'] = 'Editing \'{$a->title}\'';
 
 // Not allowed template.
 $string['not_allowed_header'] = 'You do not have permission to access this page.';

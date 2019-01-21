@@ -8,7 +8,7 @@ use renderer_base;
 use templatable;
 use stdClass;
 
-class success_html implements renderable, templatable {
+class update_success implements renderable, templatable {
 
     // The ID of the item that was just inserted.
     var $id = null;
@@ -27,10 +27,10 @@ class success_html implements renderable, templatable {
 
       $data = new stdClass();
 
-      // Attempt to retrieve the title of the recently inserted item.
-      $recently_inserted = $DB->get_record('lor_content', array('id' => $this->id), 'id, title');
-      if ($recently_inserted !== false) {
-        $data->title = $recently_inserted->title;
+      // Attempt to retrieve the title of the recently updated item.
+      $recently_updated = $DB->get_record('lor_content', array('id' => $this->id), 'id, title');
+      if ($recently_updated !== false) {
+        $data->title = $recently_updated->title;
       } else {
         // Output an error if the title was not found.
         $data->title = get_string('error_title_not_found', 'local_lor');

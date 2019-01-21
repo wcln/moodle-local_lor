@@ -124,15 +124,8 @@ function local_lor_get_keywords_string_for_item($content_id) {
 }
 
 function local_lor_get_categories_string_for_item($content_id) {
-  global $DB;
 
-  $sql = "SELECT DISTINCT {lor_category}.name
-          FROM {lor_content}, {lor_content_categories}, {lor_category}
-          WHERE {lor_content}.id = {lor_content_categories}.content
-          AND {lor_content_categories}.category = {lor_category}.id
-          AND {lor_content}.id = ?";
-
-  $categories = $DB->get_records_sql($sql, array($content_id));
+  $categories = local_lor_get_categories_for_item($content_id);
 
   $categories_str = "";
   foreach ($categories as $category) {
@@ -146,16 +139,21 @@ function local_lor_get_categories_string_for_item($content_id) {
   return $categories_str;
 }
 
-function local_lor_get_grades_string_for_item($content_id) {
+function local_lor_get_categories_for_item($content_id) {
   global $DB;
 
-  $sql = "SELECT DISTINCT {lor_grade}.grade
-          FROM {lor_content}, {lor_content_grades}, {lor_grade}
-          WHERE {lor_content}.id = {lor_content_grades}.content
-          AND {lor_content_grades}.grade = {lor_grade}.grade
+  $sql = "SELECT DISTINCT {lor_category}.name, {lor_category}.id
+          FROM {lor_content}, {lor_content_categories}, {lor_category}
+          WHERE {lor_content}.id = {lor_content_categories}.content
+          AND {lor_content_categories}.category = {lor_category}.id
           AND {lor_content}.id = ?";
 
-  $grades = $DB->get_records_sql($sql, array($content_id));
+  return $DB->get_records_sql($sql, array($content_id));
+}
+
+function local_lor_get_grades_string_for_item($content_id) {
+
+  $grades = local_lor_get_grades_for_item($content_id);
 
   $grades_str = "";
   foreach ($grades as $grade) {
@@ -167,6 +165,18 @@ function local_lor_get_grades_string_for_item($content_id) {
   }
 
   return $grades_str;
+}
+
+function local_lor_get_grades_for_item($content_id) {
+  global $DB;
+
+  $sql = "SELECT DISTINCT {lor_grade}.grade
+          FROM {lor_content}, {lor_content_grades}, {lor_grade}
+          WHERE {lor_content}.id = {lor_content_grades}.content
+          AND {lor_content_grades}.grade = {lor_grade}.grade
+          AND {lor_content}.id = ?";
+
+  return $DB->get_records_sql($sql, array($content_id));
 }
 
 function local_lor_get_contributors_string_for_item($content_id) {
@@ -182,13 +192,23 @@ function local_lor_get_contributors_string_for_item($content_id) {
 
   $contributors_str = "";
   foreach ($contributors as $contributor) {
+
+    // Remove white space from beginning and end of name.
+    $contributor->name = preg_replace('/^[ \t]+|[ \t]+$/', '', $contributor->name);
+
+    // If there is more than one space between first and last name, replace with one space.
+    $contributor->name = preg_replace('/[ \t]{2,}/', ' ', $contributor->name);
+
+    // Append the name to the string with a comma.
     $contributors_str .= "$contributor->name, ";
   }
 
+  // Remove the trailing comma and space from the string.
   if (strlen($contributors_str) > 1) {
     $contributors_str = substr($contributors_str, 0, -2);
   }
 
+  // Return the complete string.
   return $contributors_str;
 }
 
@@ -244,4 +264,80 @@ function local_lor_get_related_parameters($id) {
 
   // Currently not including keywords...
   return "?type=-1$grades_string$categories_string";
+}
+
+function local_lor_update_item($id, $title, $topics, $categories, $grades, $contributors) {
+  global $DB;
+
+  // Update lor_content record.
+  $content_record = new stdCLass();
+  $content_record->id = $id;
+  $content_record->title = $title;
+  $DB->update_record('lor_content', $content_record);
+
+  // Delete all keywords for the item.
+  $DB->delete_records('lor_content_keywords', array('content' => $id));
+
+  // Re-insert keywords for the item.
+  $keywords = preg_split('/,\s*/', $topics);
+  foreach ($keywords as $word) {
+
+    // check if keyword exists already, if not then insert
+    $existing_record = $DB->get_record_sql('SELECT name FROM {lor_keyword} WHERE name=?', array($word));
+    if($existing_record) {
+      $DB->execute('INSERT INTO {lor_content_keywords}(content, keyword) VALUES (?,?)', array($id, $word));
+    } else {
+      $DB->execute('INSERT INTO {lor_keyword}(name) VALUES (?)', array($word));
+      $DB->execute('INSERT INTO {lor_content_keywords}(content, keyword) VALUES (?,?)', array($id, $word));
+    }
+  }
+
+  // Delete all categories for the item.
+  $DB->delete_records('lor_content_categories', array('content' => $id));
+
+  // Re-insert categories for the item.
+  $categories = array_filter($categories);
+  foreach ($categories as $category) {
+    $DB->execute('INSERT INTO {lor_content_categories}(content, category) VALUES (?,?)', array($id, (int)$category));
+  }
+
+  // Delete all grades for the item.
+  $DB->delete_records('lor_content_grades', array('content' => $id));
+
+  // Re-insert grades for the item.
+  $grades = array_filter($grades);
+  foreach ($grades as $grade) {
+    $DB->execute('INSERT INTO {lor_content_grades}(content, grade) VALUES (?,?)', array($id, (int)$grade));
+  }
+
+  // Delete all contributors for the item.
+  $DB->delete_records('lor_content_contributors', array('content' => $id));
+
+  // Re-insert contributors for the item.
+  $contributors = preg_split('/,\s*/', $contributors);
+  foreach ($contributors as $contributor) {
+
+    // Remove white space from beginning and end of name.
+    $contributor = preg_replace('/^[ \t]+|[ \t]+$/', '', $contributor);
+
+    // If there is more than one space between first and last name, replace with one space.
+    $contributor = preg_replace('/[ \t]{2,}/', ' ', $contributor);
+
+    // check if contributor exists already, if not then insert
+    $existing_record = $DB->get_record_sql('SELECT id FROM {lor_contributor} WHERE name=?', array($contributor));
+    if($existing_record) {
+      $cid = $existing_record->id;
+    } else {
+      $cid = $DB->insert_record_raw('lor_contributor', array('id' => null, 'name' => $contributor), true, false, false);
+    }
+
+    $DB->execute('INSERT INTO {lor_content_contributors}(content, contributor) VALUES (?,?)', array($id, $cid));
+  }
+
+}
+
+function local_lor_delete_item($id) {
+  global $DB;
+
+  $DB->delete_records('lor_content', array('id' => $id));
 }

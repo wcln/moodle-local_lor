@@ -74,8 +74,8 @@ if (has_capability('local/lor:insert', $systemcontext) || $isteacheranywhere) {
 
     // If an inserted_id has been provided, show the success html and a link to the just inserted item.
     if (isset($_GET['inserted_id'])) {
-      $success_html = new \local_lor\output\success_html($_GET['inserted_id']);
-      echo $renderer->render($success_html);
+      $insert_success = new \local_lor\output\insert_success($_GET['inserted_id']);
+      echo $renderer->render($insert_success);
 
       // An item was just inserted, clear the current type.
       unset($SESSION->current_type);

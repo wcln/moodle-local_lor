@@ -84,7 +84,7 @@ function local_lor_get_content_from_id($id) {
 
   $sql = "SELECT DISTINCT {lor_content}.id, type, {lor_type}.name, title, image, link, date_created, width, height
           FROM {lor_content}, {lor_type}
-          WHERE {lor_content}.id=? AND {lor_content}.type = {lor_type}.id AND {lor_content}.deleted = 0";
+          WHERE {lor_content}.id=? AND {lor_content}.type = {lor_type}.id";
   $item = $DB->get_record_sql($sql, array($id));
   return $item;
 }

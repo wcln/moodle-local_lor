@@ -10,11 +10,15 @@ use stdClass;
 
 class delete_success implements renderable, templatable {
 
+    // The ID of the item that was just deleted.
+    var $id = null;
+
     // The title of the item that was just deleted.
     var $title = null;
 
-    public function __construct($title) {
-        $this->title = $title;
+    public function __construct($id, $title) {
+      $this->id = $id;
+      $this->title = $title;
     }
 
     /**
@@ -27,7 +31,8 @@ class delete_success implements renderable, templatable {
 
       $data = new stdClass();
       $data->title = $this->title;
-      $data->link = new \moodle_url("/local/lor/index.php");
+      $data->done_link = new \moodle_url("/local/lor/index.php");
+      $data->undo_link = new \moodle_url("/local/lor/edit.php?id=$id")
 
       return $data;
     }

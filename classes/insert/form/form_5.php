@@ -12,6 +12,7 @@ class form_5 extends moodleform {
 
 	protected function definition() {
 		global $CFG;
+		global $USER;
 
 		// Fetching categories for later.
     $categories = local_lor_get_categories();
@@ -67,6 +68,7 @@ class form_5 extends moodleform {
 		// Contributors.
 		$mform->addElement('text', 'contributors', get_string('contributors', 'local_lor'));
 		$mform->setType('contributors', PARAM_TEXT);
+		$mform->setDefault('contributors', fullname($USER));
 
     // Header.
 		$mform->addElement('header', 'files', get_string('files', 'local_lor'));

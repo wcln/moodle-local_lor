@@ -131,32 +131,32 @@ class update_videos extends \core\task\scheduled_task {
             // If we found a category for this video, add it to LOR. Otherwise do nothing.
             if (!is_null($category_to_add)) {
 
-              // Get video keywords.
-              $keywords = [];
+              // Get video topics.
+              $topics = [];
               $connect = file_get_contents("https://www.youtube.com/watch?v=$video_id");
               preg_match_all('|<meta property="og\:video\:tag" content="(.+?)">|si', $connect, $tags, PREG_SET_ORDER);
 
               // For each video tag we found.
               foreach ($tags as $tag) {
 
-                // Filter out redundant keywords.
+                // Filter out redundant topics.
                 if (!preg_match("/(?i)WCLN|BCLN|math|unit.*|[0-9]+|western|canadian|learning|network|sawatzky/", $tag[1])) {
 
-                    // Ensure the tag is not already in the keywords array.
-                    if (!in_array($tag[1], $keywords)) {
+                    // Ensure the tag is not already in the topics array.
+                    if (!in_array($tag[1], $topics)) {
 
                       // Append the clean tag.
-                      $keywords[] = $tag[1];
+                      $topics[] = $tag[1];
                     }
 
-                  // Limit to 5 keywords per video, just in case.
-                  if (count($keywords) >= 5) {
+                  // Limit to 5 topics per video, just in case.
+                  if (count($topics) >= 5) {
                     break;
                   }
                 }
               }
 
-              mtrace("Found " . count($keywords) . " keywords.");
+              mtrace("Found " . count($topics) . " topics.");
 
               // Create empty record to be inserted into lor_content.
               $record = new \stdClass();
@@ -183,20 +183,20 @@ class update_videos extends \core\task\scheduled_task {
 
               mtrace("Video category added to lor_content_categories table.");
 
-              // Insert into lor_keyword table and lor_content_keywords table.
-              foreach ($keywords as $word) {
+              // Insert into lor_topic table and lor_content_topics table.
+              foreach ($topics as $word) {
 
-                // Check if keyword exists already, if not then insert.
-                $existing_record = $DB->get_record_sql('SELECT name FROM {lor_keyword} WHERE name=?', array($word));
+                // Check if topic exists already, if not then insert.
+                $existing_record = $DB->get_record_sql('SELECT name FROM {lor_topic} WHERE name=?', array($word));
                 if($existing_record) {
-                  $DB->execute('INSERT INTO {lor_content_keywords}(content, keyword) VALUES (?,?)', array($id, $word));
+                  $DB->execute('INSERT INTO {lor_content_topics}(content, topic) VALUES (?,?)', array($id, $word));
                 } else {
-                  $DB->execute('INSERT INTO {lor_keyword}(name) VALUES (?)', array($word));
-                  $DB->execute('INSERT INTO {lor_content_keywords}(content, keyword) VALUES (?,?)', array($id, $word));
+                  $DB->execute('INSERT INTO {lor_topic}(name) VALUES (?)', array($word));
+                  $DB->execute('INSERT INTO {lor_content_topics}(content, topic) VALUES (?,?)', array($id, $word));
                 }
               }
 
-              mtrace("Keywords added to database.");
+              mtrace("topics added to database.");
 
               // Insert into lor_content_videos table.
               $DB->execute('INSERT INTO {lor_content_videos}(content, video_id) VALUES (?, ?)', array($id, $video_id));

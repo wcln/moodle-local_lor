@@ -88,7 +88,7 @@ if ($search_data = $search_form->get_data()) {
   $page = $search_data->page - 1;
 
   // Search for specific content.
-  $items = local_lor_get_content($search_data->type, $search_data->categories, $search_data->grades, $search_data->sort_by, $search_data->keywords);
+  $items = local_lor_get_content($search_data->type, $search_data->categories, $search_data->grades, $search_data->sort_by, $search_data->topics);
 
 } else { // Search form was not submitted.
 

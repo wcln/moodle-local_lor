@@ -50,7 +50,7 @@ if (isset($_GET['id'])) {
               <tbody>
                 <tr>
                   <td width="200px"><a href="<?=$item->link?>"><img src="<?=$item->image?>" width="200" height="150" /></a></td>
-                  <td><b><span style="background-color: transparent; color: #7d9fd3; font-size: 16px;"><?=$item->title?></span><br /></b><br /><span style="color: #c8c8c8;">Topics: <?=local_lor_get_keywords_string_for_item($item->id)?></span></td>
+                  <td><b><span style="background-color: transparent; color: #7d9fd3; font-size: 16px;"><?=$item->title?></span><br /></b><br /><span style="color: #c8c8c8;">Topics: <?=local_lor_get_topics_string_for_item($item->id)?></span></td>
                 </tr>
               </tbody>
             </table>

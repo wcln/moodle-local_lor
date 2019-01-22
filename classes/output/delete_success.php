@@ -28,11 +28,12 @@ class delete_success implements renderable, templatable {
      */
     public function export_for_template(renderer_base $output) {
       global $DB;
+      global $CFG;
 
       $data = new stdClass();
       $data->title = $this->title;
       $data->done_link = new \moodle_url("/local/lor/index.php");
-      $data->undo_link = new \moodle_url("/local/lor/edit.php?id=$this->id&undo=1");
+      $data->undo_link = "$CFG->wwwroot/local/lor/edit.php?id=$this->id&undo=1";
 
       return $data;
     }

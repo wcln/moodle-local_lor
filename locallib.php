@@ -408,5 +408,8 @@ function local_lor_update_item($id, $type, $title, $topics, $categories, $grades
 function local_lor_delete_item($id) {
   global $DB;
 
-  $DB->delete_records('lor_content', array('id' => $id));
+  $content_record = new stdClass();
+  $content_record->id = $id;
+  $content_record->deleted = 1;
+  $DB->update_record('lor_content', $content_record);
 }

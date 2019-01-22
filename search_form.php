@@ -73,8 +73,11 @@ class search_form extends moodleform {
 		$mform->addElement('hidden', 'page', 1);
 		$mform->setType('page', PARAM_INT);
 
-		// Search button.
-		$this->add_action_buttons(false, get_string('search', 'local_lor'));
+		// Buttons.
+		$buttonarray=array();
+		$buttonarray[] = $mform->createElement('submit', 'submitbutton', get_string('search', 'local_lor'));
+		$buttonarray[] = $mform->createElement('reset', 'resetbutton', get_string('reset', 'local_lor'));
+		$mform->addGroup($buttonarray, 'buttonar', '', ' ', false);
 
 	}
 

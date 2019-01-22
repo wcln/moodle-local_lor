@@ -67,6 +67,7 @@ $string['keywords'] = "Keywords";
 $string['search_categories'] = "Categories";
 $string['search_grades'] = "Grades";
 $string['all'] = "All";
+$string['reset'] = 'Reset';
 
 // Edit form.
 $string['save'] = "Save";

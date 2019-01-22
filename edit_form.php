@@ -120,7 +120,7 @@ class edit_form extends moodleform {
 					}
 
 					// Preview image.
-					$mform->addElement('html', "<p>The current preview image is: </p><img src='".$this->_customdata['image']."'/><p>Upload a new preview image to replace the existing one.</p>");
+					$mform->addElement('html', "<p>The current preview image is: </p><img width='200px' height='150px' src='".$this->_customdata['image']."'/><p>Upload a new preview image to replace the existing one.</p>");
 					$mform->addELement('filepicker', 'image', get_string('image', 'local_lor'), null, array('maxbytes' => 1000000, 'accepted_types' => array('.png')));
 					$mform->addHelpButton('image', 'image', 'local_lor');
 
@@ -174,6 +174,11 @@ class edit_form extends moodleform {
 					if (isset($this->_customdata['book_id'])) {
 						$mform->setDefault('book_id', $this->_customdata['book_id']);
 					}
+
+					// Preview image.
+					$mform->addElement('html', "<p>The current preview image is: </p><img width='200px' height='150px' src='".$this->_customdata['image']."'/><p>Upload a new preview image to replace the existing one.</p>");
+					$mform->addELement('filepicker', 'image', get_string('image', 'local_lor'), null, array('maxbytes' => 1000000, 'accepted_types' => array('.png')));
+					$mform->addHelpButton('image', 'image', 'local_lor');
 
 					break;
 				// Learning Guide.

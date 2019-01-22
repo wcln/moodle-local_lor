@@ -1,5 +1,12 @@
 <?php
 
+// Prevent caching on this page.
+header("Pragma-directive: no-cache");
+header("Cache-directive: no-cache");
+header("Cache-control: no-cache");
+header("Pragma: no-cache");
+header("Expires: 0");
+
 require_once(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/locallib.php');
 
@@ -92,6 +99,7 @@ if (has_capability('local/lor:edit', $systemcontext)) {
 
         // General settings.
         $id,
+        $item->type,
         $data->title,
         $data->topics,
         $data->categories,
@@ -107,7 +115,10 @@ if (has_capability('local/lor:edit', $systemcontext)) {
         isset($data->video_id) ? $data->video_id : null,
 
         // Lesson specific settings.
-        isset($data->book_id) ? $data->book_id : null
+        isset($data->book_id) ? $data->book_id : null,
+
+        // Form to handle files.
+        $edit_form
       );
 
       // Render success template.

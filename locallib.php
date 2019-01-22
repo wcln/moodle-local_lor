@@ -275,8 +275,9 @@ function local_lor_get_related_parameters($id) {
   return "?type=-1$grades_string$categories_string";
 }
 
-function local_lor_update_item($id, $title, $topics, $categories, $grades, $contributors, $link, $width, $height, $video_id, $book_id) {
+function local_lor_update_item($id, $type, $title, $topics, $categories, $grades, $contributors, $link, $width, $height, $video_id, $book_id, &$form) {
   global $DB;
+  global $CFG;
 
   // Update lor_content record.
   $content_record = new stdCLass();
@@ -303,6 +304,15 @@ function local_lor_update_item($id, $title, $topics, $categories, $grades, $cont
     // Update book ID.
     $DB->execute('UPDATE {lor_content_lessons} SET book_id = ? WHERE content = ?', array($book_id, $id));
   }
+
+  // Save preview image to server (if image exists).
+  if ($type == 1) { // Game.
+    $form->save_file('image', "$CFG->dirroot/LOR/games/preview_images/$id.png", true);
+  } else if ($type == 5) { // Lesson.
+    $form->save_file('image', "$CFG->dirroot/LOR/lessons/preview_images/$id.png", true);
+    $DB->execute('UPDATE {lor_content} SET image = ? WHERE id = ?', array("$CFG->wwwroot/LOR/lessons/preview_images/$id.png", $id));
+  }
+
 
   // Delete all keywords for the item.
   $DB->delete_records('lor_content_keywords', array('content' => $id));

@@ -56,6 +56,7 @@ if (has_capability('local/lor:edit', $systemcontext)) {
     'categories' => local_lor_get_categories_for_item($item->id),
     'grades' => local_lor_get_grades_for_item($item->id),
     'contributors' => local_lor_get_contributors_string_for_item($item->id),
+    'image' => $item->image,
     'link' => $item->link,
     'width' => $item->width,
     'height' => $item->height,

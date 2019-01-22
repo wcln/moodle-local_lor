@@ -76,6 +76,7 @@ $string['heading_edit'] = 'Editing \'{$a->title}\'';
 $string['error_no_item'] = 'Error: No item is set.';
 $string['type_header'] = '{$a->name} Specific Settings';
 $string['edit_server'] = '{$a->name} specific settings are not yet incorporated on this form. To edit {$a->name} files, access the server and manually replace the files corresponding with the ID {$a->id}.';
+$string['image_help'] = 'Leave blank to use the current preview image. If you upload a new image, it will overwrite the existing image. Remember to choose an image that scales well to 200x150px.';
 
 // Not allowed template.
 $string['not_allowed_header'] = 'You do not have permission to access this page.';

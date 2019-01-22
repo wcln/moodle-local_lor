@@ -120,8 +120,9 @@ class edit_form extends moodleform {
 					}
 
 					// Preview image.
-					// $mform->addELement('filepicker', 'image', get_string('image', 'local_lor'), null, array('maxbytes' => 1000000, 'accepted_types' => array('.png')));
-					// $mform->addRule('image', get_string('required'), 'required', null);
+					$mform->addElement('html', "<p>The current preview image is: </p><img src='".$this->_customdata['image']."'/><p>Upload a new preview image to replace the existing one.</p>");
+					$mform->addELement('filepicker', 'image', get_string('image', 'local_lor'), null, array('maxbytes' => 1000000, 'accepted_types' => array('.png')));
+					$mform->addHelpButton('image', 'image', 'local_lor');
 
 					// Paragraph.
 					$mform->addElement('html', '<p>'.get_string('iframe_size_paragraph', 'local_lor').'</p>');

@@ -286,7 +286,9 @@ function local_lor_update_item($id, $title, $topics, $categories, $grades, $cont
   $DB->update_record('lor_content', $content_record);
 
   // Check if video ID is set and needs to be updated.
-  if (!is_null($video_id))
+  if (!is_null($video_id)) {
+    $DB->execute('UPDATE {lor_content_videos} SET video_id = ? WHERE content = ?', array($video_id, $id));
+  }
 
   // Delete all keywords for the item.
   $DB->delete_records('lor_content_keywords', array('content' => $id));

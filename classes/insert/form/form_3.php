@@ -12,6 +12,7 @@ class form_3 extends moodleform {
 
 	protected function definition() {
 		global $CFG;
+		global $USER;
 
 		// Fetching categories for later.
     $categories = local_lor_get_categories();
@@ -63,6 +64,7 @@ class form_3 extends moodleform {
 		// Contributors.
 		$mform->addElement('text', 'contributors', get_string('contributors', 'local_lor'));
 		$mform->setType('contributors', PARAM_TEXT);
+		$mform->setDefault('contributors', fullname($USER));
 
 		// Submit and cancel buttons.
 		$this->add_action_buttons(true, get_string('submit', 'local_lor'));

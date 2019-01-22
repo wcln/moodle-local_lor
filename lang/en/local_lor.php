@@ -84,3 +84,4 @@ $string['not_allowed_paragraph'] = 'Please contact a site administrator if you b
 
 // Scheduled Task.
 $string['updatevideos'] = 'Update LOR videos from YouTube';
+$string['deleteitems'] = 'Permanently delete marked items from the LOR database.';

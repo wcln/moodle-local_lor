@@ -43,17 +43,17 @@ class insert_functions {
       $DB->execute('INSERT INTO {lor_content_grades}(content, grade) VALUES (?,?)', array($id, (int)$grade));
     }
 
-    // insert into lor_keyword table and lor_content_keywords table
-    $keywords = preg_split('/,\s*/', $data->topics);
-    foreach ($keywords as $word) {
+    // insert into lor_topic table and lor_content_topics table
+    $topics = preg_split('/,\s*/', $data->topics);
+    foreach ($topics as $word) {
 
-      // check if keyword exists already, if not then insert
-      $existing_record = $DB->get_record_sql('SELECT name FROM {lor_keyword} WHERE name=?', array($word));
+      // check if topic exists already, if not then insert
+      $existing_record = $DB->get_record_sql('SELECT name FROM {lor_topic} WHERE name=?', array($word));
       if($existing_record) {
-        $DB->execute('INSERT INTO {lor_content_keywords}(content, keyword) VALUES (?,?)', array($id, $word));
+        $DB->execute('INSERT INTO {lor_content_topics}(content, topic) VALUES (?,?)', array($id, $word));
       } else {
-        $DB->execute('INSERT INTO {lor_keyword}(name) VALUES (?)', array($word));
-        $DB->execute('INSERT INTO {lor_content_keywords}(content, keyword) VALUES (?,?)', array($id, $word));
+        $DB->execute('INSERT INTO {lor_topic}(name) VALUES (?)', array($word));
+        $DB->execute('INSERT INTO {lor_content_topics}(content, topic) VALUES (?,?)', array($id, $word));
       }
     }
 
@@ -115,17 +115,17 @@ class insert_functions {
       $DB->execute('INSERT INTO {lor_content_grades}(content, grade) VALUES (?,?)', array($id, (int)$grade));
     }
 
-    // insert into lor_keyword table and lor_content_keywords table
-    $keywords = preg_split('/,\s*/', $data->topics);
-    foreach ($keywords as $word) {
+    // insert into lor_topic table and lor_content_topics table
+    $topics = preg_split('/,\s*/', $data->topics);
+    foreach ($topics as $word) {
 
-      // check if keyword exists already, if not then insert
-      $existing_record = $DB->get_record_sql('SELECT name FROM {lor_keyword} WHERE name=?', array($word));
+      // check if topic exists already, if not then insert
+      $existing_record = $DB->get_record_sql('SELECT name FROM {lor_topic} WHERE name=?', array($word));
       if($existing_record) {
-        $DB->execute('INSERT INTO {lor_content_keywords}(content, keyword) VALUES (?,?)', array($id, $word));
+        $DB->execute('INSERT INTO {lor_content_topics}(content, topic) VALUES (?,?)', array($id, $word));
       } else {
-        $DB->execute('INSERT INTO {lor_keyword}(name) VALUES (?)', array($word));
-        $DB->execute('INSERT INTO {lor_content_keywords}(content, keyword) VALUES (?,?)', array($id, $word));
+        $DB->execute('INSERT INTO {lor_topic}(name) VALUES (?)', array($word));
+        $DB->execute('INSERT INTO {lor_content_topics}(content, topic) VALUES (?,?)', array($id, $word));
       }
 
     }
@@ -213,17 +213,17 @@ class insert_functions {
         $DB->execute('INSERT INTO {lor_content_grades}(content, grade) VALUES (?,?)', array($id, (int)$grade));
       }
 
-      // Insert into lor_keyword table and lor_content_keywords table.
-      $keywords = preg_split('/,\s*/', $data->topics);
-      foreach ($keywords as $word) {
+      // Insert into lor_topic table and lor_content_topics table.
+      $topics = preg_split('/,\s*/', $data->topics);
+      foreach ($topics as $word) {
 
-        // check if keyword exists already, if not then insert
-        $existing_record = $DB->get_record_sql('SELECT name FROM {lor_keyword} WHERE name=?', array($word));
+        // check if topic exists already, if not then insert
+        $existing_record = $DB->get_record_sql('SELECT name FROM {lor_topic} WHERE name=?', array($word));
         if($existing_record) {
-          $DB->execute('INSERT INTO {lor_content_keywords}(content, keyword) VALUES (?,?)', array($id, $word));
+          $DB->execute('INSERT INTO {lor_content_topics}(content, topic) VALUES (?,?)', array($id, $word));
         } else {
-          $DB->execute('INSERT INTO {lor_keyword}(name) VALUES (?)', array($word));
-          $DB->execute('INSERT INTO {lor_content_keywords}(content, keyword) VALUES (?,?)', array($id, $word));
+          $DB->execute('INSERT INTO {lor_topic}(name) VALUES (?)', array($word));
+          $DB->execute('INSERT INTO {lor_content_topics}(content, topic) VALUES (?,?)', array($id, $word));
         }
       }
 
@@ -306,17 +306,17 @@ class insert_functions {
       $DB->execute('INSERT INTO {lor_content_grades}(content, grade) VALUES (?,?)', array($id, (int)$grade));
     }
 
-    // Insert into lor_keyword table and lor_content_keywords table.
-    $keywords = preg_split('/,\s*/', $data->topics);
-    foreach ($keywords as $word) {
+    // Insert into lor_topic table and lor_content_topics table.
+    $topics = preg_split('/,\s*/', $data->topics);
+    foreach ($topics as $word) {
 
-      // check if keyword exists already, if not then insert
-      $existing_record = $DB->get_record_sql('SELECT name FROM {lor_keyword} WHERE name=?', array($word));
+      // check if topic exists already, if not then insert
+      $existing_record = $DB->get_record_sql('SELECT name FROM {lor_topic} WHERE name=?', array($word));
       if($existing_record) {
-        $DB->execute('INSERT INTO {lor_content_keywords}(content, keyword) VALUES (?,?)', array($id, $word));
+        $DB->execute('INSERT INTO {lor_content_topics}(content, topic) VALUES (?,?)', array($id, $word));
       } else {
-        $DB->execute('INSERT INTO {lor_keyword}(name) VALUES (?)', array($word));
-        $DB->execute('INSERT INTO {lor_content_keywords}(content, keyword) VALUES (?,?)', array($id, $word));
+        $DB->execute('INSERT INTO {lor_topic}(name) VALUES (?)', array($word));
+        $DB->execute('INSERT INTO {lor_content_topics}(content, topic) VALUES (?,?)', array($id, $word));
       }
     }
 
@@ -378,17 +378,17 @@ class insert_functions {
       $DB->execute('INSERT INTO {lor_content_grades}(content, grade) VALUES (?,?)', array($id, (int)$grade));
     }
 
-    // insert into lor_keyword table and lor_content_keywords table
-    $keywords = preg_split('/,\s*/', $data->topics);
-    foreach ($keywords as $word) {
+    // insert into lor_topic table and lor_content_topics table
+    $topics = preg_split('/,\s*/', $data->topics);
+    foreach ($topics as $word) {
 
-      // check if keyword exists already, if not then insert
-      $existing_record = $DB->get_record_sql('SELECT name FROM {lor_keyword} WHERE name=?', array($word));
+      // check if topic exists already, if not then insert
+      $existing_record = $DB->get_record_sql('SELECT name FROM {lor_topic} WHERE name=?', array($word));
       if($existing_record) {
-        $DB->execute('INSERT INTO {lor_content_keywords}(content, keyword) VALUES (?,?)', array($id, $word));
+        $DB->execute('INSERT INTO {lor_content_topics}(content, topic) VALUES (?,?)', array($id, $word));
       } else {
-        $DB->execute('INSERT INTO {lor_keyword}(name) VALUES (?)', array($word));
-        $DB->execute('INSERT INTO {lor_content_keywords}(content, keyword) VALUES (?,?)', array($id, $word));
+        $DB->execute('INSERT INTO {lor_topic}(name) VALUES (?)', array($word));
+        $DB->execute('INSERT INTO {lor_content_topics}(content, topic) VALUES (?,?)', array($id, $word));
       }
 
     }

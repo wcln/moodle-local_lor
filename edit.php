@@ -59,7 +59,7 @@ if (has_capability('local/lor:edit', $systemcontext)) {
     'id' => $id,
     'type' => $item->type,
     'title' => $item->title,
-    'topics' => local_lor_get_keywords_string_for_item($item->id),
+    'topics' => local_lor_get_topics_string_for_item($item->id),
     'categories' => local_lor_get_categories_for_item($item->id),
     'grades' => local_lor_get_grades_for_item($item->id),
     'contributors' => local_lor_get_contributors_string_for_item($item->id),

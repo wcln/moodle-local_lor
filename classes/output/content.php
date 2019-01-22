@@ -64,7 +64,7 @@ class content implements renderable, templatable {
           'title' => $item->title,
           'link' => $item->link,
           'image' => $item->image,
-          'keywords' => local_lor_get_keywords_string_for_item($item->id)
+          'topics' => local_lor_get_topics_string_for_item($item->id)
         ];
       }
 

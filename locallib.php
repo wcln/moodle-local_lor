@@ -1,6 +1,6 @@
 <?php
 
-function local_lor_get_content($type, $categories, $grades, $order_by = "new", $keywords) {
+function local_lor_get_content($type, $categories, $grades, $order_by = "new", $topics) {
   global $DB;
 
   $tables = "{lor_content}";
@@ -46,25 +46,25 @@ function local_lor_get_content($type, $categories, $grades, $order_by = "new", $
   }
 
 
-  // Keywords.
-  if (!is_null($keywords) && $keywords !== "") {
-    $keywords = explode(' ', $keywords);
+  // topics.
+  if (!is_null($topics) && $topics !== "") {
+    $topics = explode(' ', $topics);
     if (strpos($tables, '{lor_category}') !== false) {
-      $tables .= ", {lor_content_keywords}, {lor_contributor}, {lor_content_contributors}";
+      $tables .= ", {lor_content_topics}, {lor_contributor}, {lor_content_contributors}";
     } else {
-      $tables .= ", {lor_content_keywords}, {lor_content_categories}, {lor_category}, {lor_contributor}, {lor_content_contributors}";
+      $tables .= ", {lor_content_topics}, {lor_content_categories}, {lor_category}, {lor_contributor}, {lor_content_contributors}";
     }
-    $where_clause .= ' AND {lor_content_keywords}.content = {lor_content}.id
+    $where_clause .= ' AND {lor_content_topics}.content = {lor_content}.id
                        AND {lor_content}.id = {lor_content_categories}.content AND {lor_content_categories}.category={lor_category}.id
                        AND {lor_content}.id = {lor_content_contributors}.content AND {lor_content_contributors}.contributor={lor_contributor}.id';
 
-    foreach ($keywords as $keyword) {
-      $where_clause .= ' AND (LOWER(keyword) LIKE ? OR LOWER(title) LIKE ? OR LOWER({lor_category}.name) LIKE ? OR LOWER({lor_contributor}.name LIKE ?))';
-      $keyword = strtolower($keyword);
-      $params[] = "%$keyword%";
-      $params[] = "%$keyword%";
-      $params[] = "%$keyword%";
-      $params[] = "%$keyword%";
+    foreach ($topics as $topic) {
+      $where_clause .= ' AND (LOWER(topic) LIKE ? OR LOWER(title) LIKE ? OR LOWER({lor_category}.name) LIKE ? OR LOWER({lor_contributor}.name LIKE ?))';
+      $topic = strtolower($topic);
+      $params[] = "%$topic%";
+      $params[] = "%$topic%";
+      $params[] = "%$topic%";
+      $params[] = "%$topic%";
     }
   }
 
@@ -105,24 +105,24 @@ function local_lor_get_video_id_from_content_id($id) {
   return isset($record->video_id) ? $record->video_id : false;
 }
 
-function local_lor_get_keywords_string_for_item($content_id) {
+function local_lor_get_topics_string_for_item($content_id) {
   global $DB;
 
-  $sql = "SELECT DISTINCT keyword FROM {lor_content_keywords} WHERE content = ?";
+  $sql = "SELECT DISTINCT topic FROM {lor_content_topics} WHERE content = ?";
 
-  $keywords = $DB->get_records_sql($sql, array($content_id));
+  $topics = $DB->get_records_sql($sql, array($content_id));
 
-  $keywords_str = "";
-  foreach ($keywords as $keyword) {
-    $keywords_str .= "$keyword->keyword, ";
+  $topics_str = "";
+  foreach ($topics as $topic) {
+    $topics_str .= "$topic->topic, ";
   }
 
-  if (strlen($keywords_str) > 1) {
-    $keywords_str = substr($keywords_str, 0, -2);
+  if (strlen($topics_str) > 1) {
+    $topics_str = substr($topics_str, 0, -2);
   }
 
   // Return the string with the first character of each word in uppercase.
-  return ucwords($keywords_str);
+  return ucwords($topics_str);
 }
 
 function local_lor_get_categories_string_for_item($content_id) {
@@ -245,8 +245,8 @@ function local_lor_get_grades() {
 function local_lor_get_related_parameters($id) {
   global $DB;
 
-  // Get keywords.
-  $keywords = $DB->get_records_sql('SELECT {lor_content_keywords}.keyword FROM {lor_content_keywords} WHERE content=?', array($id));
+  // Get topics.
+  $topics = $DB->get_records_sql('SELECT {lor_content_topics}.topic FROM {lor_content_topics} WHERE content=?', array($id));
 
   // Get grades.
   $grades = $DB->get_records_sql('SELECT {lor_content_grades}.grade FROM {lor_content_grades} WHERE content=?', array($id));
@@ -254,13 +254,13 @@ function local_lor_get_related_parameters($id) {
   // Get categories.
   $categories = $DB->get_records_sql('SELECT {lor_content_categories}.category FROM {lor_content_categories} WHERE content=?', array($id));
 
-  $keywords_string = "&keywords=";
+  $topics_string = "&topics=";
   $grades_string = "";
   $categories_string = "";
 
   // Currently not enabled see below.
-  foreach ($keywords as $keyword) {
-    $keywords_string .= $keyword->keyword . '+';
+  foreach ($topics as $topic) {
+    $topics_string .= $topic->topic . '+';
   }
 
   foreach ($grades as $grade) {
@@ -271,7 +271,7 @@ function local_lor_get_related_parameters($id) {
     $categories_string .= "&categories[]=$category->category";
   }
 
-  // Currently not including keywords...
+  // Currently not including topics...
   return "?type=-1$grades_string$categories_string";
 }
 
@@ -344,20 +344,20 @@ function local_lor_update_item($id, $type, $title, $topics, $categories, $grades
   }
 
 
-  // Delete all keywords for the item.
-  $DB->delete_records('lor_content_keywords', array('content' => $id));
+  // Delete all topics for the item.
+  $DB->delete_records('lor_content_topics', array('content' => $id));
 
-  // Re-insert keywords for the item.
-  $keywords = preg_split('/,\s*/', $topics);
-  foreach ($keywords as $word) {
+  // Re-insert topics for the item.
+  $topics = preg_split('/,\s*/', $topics);
+  foreach ($topics as $word) {
 
-    // check if keyword exists already, if not then insert
-    $existing_record = $DB->get_record_sql('SELECT name FROM {lor_keyword} WHERE name=?', array($word));
+    // check if topic exists already, if not then insert
+    $existing_record = $DB->get_record_sql('SELECT name FROM {lor_topic} WHERE name=?', array($word));
     if($existing_record) {
-      $DB->execute('INSERT INTO {lor_content_keywords}(content, keyword) VALUES (?,?)', array($id, $word));
+      $DB->execute('INSERT INTO {lor_content_topics}(content, topic) VALUES (?,?)', array($id, $word));
     } else {
-      $DB->execute('INSERT INTO {lor_keyword}(name) VALUES (?)', array($word));
-      $DB->execute('INSERT INTO {lor_content_keywords}(content, keyword) VALUES (?,?)', array($id, $word));
+      $DB->execute('INSERT INTO {lor_topic}(name) VALUES (?)', array($word));
+      $DB->execute('INSERT INTO {lor_content_topics}(content, topic) VALUES (?,?)', array($id, $word));
     }
   }
 

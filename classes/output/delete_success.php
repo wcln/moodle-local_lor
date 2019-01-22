@@ -32,7 +32,7 @@ class delete_success implements renderable, templatable {
       $data = new stdClass();
       $data->title = $this->title;
       $data->done_link = new \moodle_url("/local/lor/index.php");
-      $data->undo_link = new \moodle_url("/local/lor/edit.php?id=$this->id");
+      $data->undo_link = new \moodle_url("/local/lor/edit.php?id=$this->id&undo=1");
 
       return $data;
     }

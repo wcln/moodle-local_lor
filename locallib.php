@@ -413,3 +413,12 @@ function local_lor_delete_item($id) {
   $content_record->deleted = 1;
   $DB->update_record('lor_content', $content_record);
 }
+
+function local_lor_undo_delete($id) {
+  global $DB;
+
+  $content_record = new stdClass();
+  $content_record->id = $id;
+  $content_record->deleted = 0;
+  $DB->update_record('lor_content', $content_record);
+}

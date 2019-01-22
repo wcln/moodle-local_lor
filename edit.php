@@ -54,6 +54,12 @@ $systemcontext = context_system::instance();
 // Ensure user has permission to be here.
 if (has_capability('local/lor:edit', $systemcontext)) {
 
+  // Check if we are restoring an item.
+  if (isset($_GET['undo'])) {
+    // Restore the item.
+    local_lor_undo_delete($id);
+  }
+
   // Initialize the form.
   $edit_form = new edit_form(null, array(
     'id' => $id,

@@ -76,7 +76,7 @@ class form_2 extends moodleform {
     $mform->addRule('pdf', get_string('required'), 'required', null);
 
 		// Image file.
-    $mform->addElement('filepicker', 'icon', get_string('icon', 'local_lor'), null, array('maxbytes'=>10000000, 'accepted_types'=>array('.png', '.jpg')));
+    $mform->addElement('filepicker', 'icon', get_string('icon', 'local_lor'), null, array('maxbytes'=>10000000, 'accepted_types'=>array('.png')));
     $mform->addRule('icon', get_string('required'), 'required', null);
 
 

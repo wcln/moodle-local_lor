@@ -283,7 +283,9 @@ function local_lor_update_item($id, $type, $title, $topics, $categories, $grades
   $content_record = new stdCLass();
   $content_record->id = $id;
   $content_record->title = $title;
-  $content_record->link = $link;
+  if (!is_null($link)) {
+    $content_record->link = $link;
+  }
   $content_record->width = $width;
   $content_record->height = $height;
   $DB->update_record('lor_content', $content_record);
@@ -307,10 +309,38 @@ function local_lor_update_item($id, $type, $title, $topics, $categories, $grades
 
   // Save preview image to server (if image exists).
   if ($type == 1) { // Game.
-    $form->save_file('image', "$CFG->dirroot/LOR/games/preview_images/$id.png", true);
+
+    if ($form->get_file_content('image') !== false) {
+      $form->save_file('image', "$CFG->dirroot/LOR/games/preview_images/$id.png", true);
+    }
+
   } else if ($type == 5) { // Lesson.
-    $form->save_file('image', "$CFG->dirroot/LOR/lessons/preview_images/$id.png", true);
-    $DB->execute('UPDATE {lor_content} SET image = ? WHERE id = ?', array("$CFG->wwwroot/LOR/lessons/preview_images/$id.png", $id));
+
+    if ($form->get_file_content('image') !== false) {
+      $form->save_file('image', "$CFG->dirroot/LOR/lessons/preview_images/$id.png", true);
+      $DB->execute('UPDATE {lor_content} SET image = ? WHERE id = ?', array("$CFG->wwwroot/LOR/lessons/preview_images/$id.png", $id));
+    }
+
+  } else if ($type == 2) { // Project.
+
+    // Get project ID from link.
+    $pid = array();
+    preg_match('/(?i)projects\/(.*)\.pdf$/', $link, $pid);
+
+    if (count($pid) > 0) {
+      $pid = $pid[1];
+
+      // Save all three files.
+      if ($form->get_file_content('word') !== false) {
+        $form->save_file('word', "$CFG->dirroot/LOR/projects/$pid.docx", true);
+      }
+      if ($form->get_file_content('pdf') !== false) {
+        $form->save_file('pdf', "$CFG->dirroot/LOR/projects/$pid.pdf", true);
+      }
+      if ($form->get_file_content('icon') !== false) {
+        $form->save_file('icon', "$CFG->dirroot/LOR/projects/$pid.png", true);
+      }
+    }
   }
 
 

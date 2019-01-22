@@ -120,7 +120,7 @@ class edit_form extends moodleform {
 					}
 
 					// Preview image.
-					$mform->addElement('html', "<p>The current preview image is: </p><img width='200px' height='150px' src='".$this->_customdata['image']."'/><p>Upload a new preview image to replace the existing one.</p>");
+					$mform->addElement('html', "<p>The current preview image is: </p><img width='200px' height='150px' src='".$this->_customdata['image']."'/><p>Upload a new preview image to replace the existing one. You may have to refresh the page (CTRL-F5) for the image to change.</p>");
 					$mform->addELement('filepicker', 'image', get_string('image', 'local_lor'), null, array('maxbytes' => 1000000, 'accepted_types' => array('.png')));
 					$mform->addHelpButton('image', 'image', 'local_lor');
 
@@ -147,8 +147,22 @@ class edit_form extends moodleform {
 				// Project.
 				case 2:
 
-					$a->id = $this->_customdata['id'];
-					$mform->addElement('html', '<p>'.get_string('edit_server', 'local_lor', $a).'</p>');
+					$mform->addElement('html', '<p>Existing documents:</p><ul>'
+						. '<li><a target="_blank" href="'.preg_replace('/.pdf$/', '.docx', $this->_customdata['link']).'">Word document</a></li>'
+						. '<li><a target="_blank" href="'.$this->_customdata['link'].'">PDF</a></li>'
+						. '<li><a target="_blank" href="'.preg_replace('/.pdf$/', '.png', $this->_customdata['link']).'">Preview Image</a></li>'
+						. '</ul>'
+						. '<p>To replace any of the above documents, upload a file below.</p>'
+					);
+
+					// Word Document.
+			    $mform->addElement('filepicker', 'word', get_string('word', 'local_lor'), null, array('maxbytes'=>10000000, 'accepted_types'=>array('.doc', '.docx')));
+
+					// PDF.
+			    $mform->addElement('filepicker', 'pdf', get_string('pdf', 'local_lor'), null, array('maxbytes'=>10000000, 'accepted_types'=>array('.pdf')));
+
+					// Image file.
+			    $mform->addElement('filepicker', 'icon', get_string('icon', 'local_lor'), null, array('maxbytes'=>10000000, 'accepted_types'=>array('.png')));
 
 					break;
 				// Video.

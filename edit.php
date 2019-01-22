@@ -105,9 +105,9 @@ if (has_capability('local/lor:edit', $systemcontext)) {
         $data->categories,
         $data->grades,
         $data->contributors,
+        isset($data->link) ? $data->link : $item->link,
 
         // Game specific settings.
-        isset($data->link) ? $data->link : null,
         isset($data->width) ? $data->width : null,
         isset($data->height) ? $data->height : null,
 

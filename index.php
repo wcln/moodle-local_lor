@@ -50,6 +50,7 @@ $PAGE->navbar->add(get_string('lor', 'local_lor'), new moodle_url('/local/lor/in
 
 // Ouput the header.
 echo $OUTPUT->header();
+echo $OUTPUT->heading(get_string('pluginname', 'local_lor'));
 
 // Check if the user is a teacher anywhere on the site.
 $roleid = $DB->get_field('role', 'id', ['shortname' => 'editingteacher']);

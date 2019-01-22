@@ -59,7 +59,8 @@ if (has_capability('local/lor:edit', $systemcontext)) {
     'link' => $item->link,
     'width' => $item->width,
     'height' => $item->height,
-    'video_id' => local_lor_get_video_id_from_content_id($item->id)
+    'video_id' => local_lor_get_video_id_from_content_id($item->id),
+    'book_id' => local_lor_get_book_id_from_content_id($item->id)
   ));
 
   // temp
@@ -102,7 +103,10 @@ if (has_capability('local/lor:edit', $systemcontext)) {
         isset($data->height) ? $data->height : null,
 
         // Video specific settings.
-        isset($data->video_id) ? $data->video_id : null
+        isset($data->video_id) ? $data->video_id : null,
+
+        // Lesson specific settings.
+        isset($data->book_id) ? $data->book_id : null
       );
 
       // Render success template.

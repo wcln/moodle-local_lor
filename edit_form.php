@@ -165,6 +165,13 @@ class edit_form extends moodleform {
 				// Lesson.
 				case 5:
 
+					// Book ID.
+					$mform->addElement('text', 'book_id', get_string('book_id', 'local_lor'));
+					$mform->addRule('book_id', get_string('required'), 'required', null);
+					$mform->setType('book_id', PARAM_INT);
+					if (isset($this->_customdata['book_id'])) {
+						$mform->setDefault('book_id', $this->_customdata['book_id']);
+					}
 
 					break;
 				// Learning Guide.

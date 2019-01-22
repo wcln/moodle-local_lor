@@ -273,7 +273,7 @@ function local_lor_get_related_parameters($id) {
   return "?type=-1$grades_string$categories_string";
 }
 
-function local_lor_update_item($id, $title, $topics, $categories, $grades, $contributors, $link, $width, $height, $video_id) {
+function local_lor_update_item($id, $title, $topics, $categories, $grades, $contributors, $link, $width, $height, $video_id, $book_id) {
   global $DB;
 
   // Update lor_content record.
@@ -293,6 +293,13 @@ function local_lor_update_item($id, $title, $topics, $categories, $grades, $cont
 
     // Update preview image.
     $DB->execute('UPDATE {lor_content} SET image = ? WHERE id = ?', array("https://i.ytimg.com/vi/$video_id/mqdefault.jpg", $id));
+  }
+
+  // Check if book ID is set and needs to be updated.
+  if (!is_null($book_id)) {
+
+    // Update book ID.
+    $DB->execute('UPDATE {lor_content_lessons} SET book_id = ? WHERE content = ?', array($book_id, $id));
   }
 
   // Delete all keywords for the item.

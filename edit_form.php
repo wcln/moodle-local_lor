@@ -146,7 +146,8 @@ class edit_form extends moodleform {
 				// Project.
 				case 2:
 
-
+					$a->id = $this->_customdata['id'];
+					$mform->addElement('html', '<p>'.get_string('edit_server', 'local_lor', $a).'</p>');
 
 					break;
 				// Video.
@@ -177,6 +178,8 @@ class edit_form extends moodleform {
 				// Learning Guide.
 				case 6:
 
+					$a->id = $this->_customdata['id'];
+					$mform->addElement('html', '<p>'.get_string('edit_server', 'local_lor', $a).'</p>');
 
 					break;
 			}

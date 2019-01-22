@@ -73,6 +73,7 @@ $string['save'] = "Save";
 $string['delete'] = "Delete";
 $string['heading_edit'] = 'Editing \'{$a->title}\'';
 $string['error_no_item'] = 'Error: No item is set.';
+$string['type_header'] = '{$a->name} Specific Settings';
 
 // Not allowed template.
 $string['not_allowed_header'] = 'You do not have permission to access this page.';

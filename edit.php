@@ -55,7 +55,11 @@ if (has_capability('local/lor:edit', $systemcontext)) {
     'topics' => local_lor_get_keywords_string_for_item($item->id),
     'categories' => local_lor_get_categories_for_item($item->id),
     'grades' => local_lor_get_grades_for_item($item->id),
-    'contributors' => local_lor_get_contributors_string_for_item($item->id)
+    'contributors' => local_lor_get_contributors_string_for_item($item->id),
+    'link' => $item->link,
+    'width' => $item->width,
+    'height' => $item->height,
+    'video_id' => local_lor_get_video_id_from_content_id($item->id)
   ));
 
   // temp
@@ -82,7 +86,24 @@ if (has_capability('local/lor:edit', $systemcontext)) {
     } else { // The save button was clicked.
 
       // Update the item.
-      local_lor_update_item($id, $data->title, $data->topics, $data->categories, $data->grades, $data->contributors);
+      local_lor_update_item(
+
+        // General settings.
+        $id,
+        $data->title,
+        $data->topics,
+        $data->categories,
+        $data->grades,
+        $data->contributors,
+
+        // Game specific settings.
+        isset($data->link) ? $data->link : null,
+        isset($data->width) ? $data->width : null,
+        isset($data->height) ? $data->height : null,
+
+        // Video specific settings.
+        isset($data->video_id) ? $data->video_id : null
+      );
 
       // Render success template.
       $update_success = new \local_lor\output\update_success($id);

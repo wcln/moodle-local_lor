@@ -275,14 +275,17 @@ function local_lor_get_related_parameters($id) {
   return "?type=-1$grades_string$categories_string";
 }
 
-function local_lor_update_item($id, $title, $topics, $categories, $grades, $contributors, $link, $width, $height, $video_id, $book_id) {
+function local_lor_update_item($id, $type, $title, $topics, $categories, $grades, $contributors, $link, $width, $height, $video_id, $book_id, &$form) {
   global $DB;
+  global $CFG;
 
   // Update lor_content record.
   $content_record = new stdCLass();
   $content_record->id = $id;
   $content_record->title = $title;
-  $content_record->link = $link;
+  if (!is_null($link)) {
+    $content_record->link = $link;
+  }
   $content_record->width = $width;
   $content_record->height = $height;
   $DB->update_record('lor_content', $content_record);
@@ -303,6 +306,43 @@ function local_lor_update_item($id, $title, $topics, $categories, $grades, $cont
     // Update book ID.
     $DB->execute('UPDATE {lor_content_lessons} SET book_id = ? WHERE content = ?', array($book_id, $id));
   }
+
+  // Save preview image to server (if image exists).
+  if ($type == 1) { // Game.
+
+    if ($form->get_file_content('image') !== false) {
+      $form->save_file('image', "$CFG->dirroot/LOR/games/preview_images/$id.png", true);
+    }
+
+  } else if ($type == 5) { // Lesson.
+
+    if ($form->get_file_content('image') !== false) {
+      $form->save_file('image', "$CFG->dirroot/LOR/lessons/preview_images/$id.png", true);
+      $DB->execute('UPDATE {lor_content} SET image = ? WHERE id = ?', array("$CFG->wwwroot/LOR/lessons/preview_images/$id.png", $id));
+    }
+
+  } else if ($type == 2) { // Project.
+
+    // Get project ID from link.
+    $pid = array();
+    preg_match('/(?i)projects\/(.*)\.pdf$/', $link, $pid);
+
+    if (count($pid) > 0) {
+      $pid = $pid[1];
+
+      // Save all three files.
+      if ($form->get_file_content('word') !== false) {
+        $form->save_file('word', "$CFG->dirroot/LOR/projects/$pid.docx", true);
+      }
+      if ($form->get_file_content('pdf') !== false) {
+        $form->save_file('pdf', "$CFG->dirroot/LOR/projects/$pid.pdf", true);
+      }
+      if ($form->get_file_content('icon') !== false) {
+        $form->save_file('icon', "$CFG->dirroot/LOR/projects/$pid.png", true);
+      }
+    }
+  }
+
 
   // Delete all keywords for the item.
   $DB->delete_records('lor_content_keywords', array('content' => $id));

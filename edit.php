@@ -1,5 +1,12 @@
 <?php
 
+// Prevent caching on this page.
+header("Pragma-directive: no-cache");
+header("Cache-directive: no-cache");
+header("Cache-control: no-cache");
+header("Pragma: no-cache");
+header("Expires: 0");
+
 require_once(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/locallib.php');
 
@@ -56,6 +63,7 @@ if (has_capability('local/lor:edit', $systemcontext)) {
     'categories' => local_lor_get_categories_for_item($item->id),
     'grades' => local_lor_get_grades_for_item($item->id),
     'contributors' => local_lor_get_contributors_string_for_item($item->id),
+    'image' => $item->image,
     'link' => $item->link,
     'width' => $item->width,
     'height' => $item->height,
@@ -91,14 +99,15 @@ if (has_capability('local/lor:edit', $systemcontext)) {
 
         // General settings.
         $id,
+        $item->type,
         $data->title,
         $data->topics,
         $data->categories,
         $data->grades,
         $data->contributors,
+        isset($data->link) ? $data->link : $item->link,
 
         // Game specific settings.
-        isset($data->link) ? $data->link : null,
         isset($data->width) ? $data->width : null,
         isset($data->height) ? $data->height : null,
 
@@ -106,7 +115,10 @@ if (has_capability('local/lor:edit', $systemcontext)) {
         isset($data->video_id) ? $data->video_id : null,
 
         // Lesson specific settings.
-        isset($data->book_id) ? $data->book_id : null
+        isset($data->book_id) ? $data->book_id : null,
+
+        // Form to handle files.
+        $edit_form
       );
 
       // Render success template.

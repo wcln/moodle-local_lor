@@ -12,7 +12,7 @@ $string['title'] = "Title";
 $string['inquiry'] = "Title / Inquiry Question";
 $string['description'] = "Inquiry Question";
 $string['categories'] = "Choose one or more categories";
-$string['topics'] = "topics (Comma separated: eg. circulatory system, heart, blood)";
+$string['topics'] = "Topics (Comma separated: eg. circulatory system, heart, blood)";
 $string['word'] = "Upload a Word document of the project";
 $string['pdf'] = "Attach a PDF version of the project";
 $string['icon'] = "Upload an icon (200x150px)";
@@ -63,7 +63,7 @@ $string['search'] = "Search";
 $string['sort_by'] = "Sort by";
 $string['recently_added'] = "Recently added";
 $string['alphabetical'] = "Alphabetical";
-$string['topics'] = "topics";
+$string['topics'] = "Topics";
 $string['search_categories'] = "Categories";
 $string['search_grades'] = "Grades";
 $string['all'] = "All";
@@ -84,3 +84,4 @@ $string['not_allowed_paragraph'] = 'Please contact a site administrator if you b
 
 // Scheduled Task.
 $string['updatevideos'] = 'Update LOR videos from YouTube';
+$string['deleteitems'] = 'Permanently delete marked items from the LOR database.';

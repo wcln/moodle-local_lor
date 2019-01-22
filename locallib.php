@@ -4,7 +4,7 @@ function local_lor_get_content($type, $categories, $grades, $order_by = "new", $
   global $DB;
 
   $tables = "{lor_content}";
-  $where_clause = '1=1';
+  $where_clause = '{lor_content}.deleted=0';
   $params = array();
 
   // Order by.
@@ -408,5 +408,17 @@ function local_lor_update_item($id, $type, $title, $topics, $categories, $grades
 function local_lor_delete_item($id) {
   global $DB;
 
-  $DB->delete_records('lor_content', array('id' => $id));
+  $content_record = new stdClass();
+  $content_record->id = $id;
+  $content_record->deleted = 1;
+  $DB->update_record('lor_content', $content_record);
+}
+
+function local_lor_undo_delete($id) {
+  global $DB;
+
+  $content_record = new stdClass();
+  $content_record->id = $id;
+  $content_record->deleted = 0;
+  $DB->update_record('lor_content', $content_record);
 }

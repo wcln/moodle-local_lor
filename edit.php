@@ -54,6 +54,12 @@ $systemcontext = context_system::instance();
 // Ensure user has permission to be here.
 if (has_capability('local/lor:edit', $systemcontext)) {
 
+  // Check if we are restoring an item.
+  if (isset($_GET['undo'])) {
+    // Restore the item.
+    local_lor_undo_delete($id);
+  }
+
   // Initialize the form.
   $edit_form = new edit_form(null, array(
     'id' => $id,
@@ -71,9 +77,6 @@ if (has_capability('local/lor:edit', $systemcontext)) {
     'book_id' => local_lor_get_book_id_from_content_id($item->id)
   ));
 
-  // temp
-  $delete = false;
-
   if ($data = $edit_form->get_data()) {
 
     // Ouput the header and custom heading.
@@ -89,7 +92,7 @@ if (has_capability('local/lor:edit', $systemcontext)) {
       local_lor_delete_item($id);
 
       // Render success template.
-      $delete_success = new \local_lor\output\delete_success($item->title);
+      $delete_success = new \local_lor\output\delete_success($id, $item->title);
       echo $renderer->render($delete_success);
 
     } else { // The save button was clicked.

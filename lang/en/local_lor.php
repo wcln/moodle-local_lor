@@ -73,6 +73,8 @@ $string['save'] = "Save";
 $string['delete'] = "Delete";
 $string['heading_edit'] = 'Editing \'{$a->title}\'';
 $string['error_no_item'] = 'Error: No item is set.';
+$string['type_header'] = '{$a->name} Specific Settings';
+$string['edit_server'] = '{$a->name} specific settings are not yet incorporated on this form. To edit {$a->name} files, access the server and manually replace the files corresponding with the ID {$a->id}.';
 
 // Not allowed template.
 $string['not_allowed_header'] = 'You do not have permission to access this page.';

@@ -100,6 +100,94 @@ class edit_form extends moodleform {
 			$mform->setType('id', PARAM_INT);
 		}
 
+		// Output type specific form elements.
+		if (isset($this->_customdata['type'])) {
+
+			$a = new stdClass();
+			$a->name = local_lor_get_type_name_from_id($this->_customdata['type']);
+			$mform->addElement('header', 'typeheader', get_string('type_header', 'local_lor', $a));
+
+			switch ($this->_customdata['type']) {
+				// Game.
+				case 1:
+
+					// Link to game.
+					$mform->addElement('text', 'link', get_string('link', 'local_lor'));
+					$mform->addRule('link', get_string('required'), 'required', null);
+					$mform->setType('link', PARAM_NOTAGS);
+					if (isset($this->_customdata['link'])) {
+								$mform->setDefault('link', $this->_customdata['link']);
+					}
+
+					// Preview image.
+					// $mform->addELement('filepicker', 'image', get_string('image', 'local_lor'), null, array('maxbytes' => 1000000, 'accepted_types' => array('.png')));
+					// $mform->addRule('image', get_string('required'), 'required', null);
+
+					// Paragraph.
+					$mform->addElement('html', '<p>'.get_string('iframe_size_paragraph', 'local_lor').'</p>');
+
+					// Width.
+					$mform->addElement('text', 'width', get_string('width', 'local_lor'));
+					$mform->setType('width', PARAM_INT);
+					$mform->addRule('width', get_string('required'), 'required', null);
+					if (isset($this->_customdata['width'])) {
+						$mform->setDefault('width', $this->_customdata['width']);
+					}
+
+					// Height.
+					$mform->addElement('text', 'height', get_string('height', 'local_lor'));
+					$mform->setType('height', PARAM_INT);
+					$mform->addRule('height', get_string('required'), 'required', null);
+					if (isset($this->_customdata['height'])) {
+						$mform->setDefault('height', $this->_customdata['height']);
+					}
+
+					break;
+				// Project.
+				case 2:
+
+					$a->id = $this->_customdata['id'];
+					$mform->addElement('html', '<p>'.get_string('edit_server', 'local_lor', $a).'</p>');
+
+					break;
+				// Video.
+				case 3:
+
+					// Video ID.
+					$mform->addElement('text', 'video_id', get_string('video_id', 'local_lor'));
+					$mform->addRule('video_id', get_string('required'), 'required', null);
+					$mform->setType('video_id', PARAM_TEXT);
+					$mform->addHelpButton('video_id', 'video_id', 'local_lor');
+					if (isset($this->_customdata['video_id'])) {
+						$mform->setDefault('video_id', $this->_customdata['video_id']);
+					}
+
+					break;
+				// Lesson.
+				case 5:
+
+					// Book ID.
+					$mform->addElement('text', 'book_id', get_string('book_id', 'local_lor'));
+					$mform->addRule('book_id', get_string('required'), 'required', null);
+					$mform->setType('book_id', PARAM_INT);
+					if (isset($this->_customdata['book_id'])) {
+						$mform->setDefault('book_id', $this->_customdata['book_id']);
+					}
+
+					break;
+				// Learning Guide.
+				case 6:
+
+					$a->id = $this->_customdata['id'];
+					$mform->addElement('html', '<p>'.get_string('edit_server', 'local_lor', $a).'</p>');
+
+					break;
+			}
+		}
+
+		// Close header.
+		$mform->closeHeaderBefore('buttonar');
+
 		// Buttons.
 		$buttonarray=array();
 		$buttonarray[] = $mform->createElement('submit', 'submitbutton', get_string('savechanges'));

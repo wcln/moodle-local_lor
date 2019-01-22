@@ -93,14 +93,16 @@ function local_lor_get_book_id_from_content_id($id) {
   global $DB;
 
   $sql = "SELECT DISTINCT book_id FROM {lor_content_lessons} WHERE content = ?";
-  return $DB->get_record_sql($sql, array($id))->book_id;
+  $record = $DB->get_record_sql($sql, array($id));
+  return isset($record->book_id) ? $record->book_id : false;
 }
 
 function local_lor_get_video_id_from_content_id($id) {
   global $DB;
 
   $sql = "SELECT DISTINCT video_id FROM {lor_content_videos} WHERE content = ?";
-  return $DB->get_record_sql($sql, array($id))->video_id;
+  $record = $DB->get_record_sql($sql, array($id));
+  return isset($record->video_id) ? $record->video_id : false;
 }
 
 function local_lor_get_keywords_string_for_item($content_id) {
@@ -226,6 +228,13 @@ function local_lor_get_types() {
   return $types;
 }
 
+function local_lor_get_type_name_from_id($type_id) {
+  global $DB;
+
+  $name = $DB->get_record_sql('SELECT id, name FROM {lor_type} WHERE id=?', array($type_id));
+  return $name->name;
+}
+
 function local_lor_get_grades() {
   global $DB;
 
@@ -266,14 +275,34 @@ function local_lor_get_related_parameters($id) {
   return "?type=-1$grades_string$categories_string";
 }
 
-function local_lor_update_item($id, $title, $topics, $categories, $grades, $contributors) {
+function local_lor_update_item($id, $title, $topics, $categories, $grades, $contributors, $link, $width, $height, $video_id, $book_id) {
   global $DB;
 
   // Update lor_content record.
   $content_record = new stdCLass();
   $content_record->id = $id;
   $content_record->title = $title;
+  $content_record->link = $link;
+  $content_record->width = $width;
+  $content_record->height = $height;
   $DB->update_record('lor_content', $content_record);
+
+  // Check if video ID is set and needs to be updated.
+  if (!is_null($video_id)) {
+
+    // Update video ID.
+    $DB->execute('UPDATE {lor_content_videos} SET video_id = ? WHERE content = ?', array($video_id, $id));
+
+    // Update preview image.
+    $DB->execute('UPDATE {lor_content} SET image = ? WHERE id = ?', array("https://i.ytimg.com/vi/$video_id/mqdefault.jpg", $id));
+  }
+
+  // Check if book ID is set and needs to be updated.
+  if (!is_null($book_id)) {
+
+    // Update book ID.
+    $DB->execute('UPDATE {lor_content_lessons} SET book_id = ? WHERE content = ?', array($book_id, $id));
+  }
 
   // Delete all keywords for the item.
   $DB->delete_records('lor_content_keywords', array('content' => $id));

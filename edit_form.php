@@ -121,7 +121,7 @@ class edit_form extends moodleform {
 		 }
 
 		 // Check length of title.
-		 if (strlen($data['title']) >= 150) {
+		 if (strlen($data['title']) >= 200) {
 			 $errors['title'] = get_string('error_title_length', 'local_lor');
 		 }
 

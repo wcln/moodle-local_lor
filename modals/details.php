@@ -26,7 +26,7 @@ if (isset($_GET['id'])) {
         <ul>
           <li><span class="label label-default">Categories:</span> <?=local_lor_get_categories_string_for_item($item->id)?></li>
           <li><span class="label label-primary">Grades:</span> <?=local_lor_get_grades_string_for_item($item->id)?:"N/A"?></li>
-          <li><span class="label label-success">topics:</span> <?=local_lor_get_topics_string_for_item($item->id)?></li>
+          <li><span class="label label-success">Topics:</span> <?=local_lor_get_topics_string_for_item($item->id)?></li>
           <li><span class="label label-info">Contributor(s):</span> <?=local_lor_get_contributors_string_for_item($item->id)?:"N/A"?></li>
           <li><span class="label label-warning">Date Created:</span> <?=date("F Y", strtotime($item->date_created))?></li> <!-- Date in format: June 2017 -->
         </ul>
@@ -73,7 +73,7 @@ if (isset($_GET['id'])) {
       <?php elseif ($item->type == 6): // Learning Guide. ?>
 
         <embed src="<?=$item->link?>" width="700" height="800" type='application/pdf'>
-          
+
       <?php endif ?>
     </div>
   </div>

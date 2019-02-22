@@ -82,7 +82,7 @@ if (isset($_GET['id'])) {
 
       <div class="row">
         <div class="col-md-12 text-center">
-          <p><b><i>Note:</i></b> Please contact WCLN if you would like to use this LOR item outside of bclearningnetwork.com</p>
+          <p><b><i>Note:</i></b> Please contact WCLN if you would like to use this LOR item outside of wcln.ca</p>
         </div>
       </div>
       <div class="lor-modal-footer">

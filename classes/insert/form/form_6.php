@@ -96,7 +96,7 @@ class form_6 extends moodleform {
 					break 2;
 				} else {
 					// Check that file doesnt already exist on server.
-					if ($r1->filesize > 0 && file_exists($CFG->dirroot . '/LOR/learning_guides/' . $r1->filename)) {
+					if ($r1->filesize > 0 && file_exists($CFG->dirroot . '/_LOR/learning_guides/' . $r1->filename)) {
 						$errors['word'] = $errors['pdf'] = get_string('error_file_exists', 'local_lor');
 						break 2;
 					}

@@ -47,7 +47,7 @@ if (isset($_GET['id'])) {
       <?php elseif ($item->type == 3): // Video. ?>
         <p align="center"><iframe src="https://www.youtube.com/embed/<?=local_lor_get_video_id_from_content_id($item->id)?>?rel=0" allowfullscreen="" frameborder="0" height="360" width="640" longdesc="<?=$item->title?>"></iframe></p>
       <?php elseif ($item->type == 5): // Lesson. ?>
-        <form id="lti-form" target="lesson_iframe" method="post" action="https://bclearningnetwork.com/local/LTI/request.php">
+        <form id="lti-form" target="lesson_iframe" method="post" action="https://wcln.ca/local/lti/index.php">
           <input type="hidden" name="oauth_consumer_key" value="consumerkey" />
           <input type="hidden" name="custom_book_id" value="<?=local_lor_get_book_id_from_content_id($item->id)?>" /><!-- temp book id -->
           <input type="submit">
@@ -79,7 +79,7 @@ if (isset($_GET['id'])) {
   </div>
   <div class="row">
     <div class="col-md-12 text-center">
-      <p><b><i>Note:</i></b> Please contact WCLN if you would like to use this LOR item outside of bclearningnetwork.com</p>
+      <p><b><i>Note:</i></b> Please contact WCLN if you would like to use this LOR item outside of wcln.ca</p>
     </div>
   </div>
 <!-- End of modal HTML. -->

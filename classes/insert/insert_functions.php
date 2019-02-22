@@ -24,10 +24,10 @@ class insert_functions {
     $id = $DB->insert_record('lor_content', $record);
 
     // Save preview image to server.
-    $form->save_file('image', "$CFG->dirroot/LOR/games/preview_images/$id.png", true);
+    $form->save_file('image', "$CFG->dirroot/_LOR/games/preview_images/$id.png", true);
 
     // Update image link in content table.
-    $record->image = "$CFG->wwwroot/LOR/games/preview_images/$id.png";
+    $record->image = "$CFG->wwwroot/_LOR/games/preview_images/$id.png";
     $record->id = $id;
     $DB->update_record('lor_content', $record);
 
@@ -90,16 +90,16 @@ class insert_functions {
 
     date_default_timezone_set('America/Los_Angeles'); // PST
 
-    $form->save_file('word', $CFG->dirroot . '/LOR/projects/' . $form->get_new_filename('word'));
-    $form->save_file('pdf', $CFG->dirroot . '/LOR/projects/' . $form->get_new_filename('pdf'));
-    $form->save_file('icon', $CFG->dirroot . '/LOR/projects/' . $form->get_new_filename('icon'));
+    $form->save_file('word', $CFG->dirroot . '/_LOR/projects/' . $form->get_new_filename('word'));
+    $form->save_file('pdf', $CFG->dirroot . '/_LOR/projects/' . $form->get_new_filename('pdf'));
+    $form->save_file('icon', $CFG->dirroot . '/_LOR/projects/' . $form->get_new_filename('icon'));
 
     // insert into content table
     $record = new \stdClass();
     $record->type = 2;
     $record->title = $data->title;
-    $record->image = $CFG->wwwroot . '/LOR/projects/' . $form->get_new_filename('icon');
-    $record->link = $CFG->wwwroot . '/LOR/projects/' . $form->get_new_filename('pdf');
+    $record->image = $CFG->wwwroot . '/_LOR/projects/' . $form->get_new_filename('icon');
+    $record->link = $CFG->wwwroot . '/_LOR/projects/' . $form->get_new_filename('pdf');
     $record->date_created = date("Ymd");
     $id = $DB->insert_record('lor_content', $record);
 
@@ -277,17 +277,17 @@ class insert_functions {
     $id = $DB->insert_record('lor_content', $record);
 
     // Save preview image to server.
-    $file_exists = $form->save_file('image', "$CFG->dirroot/LOR/lessons/preview_images/$id.png", true);
+    $file_exists = $form->save_file('image', "$CFG->dirroot/_LOR/lessons/preview_images/$id.png", true);
     if ($file_exists) {
       // Use custom image.
-      $record->image = "$CFG->wwwroot/LOR/lessons/preview_images/$id.png";
+      $record->image = "$CFG->wwwroot/_LOR/lessons/preview_images/$id.png";
     } else {
       // Use generic preview image.
       $record->image = "$CFG->wwwroot/local/lor/images/generic_preview_images/generic_lesson_preview.png";
     }
 
     // Update image link in content table.
-    $record->image = "$CFG->wwwroot/LOR/games/preview_images/$id.png";
+    $record->image = "$CFG->wwwroot/_LOR/games/preview_images/$id.png";
     $record->id = $id;
     $DB->update_record('lor_content', $record);
 
@@ -354,15 +354,15 @@ class insert_functions {
 
     date_default_timezone_set('America/Los_Angeles'); // PST
 
-    $form->save_file('word', $CFG->dirroot . '/LOR/learning_guides/' . $form->get_new_filename('word'));
-    $form->save_file('pdf', $CFG->dirroot . '/LOR/learning_guides/' . $form->get_new_filename('pdf'));
+    $form->save_file('word', $CFG->dirroot . '/_LOR/learning_guides/' . $form->get_new_filename('word'));
+    $form->save_file('pdf', $CFG->dirroot . '/_LOR/learning_guides/' . $form->get_new_filename('pdf'));
 
     // Insert into content table.
     $record = new \stdClass();
     $record->type = 6;
     $record->title = $data->title;
     $record->image = "$CFG->wwwroot/local/lor/images/generic_preview_images/generic_learning_guide_preview.png";
-    $record->link = $CFG->wwwroot . '/LOR/learning_guides/' . $form->get_new_filename('pdf');
+    $record->link = $CFG->wwwroot . '/_LOR/learning_guides/' . $form->get_new_filename('pdf');
     $record->date_created = date("Ymd");
     $id = $DB->insert_record('lor_content', $record);
 

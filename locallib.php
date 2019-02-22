@@ -311,14 +311,14 @@ function local_lor_update_item($id, $type, $title, $topics, $categories, $grades
   if ($type == 1) { // Game.
 
     if ($form->get_file_content('image') !== false) {
-      $form->save_file('image', "$CFG->dirroot/LOR/games/preview_images/$id.png", true);
+      $form->save_file('image', "$CFG->dirroot/_LOR/games/preview_images/$id.png", true);
     }
 
   } else if ($type == 5) { // Lesson.
 
     if ($form->get_file_content('image') !== false) {
-      $form->save_file('image', "$CFG->dirroot/LOR/lessons/preview_images/$id.png", true);
-      $DB->execute('UPDATE {lor_content} SET image = ? WHERE id = ?', array("$CFG->wwwroot/LOR/lessons/preview_images/$id.png", $id));
+      $form->save_file('image', "$CFG->dirroot/_LOR/lessons/preview_images/$id.png", true);
+      $DB->execute('UPDATE {lor_content} SET image = ? WHERE id = ?', array("$CFG->wwwroot/_LOR/lessons/preview_images/$id.png", $id));
     }
 
   } else if ($type == 2) { // Project.
@@ -332,13 +332,13 @@ function local_lor_update_item($id, $type, $title, $topics, $categories, $grades
 
       // Save all three files.
       if ($form->get_file_content('word') !== false) {
-        $form->save_file('word', "$CFG->dirroot/LOR/projects/$pid.docx", true);
+        $form->save_file('word', "$CFG->dirroot/_LOR/projects/$pid.docx", true);
       }
       if ($form->get_file_content('pdf') !== false) {
-        $form->save_file('pdf', "$CFG->dirroot/LOR/projects/$pid.pdf", true);
+        $form->save_file('pdf', "$CFG->dirroot/_LOR/projects/$pid.pdf", true);
       }
       if ($form->get_file_content('icon') !== false) {
-        $form->save_file('icon', "$CFG->dirroot/LOR/projects/$pid.png", true);
+        $form->save_file('icon', "$CFG->dirroot/_LOR/projects/$pid.png", true);
       }
     }
   }

@@ -196,7 +196,7 @@ class update_videos extends \core\task\scheduled_task {
                 }
               }
 
-              mtrace("topics added to database.");
+              mtrace("Topics added to database.");
 
               // Insert into lor_content_videos table.
               $DB->execute('INSERT INTO {lor_content_videos}(content, video_id) VALUES (?, ?)', array($id, $video_id));

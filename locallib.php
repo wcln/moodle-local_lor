@@ -321,7 +321,7 @@ function local_lor_update_item($id, $type, $title, $topics, $categories, $grades
       $DB->execute('UPDATE {lor_content} SET image = ? WHERE id = ?', array("$CFG->wwwroot/_LOR/lessons/preview_images/$id.png", $id));
     }
 
-  } else if ($type == 2) { // Project.
+  } else if ($type == 2 || $type == 7) { // Project or Group Activity.
 
     // Get project ID from link.
     $pid = array();
@@ -330,15 +330,21 @@ function local_lor_update_item($id, $type, $title, $topics, $categories, $grades
     if (count($pid) > 0) {
       $pid = $pid[1];
 
+      if ($type == 2) {
+        $dir = 'projects';
+      } else if ($type == 7) {
+        $dir = 'group_activities';
+      }
+
       // Save all three files.
       if ($form->get_file_content('word') !== false) {
-        $form->save_file('word', "$CFG->dirroot/_LOR/projects/$pid.docx", true);
+        $form->save_file('word', "$CFG->dirroot/_LOR/$dir/$pid.docx", true);
       }
       if ($form->get_file_content('pdf') !== false) {
-        $form->save_file('pdf', "$CFG->dirroot/_LOR/projects/$pid.pdf", true);
+        $form->save_file('pdf', "$CFG->dirroot/_LOR/$dir/$pid.pdf", true);
       }
       if ($form->get_file_content('icon') !== false) {
-        $form->save_file('icon', "$CFG->dirroot/_LOR/projects/$pid.png", true);
+        $form->save_file('icon', "$CFG->dirroot/_LOR/$dir/$pid.png", true);
       }
     }
   }

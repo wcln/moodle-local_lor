@@ -41,7 +41,7 @@ if (isset($_GET['id'])) {
           </textarea>
 
 
-        <?php elseif ($item->type == 2): // Project. ?>
+        <?php elseif ($item->type == 2 || $item->type == 7): // Project or Group Activity. ?>
 
 
           <p>To include this project in a course, or on any page, copy the text below and paste it into the page HTML.</p>

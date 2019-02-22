@@ -417,4 +417,78 @@ class insert_functions {
 
     return $id;
   }
+
+  /*
+   * Insert a Group Activity.
+   */
+  public static function insert_7($data, &$form) {
+    global $DB;
+    global $CFG;
+
+    date_default_timezone_set('America/Los_Angeles'); // PST
+
+    $form->save_file('word', $CFG->dirroot . '/_LOR/group_activities/' . $form->get_new_filename('word'));
+    $form->save_file('pdf', $CFG->dirroot . '/_LOR/group_activities/' . $form->get_new_filename('pdf'));
+    // $form->save_file('icon', $CFG->dirroot . '/_LOR/group_activities/' . $form->get_new_filename('icon'));
+
+    // insert into content table
+    $record = new \stdClass();
+    $record->type = 7;
+    $record->title = $data->title;
+    $record->image = "$CFG->wwwroot/local/lor/images/generic_preview_images/generic_group_activity_preview.png";
+    $record->link = $CFG->wwwroot . '/_LOR/group_activities/' . $form->get_new_filename('pdf');
+    $record->date_created = date("Ymd");
+    $id = $DB->insert_record('lor_content', $record);
+
+    // insert into categories table
+    $categories = array_filter($data->categories);
+    foreach ($categories as $category) {
+      $DB->execute('INSERT INTO {lor_content_categories}(content, category) VALUES (?,?)', array($id, (int)$category));
+    }
+
+    // insert into grades table
+    $grades = array_filter($data->grades);
+    foreach ($grades as $grade) {
+      $DB->execute('INSERT INTO {lor_content_grades}(content, grade) VALUES (?,?)', array($id, (int)$grade));
+    }
+
+    // insert into lor_topic table and lor_content_topics table
+    $topics = preg_split('/,\s*/', $data->topics);
+    foreach ($topics as $word) {
+
+      // check if topic exists already, if not then insert
+      $existing_record = $DB->get_record_sql('SELECT name FROM {lor_topic} WHERE name=?', array($word));
+      if($existing_record) {
+        $DB->execute('INSERT INTO {lor_content_topics}(content, topic) VALUES (?,?)', array($id, $word));
+      } else {
+        $DB->execute('INSERT INTO {lor_topic}(name) VALUES (?)', array($word));
+        $DB->execute('INSERT INTO {lor_content_topics}(content, topic) VALUES (?,?)', array($id, $word));
+      }
+
+    }
+
+    // insert into lor_contributor and lor_content_contributors
+    $contributors = preg_split('/,\s*/', $data->contributors);
+    foreach ($contributors as $contributor) {
+
+      // Remove white space from beginning and end of name.
+      $contributor = preg_replace('/^[ \t]+|[ \t]+$/', '', $contributor);
+
+      // If there is more than one space between first and last name, replace with one space.
+      $contributor = preg_replace('/[ \t]{2,}/', ' ', $contributor);
+
+      // check if contributor exists already, if not then insert
+      $existing_record = $DB->get_record_sql('SELECT id FROM {lor_contributor} WHERE name=?', array($contributor));
+      if($existing_record) {
+        $cid = $existing_record->id;
+      } else {
+        $cid = $DB->insert_record_raw('lor_contributor', array('id' => null, 'name' => $contributor), true, false, false);
+      }
+
+
+      $DB->execute('INSERT INTO {lor_content_contributors}(content, contributor) VALUES (?,?)', array($id, $cid));
+    }
+
+    return $id;
+  }
 }

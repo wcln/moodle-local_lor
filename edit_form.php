@@ -144,8 +144,9 @@ class edit_form extends moodleform {
 					}
 
 					break;
-				// Project.
+				// Project or Group Activity.
 				case 2:
+				case 7:
 
 					$mform->addElement('html', '<p>Existing documents:</p><ul>'
 						. '<li><a target="_blank" href="'.preg_replace('/.pdf$/', '.docx', $this->_customdata['link']).'">Word document</a></li>'

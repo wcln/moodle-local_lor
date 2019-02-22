@@ -40,7 +40,7 @@ if (isset($_GET['id'])) {
 
         <p align="center"><iframe width="<?=$item->width?>px" height="<?=$item->height?>px" src="<?=$item->link?>" allowfullscreen="" frameborder="0"></iframe></p>
 
-      <?php elseif ($item->type == 2): // Project. ?>
+      <?php elseif ($item->type == 2 || $item->type == 7): // Project or Group Activity. ?>
 
         <embed src="<?=$item->link?>" width="700" height="800" type='application/pdf'>
 

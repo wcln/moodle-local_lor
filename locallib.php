@@ -428,3 +428,31 @@ function local_lor_undo_delete($id) {
   $content_record->deleted = 0;
   $DB->update_record('lor_content', $content_record);
 }
+
+/**
+ * Checks if the current user is a designer.
+ * If a user is in the designer cohort, they have access to the insert from and edit functionality.
+ * @return boolean          True if the logged in user is part of the designer cohort (or is a site admin).
+ */
+function local_lor_is_designer() {
+  global $DB, $USER;
+
+  // Return true if the user is a site administrator.
+  if (is_siteadmin()) {
+    return true;
+  }
+
+  // Retrieve the ID of the 'Designer' cohort.
+  $designer_cohort_id = $DB->get_record('cohort', array('idnumber' => 'Designer'), 'id');
+
+  // If the cohort exists...
+  if ($designer_cohort_id) {
+
+    // Return if the current user is a member of the 'Designer' cohort.
+    return $DB->record_exists('cohort_members', array('userid' => $USER->id, 'cohortid' => $designer_cohort_id->id));
+
+  }
+
+  // Default: return false.
+  return false;
+}

@@ -48,11 +48,8 @@ $PAGE->navbar->add(get_string('nav_edit_form', 'local_lor'), new moodle_url("/lo
 // Ensure user is logged in.
 require_login();
 
-// Fetch the current system context.
-$systemcontext = context_system::instance();
-
 // Ensure user has permission to be here.
-if (has_capability('local/lor:edit', $systemcontext)) {
+if (local_lor_is_designer()) {
 
   // Check if we are restoring an item.
   if (isset($_GET['undo'])) {

@@ -38,9 +38,6 @@ $PAGE->requires->js(new moodle_url("https://bclearningnetwork.com/lib/bootstrap/
 $PAGE->requires->js(new moodle_url("js/navigation.js"));
 $PAGE->requires->js(new moodle_url("js/modal_handler.js"));
 
-// Fetch the current system context.
-$systemcontext = context_system::instance();
-
 // Retrieve the renderer for the page.
 $renderer = $PAGE->get_renderer('local_lor');
 
@@ -52,12 +49,8 @@ $PAGE->navbar->add(get_string('lor', 'local_lor'), new moodle_url('/local/lor/in
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('pluginname', 'local_lor'));
 
-// Check if the user is a teacher anywhere on the site.
-$roleid = $DB->get_field('role', 'id', ['shortname' => 'editingteacher']);
-$isteacheranywhere = $DB->record_exists('role_assignments', ['userid' => $USER->id, 'roleid' => $roleid]);
-
 // Check if the user has the ability to insert into the LOR.
-if (has_capability('local/lor:insert', $systemcontext) || $isteacheranywhere) {
+if (local_lor_is_designer()) {
 
   // Ouput the template to show a link to the insert page.
   $insert_link = new \local_lor\output\insert_link();

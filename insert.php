@@ -17,9 +17,6 @@ $PAGE->set_title($title);
 $PAGE->set_heading($title);
 $PAGE->set_pagelayout('standard');
 
-// Fetch the current system context.
-$systemcontext = context_system::instance();
-
 // Retrieve the renderer for the page.
 $renderer = $PAGE->get_renderer('local_lor');
 
@@ -31,12 +28,8 @@ $PAGE->navbar->add(get_string('nav_insert_form', 'local_lor'), new moodle_url('/
 // Ensure the user is logged in to proceed.
 require_login();
 
-// Check if the user is a teacher anywhere on the site.
-$roleid = $DB->get_field('role', 'id', ['shortname' => 'editingteacher']);
-$isteacheranywhere = $DB->record_exists('role_assignments', ['userid' => $USER->id, 'roleid' => $roleid]);
-
 // Check if the user has the ability to insert into the LOR.
-if (has_capability('local/lor:insert', $systemcontext) || $isteacheranywhere) {
+if (local_lor_is_designer()) {
 
   // Will be used to store if a game link was received from the Game Creator plugin.
   $from_gamecreator = false;

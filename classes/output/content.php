@@ -35,13 +35,8 @@ class content implements renderable, templatable {
         $this->pages = range(1, ceil(count($items) / $items_per_page));
         $this->items_per_page = $items_per_page;
 
-        // Fetch the current system context.
-        $systemcontext = \context_system::instance();
-
         // If the user has permission to edit LOR items.
-        if (has_capability('local/lor:edit', $systemcontext)) {
-          $this->is_admin = true;
-        }
+        $this->is_admin = local_lor_is_designer();
     }
 
     /**

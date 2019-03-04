@@ -95,25 +95,6 @@ class form_7 extends moodleform {
 		global $DB;
 		$errors = parent::validation($data, $files);
 
-    // Check that all files have same ID.
-		$sql = 'SELECT id, filename, filesize FROM {files} WHERE itemid=? OR itemid=?';
-		$records = $DB->get_records_sql($sql, array($data['word'], $data['pdf']));
-
-		foreach ($records as $r1) {
-			foreach ($records as $r2) {
-				if ($r1->filesize > 0 && $r2->filesize > 0 && explode(".", $r1->filename, 2)[0] != explode(".", $r2->filename, 2)[0]) {
-					$errors['word'] = $errors['pdf'] = get_string('error_filenames', 'local_lor');
-					break 2;
-				} else {
-					// Check that file doesnt already exist on server.
-					if ($r1->filesize > 0 && file_exists($CFG->dirroot . '/_LOR/projects/' . $r1->filename)) {
-						$errors['word'] = $errors['pdf'] = get_string('error_file_exists', 'local_lor');
-						break 2;
-					}
-				}
-			}
-		}
-
 		// Check length of title.
 		if (strlen($data['title']) >= 150) {
 			$errors['title'] = get_string('error_title_length', 'local_lor');

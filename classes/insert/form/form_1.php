@@ -8,6 +8,9 @@ defined('MOODLE_INTERNAL') || die;
 require_once($CFG->libdir.'/formslib.php');
 require_once(__DIR__ . '/../../../locallib.php');
 
+/**
+ * Game form.
+ */
 class form_1 extends moodleform {
 
 	protected function definition() {

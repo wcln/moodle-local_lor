@@ -73,7 +73,7 @@ class form_7 extends moodleform {
 
 
     // Word Document.
-    $mform->addElement('filepicker', 'word', get_string('word', 'local_lor'), null, array('maxbytes'=>10000000, 'accepted_types'=>array('.doc', '.docx')));
+    $mform->addElement('filepicker', 'word', get_string('word', 'local_lor'), null, array('maxbytes'=>10000000, 'accepted_types'=>array('.docx')));
     $mform->addRule('word', get_string('required'), 'required', null);
 
 		// PDF.

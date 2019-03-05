@@ -90,18 +90,23 @@ class insert_functions {
 
     date_default_timezone_set('America/Los_Angeles'); // PST
 
-    $form->save_file('word', $CFG->dirroot . '/_LOR/projects/' . $form->get_new_filename('word'));
-    $form->save_file('pdf', $CFG->dirroot . '/_LOR/projects/' . $form->get_new_filename('pdf'));
-    $form->save_file('icon', $CFG->dirroot . '/_LOR/projects/' . $form->get_new_filename('icon'));
-
-    // insert into content table
+    // Insert into content table.
     $record = new \stdClass();
     $record->type = 2;
     $record->title = $data->title;
-    $record->image = $CFG->wwwroot . '/_LOR/projects/' . $form->get_new_filename('icon');
-    $record->link = $CFG->wwwroot . '/_LOR/projects/' . $form->get_new_filename('pdf');
+    $record->image = "";
+    $record->link = "";
     $record->date_created = date("Ymd");
     $id = $DB->insert_record('lor_content', $record);
+    $record->id = $id;
+    $record->image = "$CFG->wwwroot/_LOR/projects/WCLN_Project_$id.png";
+    $record->link = "$CFG->wwwroot/_LOR/projects/WCLN_Project_$id.pdf";
+    $DB->update_record('lor_content', $record);
+
+    // Save files.
+    $form->save_file('word', "$CFG->dirroot/_LOR/projects/WCLN_Project_$id.docx");
+    $form->save_file('pdf', "$CFG->dirroot/_LOR/projects/WCLN_Project_$id.pdf");
+    $form->save_file('icon', "$CFG->dirroot/_LOR/projects/WCLN_Project_$id.png");
 
     // insert into categories table
     $categories = array_filter($data->categories);
@@ -427,18 +432,21 @@ class insert_functions {
 
     date_default_timezone_set('America/Los_Angeles'); // PST
 
-    $form->save_file('word', $CFG->dirroot . '/_LOR/group_activities/' . $form->get_new_filename('word'));
-    $form->save_file('pdf', $CFG->dirroot . '/_LOR/group_activities/' . $form->get_new_filename('pdf'));
-    // $form->save_file('icon', $CFG->dirroot . '/_LOR/group_activities/' . $form->get_new_filename('icon'));
-
-    // insert into content table
+    // Insert into content table.
     $record = new \stdClass();
     $record->type = 7;
     $record->title = $data->title;
     $record->image = "$CFG->wwwroot/local/lor/images/generic_preview_images/generic_group_activity_preview.png";
-    $record->link = $CFG->wwwroot . '/_LOR/group_activities/' . $form->get_new_filename('pdf');
+    $record->link = ""; // Temp, will be updated below.
     $record->date_created = date("Ymd");
     $id = $DB->insert_record('lor_content', $record);
+    $record->id = $id;
+    $record->link = "$CFG->wwwroot/_LOR/group_activities/WCLN_Group_Activity_$id.pdf";
+    $DB->update_record('lor_content', $record);
+
+    // Save files.
+    $form->save_file('word', "$CFG->dirroot/_LOR/group_activities/WCLN_Group_Activity_$id.docx");
+    $form->save_file('pdf', "$CFG->dirroot/_LOR/group_activities/WCLN_Group_Activity_$id.pdf");
 
     // insert into categories table
     $categories = array_filter($data->categories);

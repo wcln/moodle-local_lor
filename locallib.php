@@ -323,32 +323,34 @@ function local_lor_update_item($id, $type, $title, $topics, $categories, $grades
 
   } else if ($type == 2 || $type == 7) { // Project or Group Activity.
 
-    // Get project ID from link.
-    $pid = array();
-    preg_match('/(?i)projects\/(.*)\.pdf$/', $link, $pid);
+    // Set directory and filename depending if Project or Group Activity.
+    if ($type == 2) {
+      $dir = 'projects';
+      $filename = "WCLN_Project_$id";
+    } else if ($type == 7) {
+      $dir = 'group_activities';
+      $filename = "WCLN_Group_Activity_$id";
+    }
 
-    if (count($pid) > 0) {
-      $pid = $pid[1];
+    // Save all three files.
+    if ($form->get_file_content('word') !== false) {
+      $form->save_file('word', "$CFG->dirroot/_LOR/$dir/$filename.docx", true);
+    }
+    if ($form->get_file_content('pdf') !== false) {
+      $form->save_file('pdf', "$CFG->dirroot/_LOR/$dir/$filename.pdf", true);
+    }
+    if ($form->get_file_content('icon') !== false) {
+      $form->save_file('icon', "$CFG->dirroot/_LOR/$dir/$filename.png", true);
 
-      if ($type == 2) {
-        $dir = 'projects';
-      } else if ($type == 7) {
-        $dir = 'group_activities';
-      }
-
-      // Save all three files.
-      if ($form->get_file_content('word') !== false) {
-        $form->save_file('word', "$CFG->dirroot/_LOR/$dir/$pid.docx", true);
-      }
-      if ($form->get_file_content('pdf') !== false) {
-        $form->save_file('pdf', "$CFG->dirroot/_LOR/$dir/$pid.pdf", true);
-      }
-      if ($form->get_file_content('icon') !== false) {
-        $form->save_file('icon', "$CFG->dirroot/_LOR/$dir/$pid.png", true);
+      // Since by default Group Activities have
+      if ($type == 7) {
+        $record = new stdClass();
+        $record->id = $id;
+        $record->image = "$CFG->wwwroot/_LOR/$dir/$filename.png";
+        $DB->update_record('lor_content', $record);
       }
     }
   }
-
 
   // Delete all topics for the item.
   $DB->delete_records('lor_content_topics', array('content' => $id));

@@ -312,6 +312,10 @@ function local_lor_update_item($id, $type, $title, $topics, $categories, $grades
 
     if ($form->get_file_content('image') !== false) {
       $form->save_file('image', "$CFG->dirroot/_LOR/games/preview_images/$id.png", true);
+      $record = new stdClass();
+      $record->id = $id;
+      $record->image = "$CFG->wwwroot/_LOR/games/preview_images/$id.png";
+      $DB->update_record('lor_content', $record);
     }
 
   } else if ($type == 5) { // Lesson.

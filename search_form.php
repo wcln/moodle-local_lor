@@ -26,9 +26,10 @@ class search_form extends moodleform {
 		// Header.
 		$mform->addElement('header', 'search', get_string('search', 'local_lor'));
 
-		// topics text.
-		$mform->addElement('text', 'topics', get_string('topics', 'local_lor'));
+		// Keywords/Topics search text.
+		$mform->addElement('text', 'topics', get_string('keywords', 'local_lor'));
 		$mform->setType('topics', PARAM_TEXT);
+		$mform->addHelpButton('topics', 'keywords', 'local_lor');
 
 		// Type.
 		$types = local_lor_get_types();

@@ -68,6 +68,8 @@ $string['search_categories'] = "Categories";
 $string['search_grades'] = "Grades";
 $string['all'] = "All";
 $string['reset'] = 'Reset';
+$string['keywords'] = 'Keywords';
+$string['keywords_help'] = 'Searches titles, categories, contributors and topics.';
 
 // Edit form.
 $string['save'] = "Save";

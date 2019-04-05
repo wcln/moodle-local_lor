@@ -18,7 +18,7 @@ function local_lor_get_content($type, $categories, $grades, $order_by = "new", $
   if(!is_null($categories)) {
     $tables .= ", {lor_content_categories}, {lor_category}";
     $where_clause .= " AND {lor_content}.id = {lor_content_categories}.content
-                        AND {lor_content_categories}.category={lor_category}.id AND (";
+                        AND {lor_content_categories}.category={lor_category}.id AND " . "(";
     foreach ($categories as $category) {
       $where_clause .= "{lor_category}.id = ? OR ";
       $params[] = $category;
@@ -30,7 +30,7 @@ function local_lor_get_content($type, $categories, $grades, $order_by = "new", $
   // Grades.
   if(!is_null($grades) && count($grades) !== count(local_lor_get_grades())) {
     $tables .= ", {lor_content_grades}";
-    $where_clause .= " AND {lor_content}.id = {lor_content_grades}.content AND (";
+    $where_clause .= " AND {lor_content}.id = {lor_content_grades}.content AND " . "(";
     foreach ($grades as $grade) {
       $where_clause .= "{lor_content_grades}.grade = ? OR ";
       $params[] = $grade;

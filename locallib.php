@@ -336,24 +336,25 @@ function local_lor_update_item($id, $type, $title, $topics, $categories, $grades
       $filename = "WCLN_Group_Activity_$id";
     }
 
+    $record = new stdClass();
+    $record->id = $id;
+
     // Save all three files.
     if ($form->get_file_content('word') !== false) {
       $form->save_file('word', "$CFG->dirroot/_LOR/$dir/$filename.docx", true);
+      $record->link = "$CFG->wwwroot/_LOR/$dir/$filename.pdf";
     }
     if ($form->get_file_content('pdf') !== false) {
       $form->save_file('pdf', "$CFG->dirroot/_LOR/$dir/$filename.pdf", true);
+      $record->link = "$CFG->wwwroot/_LOR/$dir/$filename.pdf";
     }
     if ($form->get_file_content('icon') !== false) {
       $form->save_file('icon', "$CFG->dirroot/_LOR/$dir/$filename.png", true);
-
-      // Since by default Group Activities have
-      if ($type == 7) {
-        $record = new stdClass();
-        $record->id = $id;
-        $record->image = "$CFG->wwwroot/_LOR/$dir/$filename.png";
-        $DB->update_record('lor_content', $record);
-      }
+      $record->image = "$CFG->wwwroot/_LOR/$dir/$filename.png";
     }
+
+    // Update the record information in the database.
+    $DB->update_record('lor_content', $record);
   }
 
   // Delete all topics for the item.

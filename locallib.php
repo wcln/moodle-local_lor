@@ -367,7 +367,9 @@ function local_lor_update_item($id, $type, $title, $topics, $categories, $grades
         }
 
         // Update the record information in the database.
-        $DB->update_record('lor_content', $record);
+        if ( ! empty($record->image) || ! empty($record->link)) {
+            $DB->update_record('lor_content', $record);
+        }
     }
 
     // Delete all topics for the item.

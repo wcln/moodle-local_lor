@@ -20,12 +20,12 @@ class insert_link implements renderable, templatable {
      * @return stdClass
      */
     public function export_for_template(renderer_base $output) {
-      global $DB;
+        global $DB;
 
-      // Set the link of the page containing the insert form.
-      $data = new stdClass();
-      $data->link = new \moodle_url("/local/lor/insert.php");
+        // Set the link of the page containing the insert form.
+        $data       = new stdClass();
+        $data->link = new \moodle_url("/local/lor/insert.php");
 
-      return $data;
+        return $data;
     }
 }

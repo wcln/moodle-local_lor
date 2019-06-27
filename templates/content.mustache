@@ -1,52 +1,58 @@
 <div class="container-fluid bootstrap-lor" id="content-container">
-  {{> local_lor/modal }}
+    {{> local_lor/modal }}
 
-  <!-- Content -->
-  <div class="row-fluid text-center">
-    <div class="col-md-12 text-center">
-      <p id="count"><i>{{count}} items match your search</i></p>
+    <!-- Content -->
+    <div class="row-fluid text-center">
+        <div class="col-md-12 text-center">
+            <p id="count"><i>{{count}} items match your search</i></p>
+        </div>
     </div>
-  </div>
-  {{#items}}
-  <div class="row text-center item">
-    <div class="col-md-4 item-image">
-      <a class="modallink" href="modals/details.php?id={{id}}" data-remote="false" data-target="#itemModal">
-        <img class="lor-image" src="{{image}}" onerror="this.src='images/generic_preview_images/generic_preview.png'" width="200px" height="150px" />
-      </a>
-    </div>
-    <div class="col-md-7 project-about text-left">
-      <a class="modallink" href="modals/details.php?id={{id}}" data-remote="false" data-target="#itemModal">
-        <h3>{{title}}</h3>
-      </a>
-      <p><i>Topics: </i>{{topics}}</p>
-      <p>
-        <a href="modals/details.php?id={{id}}" data-remote="false" data-target="#itemModal" class="modallink lor-icon">
-          <img src="images/icons/details.png">Details
-        </a>
-        <a href="modals/related.php?id={{id}}" data-remote="false" data-target="#itemModal" class="modallink lor-icon">
-          <img src="images/icons/related.png">Related
-        </a>
-        <a class="lor-icon" href="{{link}}" target="_blank">
-          <img src="images/icons/present.png">Present
-        </a>
-        <a href="modals/share.php?id={{id}}"  data-remote="false" data-target="#itemModal" class="modallink lor-icon">
-          <img src="images/icons/share.png">Share
-        </a>
-        <a href="modals/embed.php?id={{id}}"  data-remote="false" data-target="#itemModal" class="modallink lor-icon">
-          <img src="images/icons/embed.png">Embed
-        </a>
-        {{#is_admin}}
-          <a href="edit.php?id={{id}}" class="lor-icon">
-            <img src="images/icons/edit.png">Edit
-          </a>
-        {{/is_admin}}
-      </p>
-    </div>
-  </div>
-  {{/items}}
+    {{#items}}
+        <div class="row text-center item">
+            <div class="col-md-4 item-image">
+                <a class="modallink" href="modals/details.php?id={{id}}" data-remote="false" data-target="#itemModal">
+                <img class="lor-image" src="{{image}}"
+                     onerror="this.src='images/generic_preview_images/generic_preview.png'" width="200px"
+                     height="150px"/>
+                </a>
+            </div>
+            <div class="col-md-7 project-about text-left">
+                <a class="modallink" href="modals/details.php?id={{id}}" data-remote="false" data-target="#itemModal">
+                <h3>{{title}}</h3>
+                </a>
+                <p><i>Topics: </i>{{topics}}</p>
+                <p>
+                    <a href="modals/details.php?id={{id}}" data-remote="false" data-target="#itemModal" class="modallink
+                    lor-icon">
+                    <img src="images/icons/details.png">Details
+                    </a>
+                    <a href="modals/related.php?id={{id}}" data-remote="false" data-target="#itemModal" class="modallink
+                    lor-icon">
+                    <img src="images/icons/related.png">Related
+                    </a>
+                    <a class="lor-icon" href="{{link}}" target="_blank">
+                        <img src="images/icons/present.png">Present
+                    </a>
+                    <a href="modals/share.php?id={{id}}" data-remote="false" data-target="#itemModal" class="modallink
+                    lor-icon">
+                    <img src="images/icons/share.png">Share
+                    </a>
+                    <a href="modals/embed.php?id={{id}}" data-remote="false" data-target="#itemModal" class="modallink
+                    lor-icon">
+                    <img src="images/icons/embed.png">Embed
+                    </a>
+                    {{#is_admin}}
+                        <a href="edit.php?id={{id}}" class="lor-icon">
+                        <img src="images/icons/edit.png">Edit
+                        </a>
+                    {{/is_admin}}
+                </p>
+            </div>
+        </div>
+    {{/items}}
 
-  {{#count}}
-    {{> local_lor/navigation }}
-  {{/count}}
+    {{#count}}
+        {{> local_lor/navigation }}
+    {{/count}}
 
 </div>

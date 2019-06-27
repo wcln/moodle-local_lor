@@ -17,8 +17,8 @@ class delete_success implements renderable, templatable {
     var $title = null;
 
     public function __construct($id, $title) {
-      $this->id = $id;
-      $this->title = $title;
+        $this->id    = $id;
+        $this->title = $title;
     }
 
     /**
@@ -27,14 +27,14 @@ class delete_success implements renderable, templatable {
      * @return stdClass
      */
     public function export_for_template(renderer_base $output) {
-      global $DB;
-      global $CFG;
+        global $DB;
+        global $CFG;
 
-      $data = new stdClass();
-      $data->title = $this->title;
-      $data->done_link = new \moodle_url("/local/lor/index.php");
-      $data->undo_link = "$CFG->wwwroot/local/lor/edit.php?id=$this->id&undo=1";
+        $data            = new stdClass();
+        $data->title     = $this->title;
+        $data->done_link = new \moodle_url("/local/lor/index.php");
+        $data->undo_link = "$CFG->wwwroot/local/lor/edit.php?id=$this->id&undo=1";
 
-      return $data;
+        return $data;
     }
 }

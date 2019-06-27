@@ -16,13 +16,13 @@ $page = 0;
 // Check if an item ID was specified in the URL.
 $id = null;
 if (isset($_GET['id'])) {
-  $id = $_GET['id'];
+    $id = $_GET['id'];
 }
 
 // Check if a type was specified in the URL.
 $type = null;
 if (isset($_GET['type'])) {
-  $type = (int) $_GET['type'];
+    $type = (int)$_GET['type'];
 }
 
 // Setting up the page.
@@ -52,9 +52,9 @@ echo $OUTPUT->heading(get_string('pluginname', 'local_lor'));
 // Check if the user has the ability to insert into the LOR.
 if (local_lor_is_designer()) {
 
-  // Ouput the template to show a link to the insert page.
-  $insert_link = new \local_lor\output\insert_link();
-  echo $renderer->render($insert_link);
+    // Ouput the template to show a link to the insert page.
+    $insert_link = new \local_lor\output\insert_link();
+    echo $renderer->render($insert_link);
 }
 
 // Initialize and display the search form.
@@ -64,30 +64,30 @@ $search_form->display();
 // Check if search form was submitted.
 if ($search_data = $search_form->get_data()) {
 
-  // Remove grade and category items if checkbox is not set.
-  foreach (array_keys($search_data->categories, "", true) as $key) {
-    unset($search_data->categories[$key]);
-  }
-  if (count($search_data->categories) === 0) {
-    $search_data->categories = null;
-  }
-  foreach (array_keys($search_data->grades, "", true) as $key) {
-    unset($search_data->grades[$key]);
-  }
-  if (count($search_data->grades) === 0) {
-    $search_data->grades = null;
-  }
+    // Remove grade and category items if checkbox is not set.
+    foreach (array_keys($search_data->categories, "", true) as $key) {
+        unset($search_data->categories[$key]);
+    }
+    if (count($search_data->categories) === 0) {
+        $search_data->categories = null;
+    }
+    foreach (array_keys($search_data->grades, "", true) as $key) {
+        unset($search_data->grades[$key]);
+    }
+    if (count($search_data->grades) === 0) {
+        $search_data->grades = null;
+    }
 
-  // Get the current page.
-  $page = $search_data->page - 1;
+    // Get the current page.
+    $page = $search_data->page - 1;
 
-  // Search for specific content.
-  $items = local_lor_get_content($search_data->type, $search_data->categories, $search_data->grades, $search_data->sort_by, $search_data->topics);
+    // Search for specific content.
+    $items = local_lor_get_content($search_data->type, $search_data->categories, $search_data->grades, $search_data->sort_by, $search_data->topics);
 
 } else { // Search form was not submitted.
 
-  // Get all content.
-  $items = local_lor_get_content($type, null, null, "new", null);
+    // Get all content.
+    $items = local_lor_get_content($type, null, null, "new", null);
 }
 
 // Send all of the items, the current page, and the number of items to be displayed per page.

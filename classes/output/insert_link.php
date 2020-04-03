@@ -3,10 +3,11 @@
 
 namespace local_lor\output;
 
+use moodle_url;
 use renderable;
 use renderer_base;
-use templatable;
 use stdClass;
+use templatable;
 
 class insert_link implements renderable, templatable {
 
@@ -24,7 +25,7 @@ class insert_link implements renderable, templatable {
 
         // Set the link of the page containing the insert form.
         $data       = new stdClass();
-        $data->link = new \moodle_url("/local/lor/insert.php");
+        $data->link = new moodle_url("/local/lor/insert.php");
 
         return $data;
     }

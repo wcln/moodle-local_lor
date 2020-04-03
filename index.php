@@ -1,6 +1,9 @@
 <?php
 
 // Standard config file and local library.
+use local_lor\output\content;
+use local_lor\output\insert_link;
+
 require_once(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/locallib.php');
 
@@ -53,7 +56,7 @@ echo $OUTPUT->heading(get_string('pluginname', 'local_lor'));
 if (local_lor_is_designer()) {
 
     // Ouput the template to show a link to the insert page.
-    $insert_link = new \local_lor\output\insert_link();
+    $insert_link = new insert_link();
     echo $renderer->render($insert_link);
 }
 
@@ -91,7 +94,7 @@ if ($search_data = $search_form->get_data()) {
 }
 
 // Send all of the items, the current page, and the number of items to be displayed per page.
-$countent_output = new \local_lor\output\content($items, $page, ITEMS_PER_PAGE);
+$countent_output = new content($items, $page, ITEMS_PER_PAGE);
 
 // Ouput the template.
 echo $renderer->render($countent_output);

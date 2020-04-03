@@ -3,10 +3,11 @@
 
 namespace local_lor\output;
 
+use moodle_url;
 use renderable;
 use renderer_base;
-use templatable;
 use stdClass;
+use templatable;
 
 class delete_success implements renderable, templatable {
 
@@ -32,7 +33,7 @@ class delete_success implements renderable, templatable {
 
         $data            = new stdClass();
         $data->title     = $this->title;
-        $data->done_link = new \moodle_url("/local/lor/index.php");
+        $data->done_link = new moodle_url("/local/lor/index.php");
         $data->undo_link = "$CFG->wwwroot/local/lor/edit.php?id=$this->id&undo=1";
 
         return $data;

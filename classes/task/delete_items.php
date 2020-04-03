@@ -2,12 +2,14 @@
 
 namespace local_lor\task;
 
+use core\task\scheduled_task;
+
 defined('MOODLE_INTERNAL') || die();
 
 // Require the config file for DB calls.
 require_once(__DIR__ . '/../../../../config.php');
 
-class delete_items extends \core\task\scheduled_task {
+class delete_items extends scheduled_task {
 
 
     /**

@@ -3,10 +3,11 @@
 
 namespace local_lor\output;
 
+use moodle_url;
 use renderable;
 use renderer_base;
-use templatable;
 use stdClass;
+use templatable;
 
 class insert_success implements renderable, templatable {
 
@@ -37,7 +38,7 @@ class insert_success implements renderable, templatable {
         }
 
         // Create a link to the recently inserted item.
-        $data->lor_link = new \moodle_url('/local/lor/index.php', array('id' => $this->id));
+        $data->lor_link = new moodle_url('/local/lor/index.php', array('id' => $this->id));
 
         return $data;
     }

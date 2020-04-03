@@ -78,7 +78,7 @@ class form_1 extends moodleform {
 
         // Game link.
         $mform->addElement('text', 'link', get_string('link', 'local_lor'));
-        if ( ! is_null($this->_customdata['link'])) {
+        if (! is_null($this->_customdata['link'])) {
             $mform->setDefault('link', $this->_customdata['link']); // pre-populate link field if link given from gamecreator
         }
         $mform->addRule('link', get_string('required'), 'required', null);

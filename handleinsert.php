@@ -1,6 +1,6 @@
 <?php
 
-use \local_lor\insert\handler;
+use local_lor\insert\handler;
 
 require_once(__DIR__ . '/../../config.php'); // standard config file
 require_once(__DIR__ . '/locallib.php');

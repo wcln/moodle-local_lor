@@ -1,7 +1,8 @@
 <?php
 
-use \local_lor\insert\type_form;
-use \local_lor\insert\handler;
+use local_lor\insert\handler;
+use local_lor\insert\type_form;
+use local_lor\output\insert_success;
 
 // Require standard config file and local library.
 require_once(__DIR__ . '/../../config.php');
@@ -67,7 +68,7 @@ if (local_lor_is_designer()) {
 
         // If an inserted_id has been provided, show the success html and a link to the just inserted item.
         if (isset($_GET['inserted_id'])) {
-            $insert_success = new \local_lor\output\insert_success($_GET['inserted_id']);
+            $insert_success = new insert_success($_GET['inserted_id']);
             echo $renderer->render($insert_success);
 
             // An item was just inserted, clear the current type.

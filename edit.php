@@ -1,6 +1,9 @@
 <?php
 
 // Prevent caching on this page.
+use local_lor\output\delete_success;
+use local_lor\output\update_success;
+
 header("Pragma-directive: no-cache");
 header("Cache-directive: no-cache");
 header("Cache-control: no-cache");
@@ -89,7 +92,7 @@ if (local_lor_is_designer()) {
             local_lor_delete_item($id);
 
             // Render success template.
-            $delete_success = new \local_lor\output\delete_success($id, $item->title);
+            $delete_success = new delete_success($id, $item->title);
             echo $renderer->render($delete_success);
 
         } else { // The save button was clicked.
@@ -122,7 +125,7 @@ if (local_lor_is_designer()) {
             );
 
             // Render success template.
-            $update_success = new \local_lor\output\update_success($id);
+            $update_success = new update_success($id);
             echo $renderer->render($update_success);
 
             // Display the form.

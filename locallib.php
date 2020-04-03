@@ -15,7 +15,7 @@ function local_lor_get_content($type, $categories, $grades, $order_by = "new", $
     }
 
     // Categories.
-    if ( ! is_null($categories)) {
+    if (! is_null($categories)) {
         $tables       .= ", {lor_content_categories}, {lor_category}";
         $where_clause .= " AND {lor_content}.id = {lor_content_categories}.content
                         AND {lor_content_categories}.category={lor_category}.id AND " . "(";
@@ -28,7 +28,7 @@ function local_lor_get_content($type, $categories, $grades, $order_by = "new", $
     }
 
     // Grades.
-    if ( ! is_null($grades) && count($grades) !== count(local_lor_get_grades())) {
+    if (! is_null($grades) && count($grades) !== count(local_lor_get_grades())) {
         $tables       .= ", {lor_content_grades}";
         $where_clause .= " AND {lor_content}.id = {lor_content_grades}.content AND " . "(";
         foreach ($grades as $grade) {
@@ -40,14 +40,14 @@ function local_lor_get_content($type, $categories, $grades, $order_by = "new", $
     }
 
     // Type.
-    if ( ! is_null($type) && $type != -1) {
+    if (! is_null($type) && $type != -1) {
         $where_clause .= " AND {lor_content}.type = ?";
         $params[]     = $type;
     }
 
 
     // topics.
-    if ( ! is_null($topics) && $topics !== "") {
+    if (! is_null($topics) && $topics !== "") {
         $topics = explode(' ', $topics);
         if (strpos($tables, '{lor_category}') !== false) {
             $tables .= ", {lor_content_topics}, {lor_contributor}, {lor_content_contributors}";
@@ -290,7 +290,7 @@ function local_lor_update_item($id, $type, $title, $topics, $categories, $grades
     $content_record        = new stdCLass();
     $content_record->id    = $id;
     $content_record->title = $title;
-    if ( ! is_null($link)) {
+    if (! is_null($link)) {
         $content_record->link = $link;
     }
     $content_record->width  = $width;
@@ -298,7 +298,7 @@ function local_lor_update_item($id, $type, $title, $topics, $categories, $grades
     $DB->update_record('lor_content', $content_record);
 
     // Check if video ID is set and needs to be updated.
-    if ( ! is_null($video_id)) {
+    if (! is_null($video_id)) {
 
         // Update video ID.
         $DB->execute('UPDATE {lor_content_videos} SET video_id = ? WHERE content = ?', array($video_id, $id));
@@ -311,7 +311,7 @@ function local_lor_update_item($id, $type, $title, $topics, $categories, $grades
     }
 
     // Check if book ID is set and needs to be updated.
-    if ( ! is_null($book_id)) {
+    if (! is_null($book_id)) {
 
         // Update book ID.
         $DB->execute('UPDATE {lor_content_lessons} SET book_id = ? WHERE content = ?', array($book_id, $id));
@@ -367,7 +367,7 @@ function local_lor_update_item($id, $type, $title, $topics, $categories, $grades
         }
 
         // Update the record information in the database.
-        if ( ! empty($record->image) || ! empty($record->link)) {
+        if (! empty($record->image) || ! empty($record->link)) {
             $DB->update_record('lor_content', $record);
         }
     }

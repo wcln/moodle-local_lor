@@ -2,6 +2,9 @@
 
 namespace local_lor\insert;
 
+use Exception;
+use stdClass;
+
 class insert_functions {
 
     /*
@@ -14,7 +17,7 @@ class insert_functions {
         date_default_timezone_set('America/Los_Angeles'); // PST
 
         // Insert into lor_content table.
-        $record               = new \stdClass();
+        $record               = new stdClass();
         $record->type         = 1;
         $record->title        = $data->title;
         $record->image        = ""; // Will be replaced below.
@@ -98,7 +101,7 @@ class insert_functions {
         date_default_timezone_set('America/Los_Angeles'); // PST
 
         // Insert into content table.
-        $record               = new \stdClass();
+        $record               = new stdClass();
         $record->type         = 2;
         $record->title        = $data->title;
         $record->image        = "";
@@ -209,7 +212,7 @@ class insert_functions {
             $image = $response->items[0]->snippet->thumbnails->medium->url;
 
             // Insert into lor_content table.
-            $record               = new \stdClass();
+            $record               = new stdClass();
             $record->type         = 3; // Video.
             $record->title        = $title;
             $record->image        = $image;
@@ -281,7 +284,7 @@ class insert_functions {
 
             return $id;
         } else {
-            throw new \Exception(get_string('error_no_video', 'local_lor'));
+            throw new Exception(get_string('error_no_video', 'local_lor'));
         }
     }
 
@@ -296,7 +299,7 @@ class insert_functions {
         date_default_timezone_set('America/Los_Angeles'); // PST
 
         // Insert into lor_content table.
-        $record               = new \stdClass();
+        $record               = new stdClass();
         $record->type         = 5;
         $record->title        = $data->title;
         $record->image        = ""; // Will be set below.
@@ -394,7 +397,7 @@ class insert_functions {
         $form->save_file('pdf', $CFG->dirroot . '/_LOR/learning_guides/' . $form->get_new_filename('pdf'));
 
         // Insert into content table.
-        $record               = new \stdClass();
+        $record               = new stdClass();
         $record->type         = 6;
         $record->title        = $data->title;
         $record->image        = "$CFG->wwwroot/local/lor/images/generic_preview_images/generic_learning_guide_preview.png";
@@ -470,7 +473,7 @@ class insert_functions {
         date_default_timezone_set('America/Los_Angeles'); // PST
 
         // Insert into content table.
-        $record               = new \stdClass();
+        $record               = new stdClass();
         $record->type         = 7;
         $record->title        = $data->title;
         $record->image        = "$CFG->wwwroot/local/lor/images/generic_preview_images/generic_group_activity_preview.png";

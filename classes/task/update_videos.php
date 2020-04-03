@@ -2,6 +2,9 @@
 
 namespace local_lor\task;
 
+use core\task\scheduled_task;
+use stdClass;
+
 defined('MOODLE_INTERNAL') || die();
 
 // Require the local library. Will be used to retrieve categories.
@@ -10,7 +13,7 @@ require_once(__DIR__ . '/../../locallib.php');
 // Require the config file for DB calls.
 require_once(__DIR__ . '/../../../../config.php');
 
-class update_videos extends \core\task\scheduled_task {
+class update_videos extends scheduled_task {
 
     // Define search constants.
     const ORDER = 'date';
@@ -82,7 +85,7 @@ class update_videos extends \core\task\scheduled_task {
                 $already_added = $DB->get_record_sql('SELECT content, video_id FROM {lor_content_videos} WHERE video_id = ?', array($video_id), IGNORE_MISSING);
 
                 // If video does not exist in LOR, proceed.
-                if ( ! $already_added) {
+                if (! $already_added) {
 
                     // Extract the title for ease of use.
                     $title = $video->snippet->title;
@@ -129,10 +132,10 @@ class update_videos extends \core\task\scheduled_task {
                         }
 
                         // If we found a category for this video, add it to LOR. Otherwise do nothing.
-                        if ( ! is_null($category_to_add)) {
+                        if (! is_null($category_to_add)) {
 
                             // Get video topics.
-                            $topics = [];
+                            $topics  = [];
                             $connect = file_get_contents("https://www.youtube.com/watch?v=$video_id");
                             preg_match_all('|<meta property="og\:video\:tag" content="(.+?)">|si', $connect, $tags, PREG_SET_ORDER);
 
@@ -140,10 +143,10 @@ class update_videos extends \core\task\scheduled_task {
                             foreach ($tags as $tag) {
 
                                 // Filter out redundant topics.
-                                if ( ! preg_match("/(?i)WCLN|BCLN|math|unit.*|[0-9]+|western|canadian|learning|network|sawatzky/", $tag[1])) {
+                                if (! preg_match("/(?i)WCLN|BCLN|math|unit.*|[0-9]+|western|canadian|learning|network|sawatzky/", $tag[1])) {
 
                                     // Ensure the tag is not already in the topics array.
-                                    if ( ! in_array($tag[1], $topics)) {
+                                    if (! in_array($tag[1], $topics)) {
 
                                         // Append the clean tag.
                                         $topics[] = $tag[1];
@@ -159,7 +162,7 @@ class update_videos extends \core\task\scheduled_task {
                             mtrace("Found " . count($topics) . " topics.");
 
                             // Create empty record to be inserted into lor_content.
-                            $record = new \stdClass();
+                            $record = new stdClass();
 
                             // Video type.
                             $record->type = 3;

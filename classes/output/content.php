@@ -4,8 +4,8 @@ namespace local_lor\output;
 
 use renderable;
 use renderer_base;
-use templatable;
 use stdClass;
+use templatable;
 
 require_once(__DIR__ . '/../../locallib.php');
 

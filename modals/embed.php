@@ -4,7 +4,7 @@
 require_once(__DIR__ . '/../../../config.php');
 require_once(__DIR__ . '/../locallib.php');
 
-if ( ! (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')) {
+if (! (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')) {
     redirect('index.php');
     // TODO: in future may be able to link to embed modal and auto open if an id is set.
     // if (isset($_GET['id'])) {

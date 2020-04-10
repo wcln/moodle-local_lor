@@ -88,6 +88,5 @@ $string['not_allowed_paragraph'] = 'Please contact a site administrator if you b
 $string['updatevideos'] = 'Update LOR videos from YouTube';
 $string['deleteitems']  = 'Permanently delete marked items from the LOR database.';
 
-$string['type:media']             = 'Game/media';
-$string['subplugintype_lormedia'] = 'LOR Media type';
-$string['subplugintype_lorvideo'] = 'LOR Video type';
+$string['type:media']            = 'Game/media';
+$string['subplugintype_lortype'] = 'LOR Item type';

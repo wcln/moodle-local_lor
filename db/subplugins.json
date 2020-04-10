@@ -1,6 +1,6 @@
 {
   "plugintypes": {
-    "lor_type_media": "local/lor/classes/type/media",
-    "lor_type_video": "local/lor/classes/type/video"
+    "lormedia": "local/lor/classes/type/media",
+    "lorvideo": "local/lor/classes/type/video"
   }
 }

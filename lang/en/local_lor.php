@@ -90,3 +90,6 @@ $string['deleteitems']  = 'Permanently delete marked items from the LOR database
 
 $string['type:media']            = 'Game/media';
 $string['subplugintype_lortype'] = 'LOR Item type';
+
+$string['add_heading'] = 'Add a new media item';
+$string['add_title']   = 'Add an item';

@@ -1,12 +1,13 @@
 <?php
 
-namespace local_lor\type;
+namespace local_lor\type\media;
 
 use local_lor\item\data;
+use local_lor\type\type;
 
 class media implements type {
 
-    public static function get_type_name($itemid) {
+    public static function get_name() {
         return get_string('type:media', 'local_lor');
     }
 
@@ -18,7 +19,7 @@ class media implements type {
         // TODO: Implement get_display_html() method.
     }
 
-    public static function add_to_form(\moodleform &$item_form) {
+    public static function add_to_form(&$item_form) {
         $item_form->addElement('text', 'test', 'Test element');
     }
 }

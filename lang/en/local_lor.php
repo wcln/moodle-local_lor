@@ -107,3 +107,5 @@ $string['delete_title']   = 'Delete an item';
 $string['delete_success'] = 'Item deleted successfully!';
 $string['delete_error']   = 'An error occurred while trying to delete the item.';
 $string['delete_confirm'] = 'Are you sure you want to permanently delete the item \'{$a}\'?';
+
+$string['lor_page'] = 'Learning resouces';

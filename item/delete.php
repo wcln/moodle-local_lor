@@ -19,6 +19,9 @@ page::set_up(
     get_string('delete_heading', 'local_lor', $item->name)
 );
 
+$PAGE->navbar->add(get_string('lor_page', 'local_lor'), $return_url);
+$PAGE->navbar->add(get_string('delete_title', 'local_lor'), $page_url);
+
 $renderer = page::get_renderer();
 
 $form = item::get_form($item->type, $itemid);

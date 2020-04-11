@@ -7,7 +7,7 @@ require_once(__DIR__ . '/../../../config.php');
 
 $itemid = required_param('id', PARAM_INT);
 
-$item = item::get($itemid);
+$item       = item::get($itemid);
 $type_class = item::get_type_class($item->type);
 
 $page_url   = new moodle_url('/local/lor/item/edit.php', ['id' => $itemid]);
@@ -18,6 +18,9 @@ page::set_up(
     get_string('edit_title', 'local_lor'),
     get_string('edit_heading', 'local_lor', $item->name)
 );
+
+$PAGE->navbar->add(get_string('lor_page', 'local_lor'), $return_url);
+$PAGE->navbar->add(get_string('edit_title', 'local_lor'), $page_url);
 
 $renderer = page::get_renderer();
 

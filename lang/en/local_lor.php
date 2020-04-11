@@ -93,3 +93,17 @@ $string['subplugintype_lortype'] = 'LOR Item type';
 
 $string['add_heading'] = 'Add a new media item';
 $string['add_title']   = 'Add an item';
+$string['add_success'] = 'The item was added successfully!';
+$string['add_error']   = 'The item could not be created.';
+
+$string['edit_heading']  = 'Editing: {$a}';
+$string['edit_title']    = 'Edit an item';
+$string['edit_success']  = 'The item was saved successfully!';
+$string['edit_error']    = 'The item failed to update.';
+$string['error_sesskey'] = 'Invalid session key!';
+
+$string['delete_heading'] = 'Deleting: {$a}';
+$string['delete_title']   = 'Delete an item';
+$string['delete_success'] = 'Item deleted successfully!';
+$string['delete_error']   = 'An error occurred while trying to delete the item.';
+$string['delete_confirm'] = 'Are you sure you want to permanently delete the item \'{$a}\'?';

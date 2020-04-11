@@ -28,10 +28,9 @@ if ($form->is_cancelled()) {
     redirect($return_url);
 } else if ($form_data = $form->get_data()) {
     if (item::create($form_data)) {
-        // TODO show success message
-        redirect($return_url);
+        redirect($return_url, get_string('add_success', 'local_lor'));
     } else {
-        // TODO print error
+        print_error('add_error', 'local_lor', $return_url);
     }
 } else {
     $form->display();

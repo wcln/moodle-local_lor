@@ -8,7 +8,6 @@ require_once(__DIR__ . '/../../../config.php');
 $itemid = required_param('id', PARAM_INT);
 
 $item       = item::get($itemid);
-$type_class = item::get_type_class($item->type);
 
 $page_url   = new moodle_url('/local/lor/item/edit.php', ['id' => $itemid]);
 $return_url = new moodle_url('/local/lor/item/index.php');

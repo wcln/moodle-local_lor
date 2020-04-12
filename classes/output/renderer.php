@@ -42,4 +42,16 @@ class renderer extends plugin_renderer_base {
         // No data is required to render this template.
         return parent::render_from_template('local_lor/not_allowed', null);
     }
+
+    /**
+     * Render the item view page
+     *
+     * @param $page
+     * @return bool|string
+     * @throws \moodle_exception
+     */
+    public function render_item_view($page) {
+        $data = $page->export_for_template($this);
+        return parent::render_from_template('local_lor/item_view', $data);
+    }
 }

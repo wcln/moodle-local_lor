@@ -1,0 +1,67 @@
+{{!
+   Item view page
+
+    @template local_lor/item_view
+}}
+<div class="local_lor_item_view">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="thumbnail">
+                <div class="caption">
+                    <h3>Details</h3>
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th>{{#str}} categories, local_lor {{/str}}</th>
+                                <td>{{categories}}</td>
+                            </tr>
+                            <tr>
+                                <th>{{#str}} grades, local_lor {{/str}}</th>
+                                <td>{{grades}}</td>
+                            </tr>
+                            <tr>
+                                <th>{{#str}} topics, local_lor {{/str}}</th>
+                                <td>{{topics}}</td>
+                            </tr>
+                            <tr>
+                                <th>{{#str}} contributors, local_lor {{/str}}</th>
+                                <td>{{contributors}}</td>
+                            </tr>
+                            <tr>
+                                <th>{{#str}} date_created, local_lor {{/str}}</th>
+                                <td>{{date_created}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="actions">
+                        <button class="btn btn-default">
+                            <i class="icon fa fa-share-alt" aria-hidden="true"></i>
+                            {{#str}} related, local_lor {{/str}}
+                        </button>
+                        <button type="button" class="btn btn-default">
+                            <i class="icon fa fa-share" aria-hidden="true"></i>
+                            {{#str}} share, local_lor {{/str}}
+                        </button>
+                        <div class="admin-only">
+                            <button class="btn btn-primary">
+                                <i class="icon fa fa-code" aria-hidden="true"></i>
+                                {{#str}} embed, local_lor {{/str}}
+                            </button>
+                            <button class="btn btn-primary">
+                                <i class="icon fa fa-edit" aria-hidden="true"></i>
+                                {{#str}} edit {{/str}}
+                            </button>
+                            <button class="btn btn-primary">
+                                <i class="icon fa fa-trash" aria-hidden="true"></i>
+                                {{#str}} delete {{/str}}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            {{{display}}}
+        </div>
+    </div>
+</div>

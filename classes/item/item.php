@@ -8,6 +8,7 @@ class item {
 
     const TABLE = 'local_lor_item';
 
+
     public static function get(int $id) {
         global $DB;
         return $DB->get_record(self::TABLE, ['id' => $id]);

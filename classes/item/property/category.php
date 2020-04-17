@@ -1,8 +1,8 @@
 <?php
 
-namespace local_lor\item;
+namespace local_lor\item\property;
 
-class categories implements editable_property {
+class category implements editable_property {
 
     const TABLE = 'local_lor_category';
     const LINKING_TABLE = 'local_lor_item_categories';
@@ -29,9 +29,11 @@ class categories implements editable_property {
      *
      * @param \stdClass $data
      * @return bool
+     * @throws \dml_exception
      */
     public static function create(\stdClass $data) {
-        return true;
+        global $DB;
+        return $DB->insert_record(self::TABLE, (object) ['name' => $data->name]);
     }
 
     /**
@@ -40,9 +42,12 @@ class categories implements editable_property {
      * @param int $id
      * @param \stdClass $data
      * @return bool
+     * @throws \dml_exception
      */
     public static function update(int $id, \stdClass $data) {
-        return true;
+        global $DB;
+        $data->id = $id;
+        return $DB->update_record(self::TABLE, $data);
     }
 
     /**
@@ -50,12 +55,38 @@ class categories implements editable_property {
      *
      * @param int $id
      * @return bool
+     * @throws \dml_exception
      */
     public static function delete(int $id) {
-        return true;
+        global $DB;
+        return $DB->delete_records(self::TABLE, ['id' => $id])
+            && $DB->delete_records(self::LINKING_TABLE, ['categoryid' => $id]);
     }
 
     public static function save_item_form(int $itemid, \stdClass $data) {
         // TODO: Implement save_item_form() method.
+    }
+
+    /**
+     * Get all categories
+     *
+     * @return array
+     * @throws \dml_exception
+     */
+    public static function get_all() {
+        global $DB;
+        return $DB->get_records(self::TABLE);
+    }
+
+    /**
+     * Get a single category
+     *
+     * @param int $id The ID of the category
+     * @return mixed
+     * @throws \dml_exception
+     */
+    public static function get(int $id) {
+        global $DB;
+        return $DB->get_record(self::TABLE, ['id' => $id]);
     }
 }

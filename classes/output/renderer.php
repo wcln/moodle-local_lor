@@ -8,18 +8,6 @@ use plugin_renderer_base;
 
 class renderer extends plugin_renderer_base {
 
-    public function render_content($page) {
-        $data = $page->export_for_template($this);
-
-        return parent::render_from_template('local_lor/content', $data);
-    }
-
-    public function render_insert_link($page) {
-        $data = $page->export_for_template($this);
-
-        return parent::render_from_template('local_lor/insert_link', $data);
-    }
-
     /**
      * Render the item view page
      *
@@ -30,5 +18,29 @@ class renderer extends plugin_renderer_base {
     public function render_item_view($page) {
         $data = $page->export_for_template($this);
         return parent::render_from_template('local_lor/item_view', $data);
+    }
+
+    /**
+     * Render the list of categories on the settings page
+     *
+     * @param $page
+     * @return bool|string
+     * @throws \moodle_exception
+     */
+    public function render_category_list($page) {
+        $data = $page->export_for_template($this);
+        return parent::render_from_template('local_lor/category_list', $data);
+    }
+
+    /**
+     * Render the list of grades on the settings page
+     *
+     * @param $page
+     * @return bool|string
+     * @throws \moodle_exception
+     */
+    public function render_grade_list($page) {
+        $data = $page->export_for_template($this);
+        return parent::render_from_template('local_lor/grade_list', $data);
     }
 }

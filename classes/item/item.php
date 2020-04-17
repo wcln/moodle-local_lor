@@ -3,8 +3,12 @@
 namespace local_lor\item;
 
 use dml_exception;
-use local_lor\contributors\contributors;
 use local_lor\form\item_form;
+use local_lor\item\property\category;
+use local_lor\item\property\contributor;
+use local_lor\item\property\data;
+use local_lor\item\property\grade;
+use local_lor\item\property\topic;
 
 class item {
 
@@ -21,10 +25,11 @@ class item {
         global $DB;
 
         $item               = $DB->get_record(self::TABLE, ['id' => $id]);
-        $item->categories   = categories::get_item_categories($id);
-        $item->contributors = contributors::get_item_contributors($id);
-        $item->grades       = grades::get_item_grades($id);
-        $item->topics       = topics::get_item_topics($id);
+        $item->categories   = category::get_item_data($id);
+        $item->contributors = contributor::get_item_data($id);
+        $item->grades       = grade::get_item_data($id);
+        $item->topics       = topic::get_item_data($id);
+        $item->data         = data::get_item_data($id);
 
         return $item;
     }

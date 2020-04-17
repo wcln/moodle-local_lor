@@ -1,8 +1,8 @@
 <?php
 
-namespace local_lor\item;
+namespace local_lor\item\property;
 
-class topics implements noneditable_property {
+class topic implements noneditable_property {
 
     const TABLE = 'local_lor_topic';
     const LINKING_TABLE = 'local_lor_item_topics';
@@ -17,7 +17,7 @@ class topics implements noneditable_property {
     public static function get_item_data(int $itemid) {
         global $DB;
         return $DB->get_records_sql(sprintf("
-            SELECT t.id, t.topic
+            SELECT t.id, t.name
             FROM {%s} t
             JOIN {%s} it ON it.topicid = t.id
             WHERE it.itemid = :itemid

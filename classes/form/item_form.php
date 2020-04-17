@@ -23,8 +23,8 @@ class item_form extends \moodleform {
         $mform->addElement('text', 'test1', 'FROM BASE FORM');
 
         // Add type specific elements to the form
-        $mform->addElement('header', 'type_specific', 'Type specific settings');
         $type_class = item::get_type_class($this->_customdata['type']);
+        $mform->addElement('header', 'type_header', get_string('type_header', 'local_lor', $type_class::get_name()));
         $type_class::add_to_form($mform);
 
         $this->add_action_buttons();

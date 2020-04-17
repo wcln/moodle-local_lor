@@ -1,7 +1,7 @@
 <?php
 
 // General.
-$string['pluginname'] = "WCLN Learning Object Repository";
+$string['pluginname'] = "WCLN Learning resources";
 $string['lor:insert'] = "Add new items to the WCLN Learning Object Repository";
 $string['lor:edit']   = "Edit items in the WCLN Learning Object Repository";
 
@@ -73,7 +73,6 @@ $string['save']          = "Save";
 $string['delete']        = "Delete";
 $string['heading_edit']  = 'Editing \'{$a->title}\'';
 $string['error_no_item'] = 'Error: No item is set.';
-$string['type_header']   = '{$a->name} Specific Settings';
 $string['edit_server']   = '{$a->name} specific settings are not yet incorporated on this form. To edit {$a->name} files, access the server and manually replace the files corresponding with the ID {$a->id}.';
 $string['image_help']    = 'Leave blank to use the current preview image. If you upload a new image, it will overwrite the existing image. Remember to choose an image that scales well to 200x150px.';
 
@@ -116,3 +115,29 @@ $string['grades']       = 'Grades';
 $string['topics']       = 'Topics';
 $string['contributors'] = 'Contributors';
 $string['date_created'] = 'Date created';
+
+$string['type_header']              = '{$a} specific settings';
+$string['general_settings']         = 'General';
+$string['item_properties_settings'] = 'Item property settings';
+$string['add_category_link']        = '+ Add category';
+$string['add_grade_link']           = '+ Add grade';
+$string['category_list_heading']    = 'Categories';
+$string['grade_list_heading']       = 'Grades';
+$string['category_list_desc']       = 'These are categories which an item can have. Items can have more than one category. These categories will be
+visible to users when they are searching for items, and will be shown when viewing items.';
+$string['grade_list_desc']          = 'These are grades which an item can have. Items can have more than one grade. These grades will be 
+visible to users when they are searching for items, and will be shown when viewing items.';
+
+$string['manage_category']         = 'Manage category';
+$string['manage_grade']            = 'Manage grade';
+$string['category_delete_confirm'] = 'Are you sure you want to delete the category \'{$a}\'. This category will be removed from all items. No items will be deleted.';
+$string['grade_delete_confirm']    = 'Are you sure you want to delete the grade \'{$a}\'. This grade will be removed from all items. No items will be deleted.';
+$string['plugin_settings']         = 'Plugin settings';
+$string['category_delete_success'] = 'Category deleted successfully!';
+$string['grade_delete_success']    = 'Grade deleted successfully!';
+$string['category_name']           = 'Category name';
+$string['grade_name']              = 'Grade name';
+$string['category_save_success']   = 'Category saved successfully!';
+$string['grade_save_success']      = 'Grade saved successfully!';
+$string['no_categories']           = 'No categories yet';
+$string['no_grades']               = 'No grades yet';

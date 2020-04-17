@@ -1,0 +1,15 @@
+{{!
+    List of existing grades on the settings page
+
+    @template local_lor/grade_list
+}}
+<div class="local_lor_grade_list">
+    <p>{{#str}} grade_list_desc, local_lor {{/str}}</p>
+    {{#grades}}
+        <p>{{name}} {{{edit_link}}}{{{delete_link}}}</p>
+    {{/grades}}
+    {{^grades}}
+        <p><i>{{#str}} no_grades, local_lor {{/str}}</i></p>
+    {{/grades}}
+    <p><a href="{{{add_url}}}">{{#str}} add_grade_link, local_lor {{/str}}</a></p>
+</div>

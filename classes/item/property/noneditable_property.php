@@ -1,6 +1,6 @@
 <?php
 
-namespace local_lor\item;
+namespace local_lor\item\property;
 
 interface noneditable_property {
 

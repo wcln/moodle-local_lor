@@ -1,11 +1,11 @@
 <?php
 
-namespace local_lor\item;
+namespace local_lor\item\property;
 
 use dml_exception;
 use stdClass;
 
-class contributors implements noneditable_property {
+class contributor implements noneditable_property {
 
     const TABLE = 'local_lor_item_contributors';
 

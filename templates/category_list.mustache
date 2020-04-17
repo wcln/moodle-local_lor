@@ -1,0 +1,15 @@
+{{!
+    List of existing categories on the settings page
+
+    @template local_lor/category_list
+}}
+<div class="local_lor_category_list">
+    <p>{{#str}} category_list_desc, local_lor {{/str}}</p>
+    {{#categories}}
+        <p>{{name}} {{{edit_link}}}{{{delete_link}}}</p>
+    {{/categories}}
+    {{^categories}}
+        <p><i>{{#str}} no_categories, local_lor {{/str}}</i></p>
+    {{/categories}}
+    <p><a href="{{{add_url}}}">{{#str}} add_category_link, local_lor {{/str}}</a></p>
+</div>

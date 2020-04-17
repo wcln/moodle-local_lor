@@ -1,6 +1,6 @@
 <?php
 
-namespace local_lor\item;
+namespace local_lor\item\property;
 
 interface editable_property {
 
@@ -13,5 +13,9 @@ interface editable_property {
     public static function delete(int $id);
 
     public static function save_item_form(int $itemid, \stdClass $data);
+
+    public static function get_all();
+
+    public static function get(int $id);
 
 }

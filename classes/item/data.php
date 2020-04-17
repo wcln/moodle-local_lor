@@ -2,7 +2,7 @@
 
 namespace local_lor\item;
 
-class data {
+class data implements noneditable_property {
 
     const TABLE = 'local_lor_item_data';
 
@@ -18,4 +18,7 @@ class data {
         return $DB->get_records_menu(self::TABLE, ['itemid' => $itemid], null, 'name,value');
     }
 
+    public static function save_item_form(int $itemid, \stdClass $data) {
+        // TODO: Implement save_item_form() method.
+    }
 }

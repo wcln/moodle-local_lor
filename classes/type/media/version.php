@@ -2,8 +2,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2020041000;
-$plugin->requires  = 2016112900;
+$plugin->version   = 2020041700;
+$plugin->requires  = 2019111802; // Moodle 3.8.2+
 $plugin->component = 'lortype_media';
 $plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = '1.0.0';
+$plugin->release   = '3.8.2';

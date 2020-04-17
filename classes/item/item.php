@@ -2,16 +2,31 @@
 
 namespace local_lor\item;
 
+use dml_exception;
+use local_lor\contributors\contributors;
 use local_lor\form\item_form;
 
 class item {
 
     const TABLE = 'local_lor_item';
 
-
+    /**
+     * Get all item details
+     *
+     * @param int $id
+     * @return mixed
+     * @throws dml_exception
+     */
     public static function get(int $id) {
         global $DB;
-        return $DB->get_record(self::TABLE, ['id' => $id]);
+
+        $item               = $DB->get_record(self::TABLE, ['id' => $id]);
+        $item->categories   = categories::get_item_categories($id);
+        $item->contributors = contributors::get_item_contributors($id);
+        $item->grades       = grades::get_item_grades($id);
+        $item->topics       = topics::get_item_topics($id);
+
+        return $item;
     }
 
     /**
@@ -20,7 +35,7 @@ class item {
      * @param string $type
      * @param null $itemid
      * @return item_form
-     * @throws \dml_exception
+     * @throws dml_exception
      */
     public static function get_form(string $type, $itemid = null) {
 
@@ -32,7 +47,7 @@ class item {
             global $DB;
             $item = $DB->get_record(self::TABLE, ['id' => $itemid]);
             $data = data::get_item_data($itemid);
-            $form->set_data((object) array_merge((array) $item, (array) $data));
+            $form->set_data((object)array_merge((array)$item, (array)$data));
             return $form;
         }
     }
@@ -42,7 +57,7 @@ class item {
      *
      * @param int $itemid
      * @return mixed
-     * @throws \dml_exception
+     * @throws dml_exception
      */
     public static function get_type(int $itemid) {
         global $DB;

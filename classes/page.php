@@ -27,6 +27,7 @@ class page {
         $PAGE->set_url($url);
         $PAGE->set_title($title);
         $PAGE->set_heading($heading);
+        $PAGE->set_pagelayout('admin');
     }
 
     /**

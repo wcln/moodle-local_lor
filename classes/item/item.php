@@ -14,6 +14,9 @@ class item {
 
     const TABLE = 'local_lor_item';
 
+    const SORT_RECENT = 'recent';
+    const SORT_ALPHABETICAL = 'alphabetical';
+
     /**
      * Get all item details
      *
@@ -110,4 +113,101 @@ class item {
     public static function delete(int $itemid) {
         return true;
     }
+
+    /**
+     * Search for items by filtering all items
+     *
+     * @param string $keywords
+     * @param string $type
+     * @param array $categories
+     * @param array $grades
+     * @param string $sort
+     * @return array
+     * @throws \moodle_exception
+     * @throws dml_exception
+     */
+    public static function search(string $keywords = '', string $type = '', array $categories = [], array $grades = [], $sort = self::SORT_RECENT) {
+        global $DB;
+
+        // Determine what sorting we are using
+        $orderby = null;
+        if ($sort === self::SORT_RECENT) {
+            $orderby = 'timecreated ASC';
+        } else if ($sort === self::SORT_ALPHABETICAL) {
+            $orderby = 'name ASC';
+        } else {
+            print_error('error_uknown_sort', 'local_lor');
+        }
+
+        // Get the pre-sorted items
+        $items = $DB->get_records(self::TABLE, null, $orderby);
+
+        if (! empty($type)) {
+            $items = self::filter_by_type($items, $type);
+        }
+
+        if (! empty($categories)) {
+            $items = self::filter_by_category($items, $categories);
+        }
+
+        if (! empty($grades)) {
+            $items = self::filter_by_grade($items, $grades);
+        }
+
+        return $items;
+    }
+
+    /**
+     * Filter an array of items by type
+     *
+     * @param array $items
+     * @param string $type
+     * @return array
+     */
+    private static function filter_by_type(array $items, string $type) {
+        return array_filter($items, function($item) use ($type) {
+            return (string) $type === (string) $item->type;
+        });
+    }
+
+    /**
+     * Filter an array of items by category
+     *
+     * @param array $items
+     * @param array $categories
+     * @return array
+     */
+    private static function filter_by_category(array $items, array $categories) {
+        return array_filter($items, function($item) use ($categories) {
+            $item_categories = category::get_item_data($item->id);
+            foreach ($item_categories as $category) {
+                if (in_array($category, $categories)) {
+                    return true;
+                }
+            }
+
+            return false;
+        });
+    }
+
+    /**
+     * Filter an array of items by grade
+     *
+     * @param array $items
+     * @param array $grades
+     * @return array
+     */
+    private static function filter_by_grade(array $items, array $grades) {
+        return array_filter($items, function($item) use ($grades) {
+            $item_grades = grade::get_item_data($item->id);
+            foreach ($item_grades as $grade) {
+                if (in_array($grade, $grades)) {
+                    return true;
+                }
+            }
+
+            return false;
+        });
+    }
+
 }

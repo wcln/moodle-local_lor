@@ -141,3 +141,10 @@ $string['category_save_success']   = 'Category saved successfully!';
 $string['grade_save_success']      = 'Grade saved successfully!';
 $string['no_categories']           = 'No categories yet';
 $string['no_grades']               = 'No grades yet';
+$string['error_uknown_sort']       = 'Unknown sort parameter passed to search function';
+
+$string['search_title']   = 'Learning resources';
+$string['search_heading'] = 'Learning resources';
+
+$string['none']         = 'None';
+$string['item_details'] = 'Item details';

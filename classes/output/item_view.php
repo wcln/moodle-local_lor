@@ -2,7 +2,7 @@
 
 namespace local_lor\output;
 
-use local_lor\item\data;
+use dml_exception;
 use local_lor\item\item;
 use renderable;
 use renderer_base;
@@ -20,15 +20,26 @@ class item_view implements renderable, templatable {
     /**
      * Export this data so it can be used as the context for a mustache template.
      *
+     * @param renderer_base $output
      * @return stdClass
-     * @throws \dml_exception
+     * @throws dml_exception
+     * @throws \coding_exception
      */
     public function export_for_template(renderer_base $output) {
-        $item = (array) item::get($this->itemid);
-        $item_data = data::get_item_data($this->itemid);
+        $item = item::get($this->itemid);
 
-        $data = array_merge($item, $item_data);
+        $implode_format = function ($array) {
+            return (empty($array)) ?
+                get_string('none', 'local_lor') : implode(',', array_column($array, 'name'));
+        };
 
-        return $data;
+        $item->categories   = $implode_format($item->categories);
+        $item->grades       = $implode_format($item->grades);
+        $item->topics       = $implode_format($item->topics);
+        $item->contributors = $implode_format($item->contributors);
+
+        $item->timecreated = userdate($item->timecreated, get_string('strftimedate', 'langconfig'));
+
+        return $item;
     }
 }

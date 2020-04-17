@@ -7,7 +7,7 @@
     <div class="container-fluid">
         <div class="thumbnail">
             <div class="caption">
-                <h3>Details</h3>
+                <h3>{{#str}} item_details, local_lor {{/str}}</h3>
                 <table class="table">
                     <tbody>
                     <tr>
@@ -28,7 +28,7 @@
                     </tr>
                     <tr>
                         <th>{{#str}} date_created, local_lor {{/str}}</th>
-                        <td>{{date_created}}</td>
+                        <td>{{timecreated}}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -61,6 +61,7 @@
     </div>
     <div class="item-display text-center">
         <p>Display here</p>
+        <!-- TODO display the item -->
         {{{display}}}
     </div>
 </div>

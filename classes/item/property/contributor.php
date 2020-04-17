@@ -19,7 +19,7 @@ class contributor implements noneditable_property {
     public static function get_item_data(int $itemid) {
         global $DB;
         return $DB->get_records_sql(sprintf("
-            SELECT u.id, u.firstname, u.lastname
+            SELECT u.id, u.firstname, u.lastname, u.lastnamephonetic, u.firstnamephonetic, u.middlename, u.alternatename
             FROM {user} u
             JOIN {%s} ic ON ic.userid = u.id
             WHERE ic.itemid = :itemid

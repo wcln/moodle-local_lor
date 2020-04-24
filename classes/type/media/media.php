@@ -88,17 +88,28 @@ class media
         $success = true;
 
         foreach (self::PROPERTIES as $property) {
-            $record = [
-                'itemid' => $itemid,
-                'name'   => $property,
-                'value'  => $data->{$property},
-            ];
+            if ($existing_record = $DB->get_record_select(
+                data::TABLE,
+                "itemid = :itemid AND name LIKE :name",
+                [
+                    'itemid' => $itemid,
+                    'name'   => $property,
+                ]
+            )
+            ) {
+                $record = [
+                    'id'     => $existing_record,
+                    'itemid' => $itemid,
+                    'name'   => $property,
+                    'value'  => $data->{$property},
+                ];
 
-            $success = $success
-                       && $DB->update_record(
-                    data::TABLE,
-                    (object)$record
-                );
+                $success = $success
+                           && $DB->update_record(
+                        data::TABLE,
+                        (object)$record
+                    );
+            }
         }
 
         return $success;

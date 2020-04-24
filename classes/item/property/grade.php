@@ -63,7 +63,20 @@ class grade implements editable_property
 
     public static function save_item_form(int $itemid, stdClass $data)
     {
-        // TODO: Implement save_item_form() method.
+        global $DB;
+
+        self::delete_for_item($itemid);
+
+        foreach ($data->grades as $gradeid) {
+              $DB->insert_record(
+                    self::LINKING_TABLE,
+                    (object)[
+                        'itemid'  => $itemid,
+                        'gradeid' => $gradeid,
+                    ],
+                    false
+                );
+        }
     }
 
     /**
@@ -102,5 +115,12 @@ class grade implements editable_property
         global $DB;
 
         return $DB->get_record(self::TABLE, ['id' => $id]);
+    }
+
+    public static function delete_for_item(int $itemid)
+    {
+        global $DB;
+
+        return $DB->delete_records(self::LINKING_TABLE, ['itemid' => $itemid]);
     }
 }

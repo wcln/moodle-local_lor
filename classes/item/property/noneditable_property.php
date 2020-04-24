@@ -11,4 +11,6 @@ interface noneditable_property
 
     public static function save_item_form(int $itemid, stdClass $data);
 
+    public static function delete_for_item(int $itemid);
+
 }

@@ -6,7 +6,6 @@ use dml_exception;
 use local_lor\form\item_form;
 use local_lor\item\property\category;
 use local_lor\item\property\contributor;
-use local_lor\item\property\data;
 use local_lor\item\property\grade;
 use local_lor\item\property\topic;
 use local_lor\type\type;
@@ -19,6 +18,14 @@ class item
 
     const SORT_RECENT = 'recent';
     const SORT_ALPHABETICAL = 'alphabetical';
+
+    const PROPERTIES
+        = [
+            category::class,
+            contributor::class,
+            grade::class,
+            topic::class,
+        ];
 
     /**
      * Get all item details
@@ -53,7 +60,7 @@ class item
      */
     public static function get_form(string $type, $itemid = null)
     {
-        $form = new item_form(null, ['type' => $type]);
+        $form = new item_form(null, ['type' => $type, 'id' => $itemid]);
 
         if (empty($itemid)) {
             return $form;
@@ -104,8 +111,11 @@ class item
             'timemodified' => time(),
         ];
 
-        // Create the item, and call the type specific create func. as well
+
+        // Create the item, and call the type specific create func. as well as property funcs.
         if ($itemid = $DB->insert_record(self::TABLE, (object)$item)) {
+            self::save_properties($itemid, $data);
+
             $type_class = type::get_class($data->type);
 
             return $type_class::create($itemid, $data);
@@ -137,7 +147,9 @@ class item
         ];
 
         // Update the item, and call the type specific update func. as well
-        if ($itemid = $DB->update_record(self::TABLE, (object)$item)) {
+        if ($DB->update_record(self::TABLE, (object)$item)) {
+            self::save_properties($itemid, $data);
+
             $type_class = type::get_class($data->type);
 
             return $type_class::update($itemid, $data);
@@ -158,8 +170,9 @@ class item
     {
         global $DB;
 
-        return $DB->delete_records(self::TABLE, ['id' => $itemid])
-               && (type::get_class(self::get_type($itemid)))::delete($itemid);
+        $DB->delete_records(self::TABLE, ['id' => $itemid])
+        && (type::get_class(self::get_type($itemid)))::delete($itemid)
+        && self::delete_properties($itemid);
     }
 
     /**
@@ -280,6 +293,43 @@ class item
                 return false;
             }
         );
+    }
+
+    /**
+     * Save all item properties
+     *
+     * @param int $itemid
+     * @param     $data
+     *
+     * @return bool
+     */
+    private static function save_properties(int $itemid, $data)
+    {
+        $result = true;
+
+        foreach (self::PROPERTIES as $property) {
+            $result = $result && $property::save_item_form($itemid, $data);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Delete all item properties
+     *
+     * @param int $itemid
+     *
+     * @return bool
+     */
+    private static function delete_properties(int $itemid)
+    {
+        $result = true;
+
+        foreach (self::PROPERTIES as $property) {
+            $result = $result && $property::delete_for_item($itemid);
+        }
+
+        return $result;
     }
 
 }

@@ -38,7 +38,20 @@ class contributor implements noneditable_property
 
     public static function save_item_form(int $itemid, stdClass $data)
     {
-        // TODO: Implement save_item_form() method.
+        global $DB;
+
+        self::delete_for_item($itemid);
+
+        foreach ($data->contributors as $userid) {
+            $DB->insert_record(
+                self::TABLE,
+                (object)[
+                    'itemid' => $itemid,
+                    'userid' => $userid,
+                ],
+                false
+            );
+        }
     }
 
     public static function get_form_options()
@@ -51,5 +64,12 @@ class contributor implements noneditable_property
             'lastname ASC, firstname ASC',
             'id, CONCAT(firstname, \' \', lastname) as fullname'
         );
+    }
+
+    public static function delete_for_item(int $itemid)
+    {
+        global $DB;
+
+        return $DB->delete_records(self::TABLE, ['itemid' => $itemid]);
     }
 }

@@ -26,6 +26,9 @@ class item_form extends moodleform
 
         $mform = $this->_form;
 
+        $mform->addElement('hidden', 'id', isset($this->_customdata['id']) ? $this->_customdata['id'] : 0);
+        $mform->setType('id', PARAM_INT);
+
         $mform->addElement(
             'header',
             'general',

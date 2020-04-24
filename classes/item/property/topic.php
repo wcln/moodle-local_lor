@@ -40,6 +40,54 @@ class topic implements noneditable_property
 
     public static function save_item_form(int $itemid, stdClass $data)
     {
-        // TODO: Implement save_item_form() method.
+        global $DB;
+
+        self::delete_for_item($itemid);
+
+        $topics = explode(',', $data->topics);
+        foreach ($topics as $topic) {
+            if ($existing_topic = self::get_topic($topic)) {
+                $DB->insert_record(
+                    self::LINKING_TABLE,
+                    (object)[
+                        'itemid'  => $itemid,
+                        'topicid' => $existing_topic->id,
+                    ],
+                    false
+                );
+            } else {
+                if ($topicid = $DB->insert_record(
+                    self::TABLE,
+                    (object)['name' => $topic]
+                )
+                ) {
+                    $DB->insert_record(
+                        self::LINKING_TABLE,
+                        (object)[
+                            'itemid'  => $itemid,
+                            'topicid' => $topicid,
+                        ]
+                    );
+                }
+            }
+        }
+    }
+
+    public static function delete_for_item(int $itemid)
+    {
+        global $DB;
+
+        return $DB->delete_records(self::LINKING_TABLE, ['itemid' => $itemid]);
+    }
+
+    private static function get_topic(string $topic)
+    {
+        global $DB;
+
+        return $DB->get_record_select(
+            self::TABLE,
+            'name LIKE :topic',
+            ['topic' => $topic]
+        );
     }
 }

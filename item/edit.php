@@ -23,13 +23,12 @@ $PAGE->navbar->add(get_string('edit_title', 'local_lor'), $page_url);
 
 $renderer = page::get_renderer();
 
-echo $renderer->header();
-
 $form = item::get_form($item->type, $itemid);
 
 if ($form->is_cancelled()) {
     redirect($return_url);
 } else {
+
     if ($form_data = $form->get_data()) {
         if (item::update($itemid, $form_data)) {
             redirect($return_url, get_string('edit_success', 'local_lor'));
@@ -37,6 +36,7 @@ if ($form->is_cancelled()) {
             print_error('edit_error', 'local_lor', $return_url);
         }
     } else {
+        echo $renderer->header();
         $form->display();
     }
 }

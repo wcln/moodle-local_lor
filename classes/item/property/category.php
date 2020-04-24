@@ -91,7 +91,20 @@ class category implements editable_property
 
     public static function save_item_form(int $itemid, stdClass $data)
     {
-        // TODO: Implement save_item_form() method.
+        global $DB;
+
+        self::delete_for_item($itemid);
+
+        foreach ($data->categories as $categoryid) {
+            $DB->insert_record(
+                self::LINKING_TABLE,
+                (object)[
+                    'itemid'     => $itemid,
+                    'categoryid' => $categoryid,
+                ],
+                false
+            );
+        }
     }
 
     /**
@@ -133,5 +146,12 @@ class category implements editable_property
         global $DB;
 
         return $DB->get_record(self::TABLE, ['id' => $id]);
+    }
+
+    public static function delete_for_item(int $itemid)
+    {
+        global $DB;
+
+        return $DB->delete_records(self::LINKING_TABLE, ['itemid' => $itemid]);
     }
 }

@@ -2,6 +2,9 @@
 
 namespace local_lor\plugininfo;
 
-class lortype extends \core\plugininfo\base {
+use core\plugininfo\base;
+
+class lortype extends base
+{
     // Nothing to do here...
 }

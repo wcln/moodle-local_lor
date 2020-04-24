@@ -27,11 +27,11 @@ $renderer = page::get_renderer();
 $form = item::get_form($item->type, $itemid);
 
 if ($confirm) {
-    if (! confirm_sesskey()) {
+    if ( ! confirm_sesskey()) {
         print_error('error_sesskey', 'local_lor', $return_url);
     }
 
-    if (! item::delete($itemid)) {
+    if ( ! item::delete($itemid)) {
         print_error('delete_error', 'local_lor');
     }
 
@@ -42,7 +42,7 @@ if ($confirm) {
     $options = [
         'sesskey' => sesskey(),
         'id'      => $itemid,
-        'confirm' => true
+        'confirm' => true,
     ];
 
     echo $renderer->confirm(

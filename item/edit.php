@@ -7,7 +7,7 @@ require_once(__DIR__ . '/../../../config.php');
 
 $itemid = required_param('id', PARAM_INT);
 
-$item       = item::get($itemid);
+$item = item::get($itemid);
 
 $page_url   = new moodle_url('/local/lor/item/edit.php', ['id' => $itemid]);
 $return_url = new moodle_url('/local/lor/index.php');
@@ -29,14 +29,16 @@ $form = item::get_form($item->type, $itemid);
 
 if ($form->is_cancelled()) {
     redirect($return_url);
-} else if ($form_data = $form->get_data()) {
-    if (item::update($itemid, $form_data)) {
-        redirect($return_url, get_string('edit_success', 'local_lor'));
-    } else {
-        print_error('edit_error', 'local_lor', $return_url);
-    }
 } else {
-    $form->display();
+    if ($form_data = $form->get_data()) {
+        if (item::update($itemid, $form_data)) {
+            redirect($return_url, get_string('edit_success', 'local_lor'));
+        } else {
+            print_error('edit_error', 'local_lor', $return_url);
+        }
+    } else {
+        $form->display();
+    }
 }
 
 echo $renderer->footer();

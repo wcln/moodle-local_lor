@@ -2,7 +2,8 @@
 
 namespace local_lor\type;
 
-interface type {
+interface type
+{
 
     public static function get_name();
 

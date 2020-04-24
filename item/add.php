@@ -29,14 +29,16 @@ $form = item::get_form($type);
 
 if ($form->is_cancelled()) {
     redirect($return_url);
-} else if ($form_data = $form->get_data()) {
-    if (item::create($form_data)) {
-        redirect($return_url, get_string('add_success', 'local_lor'));
-    } else {
-        print_error('add_error', 'local_lor', $return_url);
-    }
 } else {
-    $form->display();
+    if ($form_data = $form->get_data()) {
+        if (item::create($form_data)) {
+            redirect($return_url, get_string('add_success', 'local_lor'));
+        } else {
+            print_error('add_error', 'local_lor', $return_url);
+        }
+    } else {
+        $form->display();
+    }
 }
 
 echo $renderer->footer();

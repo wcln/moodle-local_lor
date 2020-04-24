@@ -9,6 +9,8 @@ class video
 {
     use type;
 
+    const PROPERTIES = ['videoid'];
+
     public static function get_name()
     {
         return get_string('type_name', 'lortype_video');
@@ -26,7 +28,60 @@ class video
 
     public static function add_to_form(&$item_form)
     {
-        $item_form->addElement('text', 'test', 'Test video element');
-        $item_form->setType('test', PARAM_TEXT);
+        $item_form->addElement(
+            'text',
+            'videoid',
+            get_string('videoid', 'lortype_video')
+        );
+        $item_form->setType('videoid', PARAM_TEXT);
+        $item_form->addRule('videoid', get_string('required'), 'required');
+        $item_form->addHelpButton('videoid', 'videoid', 'lortype_video');
     }
+
+    public static function create($itemid, $data)
+    {
+        global $DB;
+
+        $success = true;
+
+        foreach (self::PROPERTIES as $property) {
+            $record = [
+                'itemid' => $itemid,
+                'name'   => $property,
+                'value'  => $data->{$property},
+            ];
+
+            $success = $success
+                       && $DB->insert_record(
+                    data::TABLE,
+                    (object)$record
+                );
+        }
+
+        return $success;
+    }
+
+    public static function update($itemid, $data)
+    {
+        global $DB;
+
+        $success = true;
+
+        foreach (self::PROPERTIES as $property) {
+            $record = [
+                'itemid' => $itemid,
+                'name'   => $property,
+                'value'  => $data->{$property},
+            ];
+
+            $success = $success
+                       && $DB->update_record(
+                    data::TABLE,
+                    (object)$record
+                );
+        }
+
+        return $success;
+    }
+
 }

@@ -9,6 +9,7 @@ use local_lor\item\property\contributor;
 use local_lor\item\property\data;
 use local_lor\item\property\grade;
 use local_lor\item\property\topic;
+use local_lor\type\type;
 use moodle_exception;
 
 class item
@@ -87,11 +88,30 @@ class item
      *
      * @param $data
      *
-     * @return bool
+     * @return bool True on success, false on failure
+     * @throws dml_exception
      */
     public static function create($data)
     {
-        return true;
+        global $DB;
+
+        $item = [
+            'name'         => $data->name,
+            'type'         => $data->type,
+            'description'  => $data->description['text'],
+            'image'        => null, // TODO
+            'timecreated'  => time(),
+            'timemodified' => time(),
+        ];
+
+        // Create the item, and call the type specific create func. as well
+        if ($itemid = $DB->insert_record(self::TABLE, (object)$item)) {
+            $type_class = type::get_class($data->type);
+
+            return $type_class::create($itemid, $data);
+        }
+
+        return false;
     }
 
     /**
@@ -101,10 +121,29 @@ class item
      * @param     $data
      *
      * @return bool
+     * @throws dml_exception
      */
     public static function update(int $itemid, $data)
     {
-        return true;
+        global $DB;
+
+        $item = [
+            'id'           => $itemid,
+            'name'         => $data->name,
+            'type'         => $data->type,
+            'description'  => $data->description['text'],
+            'image'        => null, // TODO
+            'timemodified' => time(),
+        ];
+
+        // Update the item, and call the type specific update func. as well
+        if ($itemid = $DB->update_record(self::TABLE, (object)$item)) {
+            $type_class = type::get_class($data->type);
+
+            return $type_class::update($itemid, $data);
+        }
+
+        return false;
     }
 
     /**
@@ -113,10 +152,14 @@ class item
      * @param int $itemid
      *
      * @return bool
+     * @throws dml_exception
      */
     public static function delete(int $itemid)
     {
-        return true;
+        global $DB;
+
+        return $DB->delete_records(self::TABLE, ['id' => $itemid])
+               && (type::get_class(self::get_type($itemid)))::delete($itemid);
     }
 
     /**

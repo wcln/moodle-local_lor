@@ -1,11 +1,11 @@
 <?php
 
-namespace local_lor\item\property;
+namespace local_lor\item;
 
 use dml_exception;
 use stdClass;
 
-class data implements noneditable_property
+class data
 {
 
     const TABLE = 'local_lor_item_data';
@@ -30,8 +30,4 @@ class data implements noneditable_property
         );
     }
 
-    public static function save_item_form(int $itemid, stdClass $data)
-    {
-        // TODO: Implement save_item_form() method.
-    }
 }

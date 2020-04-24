@@ -150,7 +150,7 @@ $string['none']                   = 'None';
 $string['item_details']           = 'Item details';
 $string['item_name']              = 'Name';
 $string['item_name_help']         = 'This is the title of the learning resource, and will be shown on the search page.';
-$string['item_description']       = 'Item description';
+$string['item_description']       = 'Description';
 $string['item_description_help']  = 'This field is optional. If you want to add more details to describe this item, write them here. 
 This description will be shown when a user is viewing a item within the learning resources plugin.';
 $string['item_image']             = 'Preview image';

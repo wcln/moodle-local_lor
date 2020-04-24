@@ -36,7 +36,7 @@ class item_form extends \moodleform {
         $mform->addHelpButton('description', 'item_description', 'local_lor');
 
         // Preview image
-        $mform->addElement('filemanager', 'image', get_string('item_image', 'local_lor'));
+        $mform->addElement('filemanager', 'image', get_string('item_image', 'local_lor'), null, ['maxfiles' => 1, 'accepted_types' => ['.jpg', '.png', '.jpeg']]);
         $mform->addHelpButton('image', 'item_image', 'local_lor');
         $mform->addRule('image', get_string('required'), 'required');
 

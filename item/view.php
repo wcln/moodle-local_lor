@@ -11,7 +11,7 @@ $itemid = required_param('id', PARAM_INT);
 $item = item::get($itemid);
 
 $page_url   = new moodle_url('/local/lor/item/view.php', ['id' => $itemid]);
-$return_url = new moodle_url('/local/lor/item/view.php');
+$return_url = new moodle_url('/local/lor/view.php');
 
 page::set_up($page_url, $item->name, $item->name);
 

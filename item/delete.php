@@ -11,7 +11,7 @@ $confirm = optional_param('confirm', false, PARAM_BOOL);
 $item = item::get($itemid);
 
 $page_url   = new moodle_url('/local/lor/item/delete.php', ['id' => $itemid]);
-$return_url = new moodle_url('/local/lor/item/index.php');
+$return_url = new moodle_url('/local/lor/index.php');
 
 page::set_up(
     $page_url,

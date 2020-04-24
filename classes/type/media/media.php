@@ -21,5 +21,6 @@ class media implements type {
 
     public static function add_to_form(&$item_form) {
         $item_form->addElement('text', 'test', 'Test element');
+        $item_form->setType('test', PARAM_TEXT);
     }
 }

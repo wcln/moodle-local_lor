@@ -146,5 +146,20 @@ $string['error_uknown_sort']       = 'Unknown sort parameter passed to search fu
 $string['search_title']   = 'Learning resources';
 $string['search_heading'] = 'Learning resources';
 
-$string['none']         = 'None';
-$string['item_details'] = 'Item details';
+$string['none']                   = 'None';
+$string['item_details']           = 'Item details';
+$string['item_name']              = 'Name';
+$string['item_name_help']         = 'This is the title of the learning resource, and will be shown on the search page.';
+$string['item_description']       = 'Item description';
+$string['item_description_help']  = 'This field is optional. If you want to add more details to describe this item, write them here. 
+This description will be shown when a user is viewing a item within the learning resources plugin.';
+$string['item_image']             = 'Preview image';
+$string['item_image_help']        = 'The preview image will be shown on the learning resources search page.';
+$string['item_categories']        = 'Categories';
+$string['item_categories_help']   = 'Choose which categories best represent this resource. You must choose at least one category.';
+$string['item_grades']            = 'Grade(s)';
+$string['item_grades_help']       = 'Select which grades this resource can be used by.';
+$string['item_contributors']      = 'Contributor(s)';
+$string['item_contributors_help'] = 'Search a list of WCLN site users, and select yourself and anyone else who helped to create this resource.';
+$string['item_topics']            = 'Topics';
+$string['item_topics_help']       = 'Enter comma separated topics / keywords that will help people search for this resource';

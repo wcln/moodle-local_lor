@@ -24,6 +24,7 @@ class grade_form extends moodleform {
 
         $mform->addElement('text', 'name', get_string('grade_name', 'local_lor'));
         $mform->setType('name', PARAM_TEXT);
+        $mform->addRule('name', get_string('required'), 'required');
 
         $this->add_action_buttons();
     }

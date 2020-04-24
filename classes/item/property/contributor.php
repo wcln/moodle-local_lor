@@ -29,4 +29,9 @@ class contributor implements noneditable_property {
     public static function save_item_form(int $itemid, stdClass $data) {
         // TODO: Implement save_item_form() method.
     }
+
+    public static function get_form_options() {
+        global $DB;
+        return $DB->get_records_menu('user', null, 'lastname ASC, firstname ASC', 'id, CONCAT(firstname, \' \', lastname) as fullname');
+    }
 }

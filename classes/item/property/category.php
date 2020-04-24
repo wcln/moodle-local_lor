@@ -2,6 +2,9 @@
 
 namespace local_lor\item\property;
 
+use dml_exception;
+use stdClass;
+
 class category implements editable_property {
 
     const TABLE = 'local_lor_category';
@@ -11,11 +14,13 @@ class category implements editable_property {
      * Get categories for this item
      *
      * @param int $itemid
+     *
      * @return array of objects containing category ID and name properties
-     * @throws \dml_exception
+     * @throws dml_exception
      */
     public static function get_item_data(int $itemid) {
         global $DB;
+
         return $DB->get_records_sql(sprintf("
             SELECT c.id, c.name
             FROM {%s} c
@@ -27,26 +32,30 @@ class category implements editable_property {
     /**
      * Create a category (from settings page)
      *
-     * @param \stdClass $data
+     * @param stdClass $data
+     *
      * @return bool
-     * @throws \dml_exception
+     * @throws dml_exception
      */
-    public static function create(\stdClass $data) {
+    public static function create(stdClass $data) {
         global $DB;
-        return $DB->insert_record(self::TABLE, (object) ['name' => $data->name]);
+
+        return $DB->insert_record(self::TABLE, (object)['name' => $data->name]);
     }
 
     /**
      * Update a category (from settings page)
      *
      * @param int $id
-     * @param \stdClass $data
+     * @param stdClass $data
+     *
      * @return bool
-     * @throws \dml_exception
+     * @throws dml_exception
      */
-    public static function update(int $id, \stdClass $data) {
+    public static function update(int $id, stdClass $data) {
         global $DB;
         $data->id = $id;
+
         return $DB->update_record(self::TABLE, $data);
     }
 
@@ -54,16 +63,19 @@ class category implements editable_property {
      * Delete a category (from settings page)
      *
      * @param int $id
+     *
      * @return bool
-     * @throws \dml_exception
+     * @throws dml_exception
      */
     public static function delete(int $id) {
         global $DB;
+
         return $DB->delete_records(self::TABLE, ['id' => $id])
-            && $DB->delete_records(self::LINKING_TABLE, ['categoryid' => $id]);
+            && $DB->delete_records(self::LINKING_TABLE,
+                ['categoryid' => $id]);
     }
 
-    public static function save_item_form(int $itemid, \stdClass $data) {
+    public static function save_item_form(int $itemid, stdClass $data) {
         // TODO: Implement save_item_form() method.
     }
 
@@ -71,22 +83,37 @@ class category implements editable_property {
      * Get all categories
      *
      * @return array
-     * @throws \dml_exception
+     * @throws dml_exception
      */
     public static function get_all() {
         global $DB;
+
         return $DB->get_records(self::TABLE);
+    }
+
+    /**
+     * Get all categories as assoc. array id => name
+     *
+     * @return array
+     * @throws dml_exception
+     */
+    public static function get_all_menu() {
+        global $DB;
+
+        return $DB->get_records_menu(self::TABLE, null, 'name ASC', 'id,name');
     }
 
     /**
      * Get a single category
      *
      * @param int $id The ID of the category
+     *
      * @return mixed
-     * @throws \dml_exception
+     * @throws dml_exception
      */
     public static function get(int $id) {
         global $DB;
+
         return $DB->get_record(self::TABLE, ['id' => $id]);
     }
 }

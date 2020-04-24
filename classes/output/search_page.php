@@ -31,6 +31,8 @@ class search_page implements renderable, templatable
     {
         $data = new stdClass();
 
+        $data->add_item_url = new moodle_url('/local/lor/item/add.php');
+
         $data->items = array_values(item::search());
 
         foreach ($data->items as $item) {

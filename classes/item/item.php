@@ -83,18 +83,6 @@ class item
     }
 
     /**
-     * Get the path to the item type class
-     *
-     * @param string $type
-     *
-     * @return string
-     */
-    public static function get_type_class(string $type)
-    {
-        return "local_lor\\type\\$type\\$type";
-    }
-
-    /**
      * Create a new LOR item
      *
      * @param $data

@@ -103,26 +103,26 @@ $string['deleteitems']
 $string['type:media']            = 'Game/media';
 $string['subplugintype_lortype'] = 'LOR Item type';
 
-$string['add_heading'] = 'Add a new media item';
-$string['add_title']   = 'Add an item';
-$string['add_success'] = 'The item was added successfully!';
-$string['add_error']   = 'The item could not be created.';
+$string['add_heading'] = 'Add a new resource';
+$string['add_title']   = 'Add a resource';
+$string['add_success'] = 'The resource was added successfully!';
+$string['add_error']   = 'The resource could not be created.';
 
 $string['edit_heading']  = 'Editing: {$a}';
-$string['edit_title']    = 'Edit an item';
-$string['edit_success']  = 'The item was saved successfully!';
-$string['edit_error']    = 'The item failed to update.';
+$string['edit_title']    = 'Edit a resource';
+$string['edit_success']  = 'The resource was saved successfully!';
+$string['edit_error']    = 'The resource failed to update.';
 $string['error_sesskey'] = 'Invalid session key!';
 
 $string['delete_heading'] = 'Deleting: {$a}';
-$string['delete_title']   = 'Delete an item';
-$string['delete_success'] = 'Item deleted successfully!';
+$string['delete_title']   = 'Delete a resource';
+$string['delete_success'] = 'Resource deleted successfully!';
 $string['delete_error']
-                          = 'An error occurred while trying to delete the item.';
+                          = 'An error occurred while trying to delete the resource.';
 $string['delete_confirm']
-                          = 'Are you sure you want to permanently delete the item \'{$a}\'?';
+                          = 'Are you sure you want to permanently delete the resource \'{$a}\'?';
 
-$string['view_title'] = 'View an item';
+$string['view_title'] = 'View a resource';
 
 $string['lor_page']     = 'Learning resouces';
 $string['related']      = 'Related';
@@ -136,15 +136,15 @@ $string['date_created'] = 'Date created';
 
 $string['type_header']              = '{$a} specific settings';
 $string['general_settings']         = 'General';
-$string['item_properties_settings'] = 'Item property settings';
+$string['item_properties_settings'] = 'Resource property settings';
 $string['add_category_link']        = '+ Add category';
 $string['add_grade_link']           = '+ Add grade';
 $string['category_list_heading']    = 'Categories';
 $string['grade_list_heading']       = 'Grades';
-$string['category_list_desc']       = 'These are categories which an item can have. Items can have more than one category. These categories will be
-visible to users when they are searching for items, and will be shown when viewing items.';
-$string['grade_list_desc']          = 'These are grades which an item can have. Items can have more than one grade. These grades will be 
-visible to users when they are searching for items, and will be shown when viewing items.';
+$string['category_list_desc']       = 'These are categories which a resource can have. Resources can have more than one category. These categories will be
+visible to users when they are searching for resources, and will be shown when viewing resources.';
+$string['grade_list_desc']          = 'These are grades which a resource can have. Resources can have more than one grade. These grades will be 
+visible to users when they are searching for resources, and will be shown when viewing resources.';
 
 $string['manage_category']         = 'Manage category';
 $string['manage_grade']            = 'Manage grade';
@@ -191,3 +191,6 @@ $string['item_topics']           = 'Topics';
 $string['item_topics_help']
                                  = 'Enter comma separated topics / keywords that will help people search for this resource';
 $string['add_item_link']         = '+ Add resource';
+$string['item_type']             = 'Resource type';
+$string['type_form_help']
+                                 = 'Select the type of resource you would like to add, then click \'Next\'.';

@@ -2,10 +2,10 @@
 
 namespace local_lor\form;
 
-use local_lor\item\item;
 use local_lor\item\property\category;
 use local_lor\item\property\contributor;
 use local_lor\item\property\grade;
+use local_lor\type\type;
 use moodleform;
 
 require_once($CFG->libdir . '/formslib.php');
@@ -105,7 +105,9 @@ class item_form extends moodleform
         $mform->setDefault('contributors', $USER->id);
 
         // Add type specific elements to the form
-        $type_class = item::get_type_class($this->_customdata['type']);
+        $mform->addElement('hidden', 'type', $this->_customdata['type']);
+        $mform->setType('type', PARAM_TEXT);
+        $type_class = type::get_class($this->_customdata['type']);
         $mform->addElement(
             'header',
             'type_header',

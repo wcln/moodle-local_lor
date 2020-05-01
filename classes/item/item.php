@@ -300,18 +300,12 @@ class item
      *
      * @param  int  $itemid
      * @param     $data
-     *
-     * @return bool
      */
     private static function save_properties(int $itemid, $data)
     {
-        $result = true;
-
         foreach (self::PROPERTIES as $property) {
-            $result = $result && $property::save_item_form($itemid, $data);
+            $property::save_item_form($itemid, $data);
         }
-
-        return $result;
     }
 
     /**

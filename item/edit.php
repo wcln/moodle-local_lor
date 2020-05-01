@@ -3,7 +3,7 @@
 use local_lor\item\item;
 use local_lor\page;
 
-require_once(__DIR__ . '/../../../config.php');
+require_once(__DIR__.'/../../../config.php');
 
 $itemid = required_param('id', PARAM_INT);
 
@@ -28,7 +28,6 @@ $form = item::get_form($item->type, $itemid);
 if ($form->is_cancelled()) {
     redirect($return_url);
 } else {
-
     if ($form_data = $form->get_data()) {
         if (item::update($itemid, $form_data)) {
             redirect($return_url, get_string('edit_success', 'local_lor'));
@@ -37,6 +36,11 @@ if ($form->is_cancelled()) {
         }
     } else {
         echo $renderer->header();
+        $item->categories   = array_keys($item->categories);
+        $item->contributors = array_keys($item->contributors);
+        $item->grades       = array_keys($item->grades);
+        $item->topics       = implode(',', array_column($item->topics, 'name'));
+        $form->set_data($item);
         $form->display();
     }
 }

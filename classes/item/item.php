@@ -172,8 +172,11 @@ class item
     {
         global $DB;
 
+        // Make sure we grab the type before the item is deleted
+        $type = self::get_type($itemid);
+
         $DB->delete_records(self::TABLE, ['id' => $itemid])
-        && (type::get_class(self::get_type($itemid)))::delete($itemid)
+        && (type::get_class($type))::delete($itemid)
         && self::delete_properties($itemid);
     }
 

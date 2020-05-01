@@ -37,4 +37,7 @@
     .local_lor_search_page .search-results {
       display: flex; } }
 
+.local_lor_item_view iframe {
+  border: none; }
+
 /*# sourceMappingURL=styles.css.map */

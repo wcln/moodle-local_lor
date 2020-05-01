@@ -5,6 +5,7 @@ namespace local_lor\output;
 use coding_exception;
 use dml_exception;
 use local_lor\item\item;
+use local_lor\type\type;
 use moodle_exception;
 use moodle_url;
 use renderable;
@@ -25,7 +26,7 @@ class item_view implements renderable, templatable
     /**
      * Export this data so it can be used as the context for a mustache template.
      *
-     * @param renderer_base $output
+     * @param  renderer_base  $output
      *
      * @return stdClass
      * @throws dml_exception
@@ -69,7 +70,7 @@ class item_view implements renderable, templatable
             get_string('strftimedate', 'langconfig')
         );
 
-        $item->edit_url = new moodle_url(
+        $item->edit_url   = new moodle_url(
             '/local/lor/item/edit.php',
             ['id' => $item->id]
         );
@@ -77,6 +78,9 @@ class item_view implements renderable, templatable
             '/local/lor/item/delete.php',
             ['id' => $item->id]
         );
+
+        $type_class    = type::get_class(item::get_type($item->id));
+        $item->display = $type_class::get_display_html($item->id);
 
         return $item;
     }

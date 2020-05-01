@@ -2,6 +2,7 @@
 
 namespace local_lor\type\media;
 
+use html_writer;
 use local_lor\item\data;
 use local_lor\type\type;
 
@@ -18,12 +19,18 @@ class media
 
     public static function get_embed_html($itemid)
     {
-        $data = data::get_item_data($itemid);
+        return html_writer::tag('p', self::get_display_html($itemid), ['align' => 'center']);
     }
 
     public static function get_display_html($itemid)
     {
-        // TODO: Implement get_display_html() method.
+        $item_data = data::get_item_data($itemid);
+
+        return html_writer::tag('iframe', null, [
+            'width'  => $item_data['height'],
+            'height' => $item_data['height'],
+            'src'    => $item_data['url'],
+        ]);
     }
 
     public static function add_to_form(&$item_form)
@@ -97,7 +104,6 @@ class media
                 ]
             )
             ) {
-
                 $record = [
                     'id'     => $existing_record->id,
                     'itemid' => $itemid,

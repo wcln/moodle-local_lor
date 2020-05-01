@@ -12,6 +12,7 @@ $item = item::get($itemid);
 $page_url   = new moodle_url('/local/lor/item/edit.php', ['id' => $itemid]);
 $return_url = new moodle_url('/local/lor/index.php');
 
+$context = context_system::instance();
 page::set_up(
     $page_url,
     get_string('edit_title', 'local_lor'),
@@ -47,6 +48,12 @@ if ($form->is_cancelled()) {
         $item->grades       = array_keys($item->grades);
         $item->topics       = implode(',', array_column($item->topics, 'name'));
 
+        // Load the preview image to show on the form
+        $draftitemid = file_get_submitted_draft_itemid('image');
+        file_prepare_draft_area($draftitemid, $context->id, 'local_lor', 'preview_image', $item->id);
+        $item->image = $draftitemid;
+
+        // Send data to the form, and display the form
         $form->set_data($item);
         $form->display();
     }

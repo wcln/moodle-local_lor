@@ -137,6 +137,10 @@ class item
     {
         global $DB;
 
+        // Save the preview image
+        $context = \context_system::instance();
+        file_save_draft_area_files($data->image, $context->id, 'local_lor', 'preview_image', $itemid);
+
         $item = [
             'id'           => $itemid,
             'name'         => $data->name,

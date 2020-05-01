@@ -165,7 +165,6 @@ class item
      *
      * @param  int  $itemid
      *
-     * @return bool
      * @throws dml_exception
      */
     public static function delete(int $itemid)

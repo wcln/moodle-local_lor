@@ -8,7 +8,7 @@ use local_lor\item\property\grade;
 use local_lor\type\type;
 use moodleform;
 
-require_once($CFG->libdir . '/formslib.php');
+require_once($CFG->libdir.'/formslib.php');
 
 defined('MOODLE_INTERNAL') || die;
 
@@ -49,7 +49,8 @@ class item_form extends moodleform
         $mform->addElement(
             'editor',
             'description',
-            get_string('item_description', 'local_lor')
+            get_string('item_description', 'local_lor'),
+            ['maxfiles' => 0, 'maxbytes' => 0, 'enable_filemanagement' => false]
         );
         $mform->addHelpButton('description', 'item_description', 'local_lor');
 

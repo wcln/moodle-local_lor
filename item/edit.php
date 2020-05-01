@@ -36,10 +36,17 @@ if ($form->is_cancelled()) {
         }
     } else {
         echo $renderer->header();
+
+        // Prepare data to send to the form
+        $item->description  = [
+            'text'   => $item->description,
+            'format' => FORMAT_HTML,
+        ];
         $item->categories   = array_keys($item->categories);
         $item->contributors = array_keys($item->contributors);
         $item->grades       = array_keys($item->grades);
         $item->topics       = implode(',', array_column($item->topics, 'name'));
+
         $form->set_data($item);
         $form->display();
     }

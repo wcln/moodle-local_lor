@@ -328,4 +328,39 @@ class item
         return $result;
     }
 
+    /**
+     * Get the item image URL
+     *
+     * This is used for the item's preview image
+     *
+     * @param $itemid
+     *
+     * @param  string  $filearea
+     *
+     * @return bool|string
+     * @throws dml_exception
+     */
+    public static function get_image_url($itemid, $filearea = 'preview_image') {
+        global $DB;
+
+        $file= $DB->get_record_select('files', "component = :component AND filearea = :filearea AND itemid = :itemid AND filesize > 0", [
+            'component' => 'local_lor',
+            'filearea' => $filearea,
+            'itemid' => $itemid
+        ]);
+
+        if (! $file) {
+            return false;
+        }
+
+        return \moodle_url::make_pluginfile_url(
+            $file->contextid,
+            $file->component,
+            $file->filearea,
+            $file->itemid,
+            $file->filepath,
+            $file->filename
+        )->out();
+    }
+
 }

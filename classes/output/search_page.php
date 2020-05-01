@@ -21,7 +21,7 @@ class search_page implements renderable, templatable
     /**
      * Export this data so it can be used as the context for a mustache template.
      *
-     * @param renderer_base $output
+     * @param  renderer_base  $output
      *
      * @return stdClass
      * @throws moodle_exception
@@ -40,6 +40,8 @@ class search_page implements renderable, templatable
                 '/local/lor/item/view.php',
                 ['id' => $item->id]
             );
+
+            $item->image = item::get_image_url($item->id);
         }
 
         return $data;

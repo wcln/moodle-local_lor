@@ -106,7 +106,6 @@ class item
             'name'         => $data->name,
             'type'         => $data->type,
             'description'  => $data->description['text'],
-            'image'        => null, // TODO
             'timecreated'  => time(),
             'timemodified' => time(),
         ];
@@ -146,7 +145,6 @@ class item
             'name'         => $data->name,
             'type'         => $data->type,
             'description'  => $data->description['text'],
-            'image'        => null, // TODO
             'timemodified' => time(),
         ];
 

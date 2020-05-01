@@ -97,8 +97,9 @@ class media
                 ]
             )
             ) {
+
                 $record = [
-                    'id'     => $existing_record,
+                    'id'     => $existing_record->id,
                     'itemid' => $itemid,
                     'name'   => $property,
                     'value'  => $data->{$property},

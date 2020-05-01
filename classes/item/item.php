@@ -30,7 +30,7 @@ class item
     /**
      * Get all item details
      *
-     * @param int $id
+     * @param  int  $id
      *
      * @return mixed
      * @throws dml_exception
@@ -52,8 +52,8 @@ class item
     /**
      * Get the moodle form used to create/edit a LOR item
      *
-     * @param string $type
-     * @param null   $itemid
+     * @param  string  $type
+     * @param  null  $itemid
      *
      * @return item_form
      * @throws dml_exception
@@ -77,7 +77,7 @@ class item
     /**
      * Get the type of an item
      *
-     * @param int $itemid
+     * @param  int  $itemid
      *
      * @return mixed
      * @throws dml_exception
@@ -127,7 +127,7 @@ class item
     /**
      * Update an existing LOR item
      *
-     * @param int $itemid
+     * @param  int  $itemid
      * @param     $data
      *
      * @return bool
@@ -161,7 +161,7 @@ class item
     /**
      * Delete an existing LOR item
      *
-     * @param int $itemid
+     * @param  int  $itemid
      *
      * @return bool
      * @throws dml_exception
@@ -178,11 +178,11 @@ class item
     /**
      * Search for items by filtering all items
      *
-     * @param string $keywords
-     * @param string $type
-     * @param array  $categories
-     * @param array  $grades
-     * @param string $sort
+     * @param  string  $keywords
+     * @param  string  $type
+     * @param  array  $categories
+     * @param  array  $grades
+     * @param  string  $sort
      *
      * @return array
      * @throws moodle_exception
@@ -230,8 +230,8 @@ class item
     /**
      * Filter an array of items by type
      *
-     * @param array  $items
-     * @param string $type
+     * @param  array  $items
+     * @param  string  $type
      *
      * @return array
      */
@@ -248,8 +248,8 @@ class item
     /**
      * Filter an array of items by category
      *
-     * @param array $items
-     * @param array $categories
+     * @param  array  $items
+     * @param  array  $categories
      *
      * @return array
      */
@@ -273,8 +273,8 @@ class item
     /**
      * Filter an array of items by grade
      *
-     * @param array $items
-     * @param array $grades
+     * @param  array  $items
+     * @param  array  $grades
      *
      * @return array
      */
@@ -298,7 +298,7 @@ class item
     /**
      * Save all item properties
      *
-     * @param int $itemid
+     * @param  int  $itemid
      * @param     $data
      *
      * @return bool
@@ -317,7 +317,7 @@ class item
     /**
      * Delete all item properties
      *
-     * @param int $itemid
+     * @param  int  $itemid
      *
      * @return bool
      */

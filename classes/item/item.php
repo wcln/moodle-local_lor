@@ -2,6 +2,7 @@
 
 namespace local_lor\item;
 
+use context_system;
 use dml_exception;
 use local_lor\form\item_form;
 use local_lor\item\property\category;
@@ -10,6 +11,7 @@ use local_lor\item\property\grade;
 use local_lor\item\property\topic;
 use local_lor\type\type;
 use moodle_exception;
+use moodle_url;
 
 class item
 {
@@ -110,9 +112,9 @@ class item
             'timemodified' => time(),
         ];
 
-
         // Create the item, and call the type specific create func. as well as property funcs.
         if ($itemid = $DB->insert_record(self::TABLE, (object)$item)) {
+            self::save_image($itemid, $data->image);
             self::save_properties($itemid, $data);
 
             $type_class = type::get_class($data->type);
@@ -136,9 +138,7 @@ class item
     {
         global $DB;
 
-        // Save the preview image
-        $context = \context_system::instance();
-        file_save_draft_area_files($data->image, $context->id, 'local_lor', 'preview_image', $itemid);
+        self::save_image($itemid, $data->image);
 
         $item = [
             'id'           => $itemid,
@@ -342,20 +342,22 @@ class item
      * @return bool|string
      * @throws dml_exception
      */
-    public static function get_image_url($itemid, $filearea = 'preview_image') {
+    public static function get_image_url($itemid, $filearea = 'preview_image')
+    {
         global $DB;
 
-        $file= $DB->get_record_select('files', "component = :component AND filearea = :filearea AND itemid = :itemid AND filesize > 0", [
-            'component' => 'local_lor',
-            'filearea' => $filearea,
-            'itemid' => $itemid
-        ]);
+        $file = $DB->get_record_select('files',
+            "component = :component AND filearea = :filearea AND itemid = :itemid AND filesize > 0", [
+                'component' => 'local_lor',
+                'filearea'  => $filearea,
+                'itemid'    => $itemid,
+            ]);
 
-        if (! $file) {
+        if ( ! $file) {
             return false;
         }
 
-        return \moodle_url::make_pluginfile_url(
+        return moodle_url::make_pluginfile_url(
             $file->contextid,
             $file->component,
             $file->filearea,
@@ -363,6 +365,20 @@ class item
             $file->filepath,
             $file->filename
         )->out();
+    }
+
+    /**
+     * Save an image
+     *
+     * @param $itemid
+     * @param $image
+     *
+     * @throws dml_exception
+     */
+    private static function save_image($itemid, $image, $filearea = 'preview_image')
+    {
+        $context = context_system::instance();
+        file_save_draft_area_files($image, $context->id, 'local_lor', $filearea, $itemid);
     }
 
 }

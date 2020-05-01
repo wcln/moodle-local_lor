@@ -40,9 +40,6 @@ if (empty($type)) {
         redirect($return_url);
     } else {
 
-        echo $renderer->header();
-        echo $renderer->heading(get_string('add_heading', 'local_lor'));
-
         if ($form_data = $form->get_data()) {
             if (item::create($form_data)) {
                 redirect($return_url, get_string('add_success', 'local_lor'));
@@ -50,6 +47,8 @@ if (empty($type)) {
                 print_error('add_error', 'local_lor', $return_url);
             }
         } else {
+            echo $renderer->header();
+            echo $renderer->heading(get_string('add_heading', 'local_lor'));
             $form->display();
         }
     }

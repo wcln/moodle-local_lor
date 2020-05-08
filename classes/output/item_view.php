@@ -4,6 +4,7 @@ namespace local_lor\output;
 
 use coding_exception;
 use dml_exception;
+use local_lor\helper;
 use local_lor\item\item;
 use local_lor\type\type;
 use moodle_exception;
@@ -37,22 +38,9 @@ class item_view implements renderable, templatable
     {
         $item = item::get($this->itemid);
 
-        $implode_format = function ($array) {
-            return (empty($array))
-                ?
-                get_string('none', 'local_lor')
-                : implode(
-                    ',',
-                    array_column(
-                        $array,
-                        'name'
-                    )
-                );
-        };
-
-        $item->categories = $implode_format($item->categories);
-        $item->grades     = $implode_format($item->grades);
-        $item->topics     = $implode_format($item->topics);
+        $item->categories = helper::implode_format($item->categories);
+        $item->grades     = helper::implode_format($item->grades);
+        $item->topics     = helper::implode_format($item->topics);
 
         array_map(
             function ($contributor) {
@@ -63,7 +51,7 @@ class item_view implements renderable, templatable
             $item->contributors
         );
 
-        $item->contributors = $implode_format($item->contributors);
+        $item->contributors = helper::implode_format($item->contributors);
 
         $item->timecreated = userdate(
             $item->timecreated,

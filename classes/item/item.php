@@ -97,10 +97,12 @@ class item
      *
      * @param $data
      *
+     * @param  null  $form The Moodle form
+     *
      * @return bool True on success, false on failure
      * @throws dml_exception
      */
-    public static function create($data)
+    public static function create($data, $form = null)
     {
         global $DB;
 
@@ -119,7 +121,7 @@ class item
 
             $type_class = type::get_class($data->type);
 
-            return $type_class::create($itemid, $data);
+            return $type_class::create($itemid, $data, $form);
         }
 
         return false;
@@ -131,10 +133,12 @@ class item
      * @param  int  $itemid
      * @param     $data
      *
+     * @param  null  $form The Moodle form
+     *
      * @return bool
      * @throws dml_exception
      */
-    public static function update(int $itemid, $data)
+    public static function update(int $itemid, $data, $form = null)
     {
         global $DB;
 
@@ -154,7 +158,7 @@ class item
 
             $type_class = type::get_class($data->type);
 
-            return $type_class::update($itemid, $data);
+            return $type_class::update($itemid, $data, $form);
         }
 
         return false;

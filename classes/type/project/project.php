@@ -3,10 +3,14 @@
 namespace local_lor\type\project;
 
 use context_system;
+use core\plugininfo\repository;
+use dml_exception;
+use html_writer;
 use local_lor\helper;
 use local_lor\item\data;
 use local_lor\item\item;
 use local_lor\type\type;
+use moodle_url;
 
 
 class project
@@ -16,7 +20,7 @@ class project
     const PROPERTIES = ['pdf', 'document'];
 
     /** @var string This is where the project files will be stored in the filesystem */
-    const STORAGE_DIR = '/repository/learning_resources/projects/';
+    const STORAGE_DIR = 'projects';
 
     /** @var string The prefix to append before the item ID and file type when saving files to the filesystem */
     const FILENAME_PREFIX = 'WCLN_Project_';
@@ -54,7 +58,14 @@ class project
 
     public static function get_display_html($itemid)
     {
-        return 'todo';
+        $item_data = data::get_item_data($itemid);
+        $filename  = $item_data['pdf'];
+
+        return html_writer::tag('embed', '', [
+            'src'    => \local_lor\repository::get_file_url(self::get_path_to_project_file($filename), $filename),
+            'width'  => '100%',
+            'height' => '700px',
+        ]);
     }
 
     public static function add_to_form(&$item_form)
@@ -83,29 +94,29 @@ class project
      * @param $form
      *
      * @return array[]
-     * @throws \dml_exception
+     * @throws dml_exception
      */
     private static function process_files(int $itemid, &$form)
     {
-        global $CFG;
-
-        $context = context_system::instance();
-//        file_save_draft_area_files('pdf', $context->id, 'local_lor', 'project', $itemid,
-//            ['maxbytes' => FILE_AREA_MAX_BYTES_UNLIMITED, 'maxfiles' => 1]);
-//        file_save_draft_area_files('document', $context->id, 'local_lor', 'project', $itemid,
-//            ['maxbytes' => FILE_AREA_MAX_BYTES_UNLIMITED, 'maxfiles' => 1]);
-
         $pdf_filename      = self::FILENAME_PREFIX.$itemid.'.pdf';
         $document_filename = self::FILENAME_PREFIX.$itemid.'.docx';
 
         return [
             'pdf'      => [
                 'filename' => $pdf_filename,
-                'success'  => $form->save_file('pdf', $CFG->dataroot.self::STORAGE_DIR.$pdf_filename, true),
+                'success'  => $form->save_file(
+                    'pdf',
+                    \local_lor\repository::get_path_to_repository().self::get_path_to_project_file($pdf_filename),
+                    true
+                ),
             ],
             'document' => [
                 'filename' => $document_filename,
-                'success'  => $form->save_file('document', $CFG->dataroot.self::STORAGE_DIR.$document_filename, true),
+                'success'  => $form->save_file(
+                    'document',
+                    \local_lor\repository::get_path_to_repository().self::get_path_to_project_file($document_filename),
+                    true
+                ),
             ],
         ];
     }
@@ -169,6 +180,18 @@ class project
         }
 
         return $success;
+    }
+
+    /**
+     * Get the path to the project file relative to the repository root
+     *
+     * @param $filename
+     *
+     * @return string
+     */
+    private static function get_path_to_project_file($filename)
+    {
+        return self::STORAGE_DIR."/".$filename;
     }
 
 

@@ -58,14 +58,25 @@ class project
 
     public static function get_display_html($itemid)
     {
-        $item_data = data::get_item_data($itemid);
-        $filename  = $item_data['pdf'];
+        $item_data         = data::get_item_data($itemid);
+        $pdf_filename      = $item_data['pdf'];
+        $document_filename = $item_data['document'];
 
-        return html_writer::tag('embed', '', [
-            'src'    => \local_lor\repository::get_file_url(self::get_path_to_project_file($filename), $filename),
+        $html = html_writer::tag('embed', '', [
+            'src'    => \local_lor\repository::get_file_url(self::get_path_to_project_file($pdf_filename),
+                $pdf_filename),
             'width'  => '100%',
             'height' => '700px',
         ]);
+
+        $html .= html_writer::tag('a', get_string('download_document', 'lortype_project'), [
+            'class'    => 'btn btn-default',
+            'download' => $document_filename,
+            'href'     => \local_lor\repository::get_file_url(self::get_path_to_project_file($document_filename),
+                $document_filename),
+        ]);
+
+        return $html;
     }
 
     public static function add_to_form(&$item_form)

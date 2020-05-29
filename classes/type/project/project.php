@@ -2,6 +2,7 @@
 
 namespace local_lor\type\project;
 
+use context_system;
 use local_lor\helper;
 use local_lor\item\data;
 use local_lor\item\item;
@@ -15,7 +16,7 @@ class project
     const PROPERTIES = ['pdf', 'document'];
 
     /** @var string This is where the project files will be stored in the filesystem */
-    const STORAGE_DIR = '/_LOR/projects/';
+    const STORAGE_DIR = '/repository/learning_resources/projects/';
 
     /** @var string The prefix to append before the item ID and file type when saving files to the filesystem */
     const FILENAME_PREFIX = 'WCLN_Project_';
@@ -59,21 +60,40 @@ class project
     public static function add_to_form(&$item_form)
     {
         // PDF (.pdf)
-        $item_form->addElement('filemanager', 'pdf', get_string('pdf', 'lortype_project'), null,
+        $item_form->addElement('filepicker', 'pdf', get_string('pdf', 'lortype_project'), null,
             ['maxfiles' => 1, 'accepted_types' => ['.pdf']]);
         $item_form->addHelpButton('pdf', 'pdf', 'lortype_project');
         $item_form->addRule('pdf', get_string('required'), 'required');
 
         // Document (.docx)
-        $item_form->addElement('filemanager', 'document', get_string('document', 'lortype_project'), null,
+        $item_form->addElement('filepicker', 'document', get_string('document', 'lortype_project'), null,
             ['maxfiles' => 1, 'accepted_types' => ['.docx']]);
         $item_form->addHelpButton('document', 'document', 'lortype_project');
         $item_form->addRule('document', get_string('required'), 'required');
     }
 
+    /**
+     * Save the project PDF and .docx to the filesystem
+     *
+     * - Specify class constant STORAGE_DIR where files are saved
+     * - Specify class constant FILENAME_PREFIX to change how the files are named
+     *      - Default is WCLN_Project_{Item_ID}.png/.docx
+     *
+     * @param  int  $itemid
+     * @param $form
+     *
+     * @return array[]
+     * @throws \dml_exception
+     */
     private static function process_files(int $itemid, &$form)
     {
         global $CFG;
+
+        $context = context_system::instance();
+//        file_save_draft_area_files('pdf', $context->id, 'local_lor', 'project', $itemid,
+//            ['maxbytes' => FILE_AREA_MAX_BYTES_UNLIMITED, 'maxfiles' => 1]);
+//        file_save_draft_area_files('document', $context->id, 'local_lor', 'project', $itemid,
+//            ['maxbytes' => FILE_AREA_MAX_BYTES_UNLIMITED, 'maxfiles' => 1]);
 
         $pdf_filename      = self::FILENAME_PREFIX.$itemid.'.pdf';
         $document_filename = self::FILENAME_PREFIX.$itemid.'.docx';
@@ -81,11 +101,11 @@ class project
         return [
             'pdf'      => [
                 'filename' => $pdf_filename,
-                'success'  => $form->save_file('pdf', $CFG->dirroot.self::STORAGE_DIR.$pdf_filename, true),
+                'success'  => $form->save_file('pdf', $CFG->dataroot.self::STORAGE_DIR.$pdf_filename, true),
             ],
             'document' => [
                 'filename' => $document_filename,
-                'success'  => $form->save_file('document', $CFG->dirroot.self::STORAGE_DIR.$document_filename, true),
+                'success'  => $form->save_file('document', $CFG->dataroot.self::STORAGE_DIR.$document_filename, true),
             ],
         ];
     }

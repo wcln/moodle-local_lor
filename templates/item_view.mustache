@@ -46,7 +46,7 @@
                         {{#str}} share, local_lor {{/str}}
                     </button>
                     <div class="admin-only">
-                        <button class="btn btn-primary">
+                        <button class="btn btn-primary" id="embed">
                             <i class="icon fa fa-code" aria-hidden="true"></i>
                             {{#str}} embed, local_lor {{/str}}
                         </button>
@@ -67,4 +67,6 @@
         <!-- Display the item -->
         {{{display}}}
     </div>
+
+    {{> local_lor/partial_embed_modal }}
 </div>

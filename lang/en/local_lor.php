@@ -199,3 +199,5 @@ $string['file_storage_info']
                                    = 'Some resource types store files such as PDF documents and Word documents in Moodle\'s file system repository. Follow the <a href="https://docs.moodle.org/38/en/File_system_repository">instructions</a> to configure a file system repository. Then, enter the name of your repository folder here.';
 $string['repository_setting']      = 'Repository name';
 $string['repository_setting_desc'] = 'The folder name of the repository you created in <i>moodledata/repository/</i>';
+$string['copy_to_clipboard']       = 'Copy to clipboard';
+$string['close_modal']             = 'Close';

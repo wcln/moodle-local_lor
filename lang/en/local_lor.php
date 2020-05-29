@@ -167,30 +167,35 @@ $string['error_uknown_sort']
 $string['search_title']   = 'Learning resources';
 $string['search_heading'] = 'Learning resources';
 
-$string['none']                  = 'None';
-$string['item_details']          = 'Item details';
-$string['item_name']             = 'Name';
+$string['none']                    = 'None';
+$string['item_details']            = 'Item details';
+$string['item_name']               = 'Name';
 $string['item_name_help']
-                                 = 'This is the title of the learning resource, and will be shown on the search page.';
-$string['item_description']      = 'Description';
-$string['item_description_help'] = 'This field is optional. If you want to add more details to describe this item, write them here. 
+                                   = 'This is the title of the learning resource, and will be shown on the search page.';
+$string['item_description']        = 'Description';
+$string['item_description_help']   = 'This field is optional. If you want to add more details to describe this item, write them here. 
 This description will be shown when a user is viewing a item within the learning resources plugin.';
-$string['item_image']            = 'Preview image';
+$string['item_image']              = 'Preview image';
 $string['item_image_help']
-                                 = 'The preview image will be shown on the learning resources search page.';
-$string['item_categories']       = 'Categories';
+                                   = 'The preview image will be shown on the learning resources search page.';
+$string['item_categories']         = 'Categories';
 $string['item_categories_help']
-                                 = 'Choose which categories best represent this resource. You must choose at least one category.';
-$string['item_grades']           = 'Grade(s)';
+                                   = 'Choose which categories best represent this resource. You must choose at least one category.';
+$string['item_grades']             = 'Grade(s)';
 $string['item_grades_help']
-                                 = 'Select which grades this resource can be used by.';
-$string['item_contributors']     = 'Contributor(s)';
+                                   = 'Select which grades this resource can be used by.';
+$string['item_contributors']       = 'Contributor(s)';
 $string['item_contributors_help']
-                                 = 'Search a list of WCLN site users, and select yourself and anyone else who helped to create this resource.';
-$string['item_topics']           = 'Topics';
+                                   = 'Search a list of WCLN site users, and select yourself and anyone else who helped to create this resource.';
+$string['item_topics']             = 'Topics';
 $string['item_topics_help']
-                                 = 'Enter comma separated topics / keywords that will help people search for this resource';
-$string['add_item_link']         = '+ Add resource';
-$string['item_type']             = 'Resource type';
+                                   = 'Enter comma separated topics / keywords that will help people search for this resource';
+$string['add_item_link']           = '+ Add resource';
+$string['item_type']               = 'Resource type';
 $string['type_form_help']
-                                 = 'Select the type of resource you would like to add, then click \'Next\'.';
+                                   = 'Select the type of resource you would like to add, then click \'Next\'.';
+$string['file_storage_heading']    = 'File storage';
+$string['file_storage_info']
+                                   = 'Some resource types store files such as PDF documents and Word documents in Moodle\'s file system repository. Follow the <a href="https://docs.moodle.org/38/en/File_system_repository">instructions</a> to configure a file system repository. Then, enter the name of your repository folder here.';
+$string['repository_setting']      = 'Repository name';
+$string['repository_setting_desc'] = 'The folder name of the repository you created in <i>moodledata/repository/</i>';

@@ -1,7 +1,8 @@
 <template>
     <div class="resources-index">
-        <h1>{{strings.search_title}}</h1>
+        <h1 class="title is-1">{{strings.search_title}}</h1>
         <p>This content is coming from a Vue component</p>
+        <button class="button is-dark">Click me</button>
     </div>
 </template>
 
@@ -10,7 +11,7 @@
 
     export default {
         name: "resources-index",
-        computed: mapState(['strings', 'resources'])
+        computed: mapState(['strings', 'resources']),
     }
 </script>
 

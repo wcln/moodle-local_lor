@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import { store } from './store';
 import resources from './components/resources'
+import './scss/main.scss';
 
 function init(contextid) {
     // We need to overwrite the variable for lazy loading.

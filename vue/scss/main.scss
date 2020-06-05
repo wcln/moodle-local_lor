@@ -1,0 +1,5 @@
+/* Only apply our styles to the Vue app div, otherwise all of Moodle will be affected */
+#local-lor-app {
+  /* Import the bulma CSS framework */
+  @import "../node_modules/bulma/bulma";
+}

@@ -1,0 +1,14 @@
+{
+  "name": "moodle-local_lor",
+  "version": "1.0.0",
+  "description": "WCLN Learning resources plugin",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "colin@perepelken.ca",
+  "license": "ISC",
+  "dependencies": {
+    "vue": "^2.6.11"
+  }
+}

@@ -201,3 +201,8 @@ $string['repository_setting']      = 'Repository name';
 $string['repository_setting_desc'] = 'The folder name of the repository you created in <i>moodledata/repository/</i>';
 $string['copy_to_clipboard']       = 'Copy to clipboard';
 $string['close_modal']             = 'Close';
+
+$string['home']          = 'Home';
+$string['next_page']     = 'Next page';
+$string['previous_page'] = 'Previous';
+$string['view']          = 'View';

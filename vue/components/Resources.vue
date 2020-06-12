@@ -1,5 +1,13 @@
 <template>
     <div class="resources-index">
+
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+            <ul>
+                <li><a href="/">{{strings.home}}</a></li>
+                <li class="is-active"><a href="#" aria-current="page">{{strings.search_title}}</a></li>
+            </ul>
+        </nav>
+
         <h1 class="title is-1">{{strings.search_title}}</h1>
 
         <div class="columns is-multiline">
@@ -9,8 +17,8 @@
         </div>
 
         <nav class="pagination" role="navigation" aria-label="pagination">
-            <a class="pagination-previous">Previous</a>
-            <a class="pagination-next">Next page</a>
+            <a class="pagination-previous">{{strings.previous_page}}</a>
+            <a class="pagination-next">{{strings.next_page}}</a>
             <ul class="pagination-list">
                 <li>
                     <a class="pagination-link" aria-label="Goto page 1">1</a>
@@ -47,18 +55,9 @@
         name: "resources-index",
         components: {ResourceCard},
         computed: mapState(['strings', 'resources']),
-        methods: {
-            getResources() {
-                this.$store.dispatch('fetchResources');
-            }
-        }
     }
 </script>
 
 <style scoped lang="scss">
-    .resources-index {
-        p {
-            color: red;
-        }
-    }
+
 </style>

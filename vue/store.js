@@ -12,6 +12,7 @@ export const store = new Vuex.Store({
         contextID: 0,
         strings: {},
         resources: [],
+        resource: {}
     },
     //strict: process.env.NODE_ENV !== 'production',
     mutations: {
@@ -20,6 +21,9 @@ export const store = new Vuex.Store({
         },
         setResources(state, ajaxdata) {
             state.resources = ajaxdata;
+        },
+        setResource(state, ajaxdata) {
+            state.resource = ajaxdata;
         },
         setStrings(state, strings) {
             state.strings = strings;
@@ -53,6 +57,10 @@ export const store = new Vuex.Store({
             const resources = await ajax('local_lor_get_resources', []);
             context.commit('setResources', resources);
         },
+        async fetchResource(context) {
+            const resource = await ajax('local_lor_get_resource', []);
+            context.commit('setResource', resource);
+        }
     }
 });
 

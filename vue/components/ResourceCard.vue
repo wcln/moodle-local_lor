@@ -13,22 +13,27 @@
                     </figure>
                 </div>
                 <div class="media-content">
-                    <p class="title is-5">{{ resource.name }}</p>
+                    <p class="title is-5">{{resource.name}}</p>
                 </div>
             </div>
             <div class="content" v-html="resource.description">
             </div>
         </div>
         <footer class="card-footer">
-            <a href="#" class="card-footer-item">View</a>
+            <router-link class="card-footer-item" :to="{ name: 'resource-view', params: { itemId: resource.id } }">
+                {{strings.view}}
+            </router-link>
         </footer>
     </div>
 </template>
 
 <script>
+    import {mapState} from "vuex";
+
     export default {
         name: "resource-card",
-        props: ['resource']
+        props: ['resource'],
+        computed: mapState(['strings']),
     }
 </script>
 

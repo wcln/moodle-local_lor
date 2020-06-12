@@ -42,6 +42,7 @@ class item
         global $DB;
 
         $item               = $DB->get_record(self::TABLE, ['id' => $id]);
+        $item->image        = self::get_image_url($id);
         $item->categories   = category::get_item_data($id);
         $item->contributors = contributor::get_item_data($id);
         $item->grades       = grade::get_item_data($id);
@@ -97,7 +98,7 @@ class item
      *
      * @param $data
      *
-     * @param  null  $form The Moodle form
+     * @param  null  $form  The Moodle form
      *
      * @return bool True on success, false on failure
      * @throws dml_exception
@@ -133,7 +134,7 @@ class item
      * @param  int  $itemid
      * @param     $data
      *
-     * @param  null  $form The Moodle form
+     * @param  null  $form  The Moodle form
      *
      * @return bool
      * @throws dml_exception
@@ -180,8 +181,8 @@ class item
         $type = self::get_type($itemid);
 
         return $DB->delete_records(self::TABLE, ['id' => $itemid])
-        && (type::get_class($type))::delete($itemid)
-        && self::delete_properties($itemid);
+               && (type::get_class($type))::delete($itemid)
+               && self::delete_properties($itemid);
     }
 
     /**

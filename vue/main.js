@@ -1,8 +1,9 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import { store } from './store';
-import resources from './components/Resources'
+import Resources from './components/Resources'
 import './scss/main.scss';
+import ResourceView from "./components/ResourceView";
 
 function init(contextid) {
     // We need to overwrite the variable for lazy loading.
@@ -18,7 +19,8 @@ function init(contextid) {
     // will not be called.
     const routes = [
         { path: '/', redirect: { name: 'resources-index' }},
-        { path: '/resources', component: resources, name: 'resources-index', meta: { title: 'search_title' }},
+        { path: '/resources', component: Resources, name: 'resources-index', meta: { title: 'search_title' } },
+        { path: '/resources/view/:itemId(\\d+)', component: ResourceView, name: 'resource-view', meta: { title: 'view_title' } }
     ];
 
     // base URL is /local/lor/index.php/

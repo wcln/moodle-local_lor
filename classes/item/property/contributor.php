@@ -25,7 +25,7 @@ class contributor implements noneditable_property
         return $DB->get_records_sql(
             sprintf(
                 "
-            SELECT u.id, u.firstname, u.lastname, u.lastnamephonetic, u.firstnamephonetic, u.middlename, u.alternatename
+            SELECT u.id, CONCAT(u.firstname, ' ', u.lastname) AS fullname
             FROM {user} u
             JOIN {%s} ic ON ic.userid = u.id
             WHERE ic.itemid = :itemid

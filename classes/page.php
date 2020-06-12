@@ -35,7 +35,7 @@ class page
         $PAGE->set_url($url);
         $PAGE->set_title($title);
         $PAGE->set_heading($heading);
-        $PAGE->set_pagelayout('admin');
+        $PAGE->set_pagelayout('base'); // No blocks, if you want blocks then change to 'standard'
     }
 
     /**

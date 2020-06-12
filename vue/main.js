@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import { store } from './store';
-import resources from './components/resources'
+import resources from './components/Resources'
 import './scss/main.scss';
 
 function init(contextid) {
@@ -12,6 +12,7 @@ function init(contextid) {
 
     store.commit('setContextID', contextid);
     store.dispatch('loadComponentStrings');
+    store.dispatch('fetchResources');
 
     // You have to use child routes if you use the same component. Otherwise the component's beforeRouteUpdate
     // will not be called.

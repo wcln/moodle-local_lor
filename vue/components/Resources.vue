@@ -1,6 +1,7 @@
 <template>
     <div class="resources-index">
 
+        <!-- Breadcrumbs -->
         <nav class="breadcrumb" aria-label="breadcrumbs">
             <ul>
                 <li><a href="/">{{strings.home}}</a></li>
@@ -8,14 +9,23 @@
             </ul>
         </nav>
 
+        <!-- Page title -->
         <h1 class="title is-1">{{strings.search_title}}</h1>
 
+        <!-- Search form -->
+
+
+        <!-- Add a resource button -->
+        <a class="button" href="/local/lor/item/add.php">{{strings.add_item_link}}</a>
+
+        <!-- Resources -->
         <div class="columns is-multiline">
             <div class="column is-one-fifth-desktop is-one-quarter-tablet" v-for="resource in resources">
                 <resource-card :resource="resource"></resource-card>
             </div>
         </div>
 
+        <!-- Pagination bar -->
         <nav class="pagination" role="navigation" aria-label="pagination">
             <a class="pagination-previous">{{strings.previous_page}}</a>
             <a class="pagination-next">{{strings.next_page}}</a>

@@ -1,6 +1,8 @@
 <?php
 
+use local_lor\helper;
 use local_lor\item\item;
+use local_lor\type\type;
 
 require_once("$CFG->libdir/externallib.php");
 
@@ -55,11 +57,24 @@ class api extends external_api
         $data = [];
         foreach ($item->data as $data_key => $data_value) {
             $data[] = [
-                'name' => $data_key,
-                'value' => $data_value
+                'name'  => $data_key,
+                'value' => $data_value,
             ];
         }
         $item->data = $data;
+
+        $item->categories   = helper::implode_format($item->categories);
+        $item->grades       = helper::implode_format($item->grades);
+        $item->topics       = helper::implode_format($item->topics);
+        $item->contributors = helper::implode_format($item->contributors, 'fullname');
+
+        $item->timecreated = userdate(
+            $item->timecreated,
+            get_string('strftimedate', 'langconfig')
+        );
+
+        $type_class    = type::get_class(item::get_type($item->id));
+        $item->display = $type_class::get_display_html($item->id);
 
         return $item;
     }
@@ -72,32 +87,13 @@ class api extends external_api
             'name'         => new external_value(PARAM_TEXT, 'Item name'),
             'image'        => new external_value(PARAM_TEXT, 'Item image'),
             'description'  => new external_value(PARAM_RAW, 'Item description'),
-            'timecreated'  => new external_value(PARAM_INT, 'Time created'),
+            'timecreated'  => new external_value(PARAM_TEXT, 'Time created'),
             'timemodified' => new external_value(PARAM_INT, 'Time modified'),
-            'categories'   => new external_multiple_structure(
-                new external_single_structure([
-                    'id'   => new external_value(PARAM_INT, 'Category ID'),
-                    'name' => new external_value(PARAM_TEXT, 'Category name'),
-                ])
-            ),
-            'contributors' => new external_multiple_structure(
-                new external_single_structure([
-                    'id'       => new external_value(PARAM_INT, 'Contributor user ID'),
-                    'fullname' => new external_value(PARAM_TEXT, 'Contributor full name'),
-                ])
-            ),
-            'grades'       => new external_multiple_structure(
-                new external_single_structure([
-                    'id'   => new external_value(PARAM_INT, 'Grade ID'),
-                    'name' => new external_value(PARAM_TEXT, 'Grade name'),
-                ])
-            ),
-            'topics'       => new external_multiple_structure(
-                new external_single_structure([
-                    'id'   => new external_value(PARAM_INT, 'Topic ID'),
-                    'name' => new external_value(PARAM_TEXT, 'Topic name'),
-                ])
-            ),
+            'categories'   => new external_value(PARAM_TEXT, 'Item categories'),
+            'contributors' => new external_value(PARAM_TEXT, 'Item contributors'),
+            'grades'       => new external_value(PARAM_TEXT, 'Item grades'),
+            'topics'       => new external_value(PARAM_TEXT, 'Item topics'),
+            'display'       => new external_value(PARAM_RAW, 'Item display HTML'),
             'data'         => new external_multiple_structure(
                 new external_single_structure([
                     'name'  => new external_value(PARAM_TEXT, 'Item data name'),

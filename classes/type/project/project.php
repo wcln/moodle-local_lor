@@ -66,15 +66,16 @@ class project
             'src'    => \local_lor\repository::get_file_url(self::get_path_to_project_file($pdf_filename),
                 $pdf_filename),
             'width'  => '100%',
-            'height' => '700px',
+            'height' => '100%',
         ]);
 
-        $html .= html_writer::tag('a', get_string('download_document', 'lortype_project'), [
-            'class'    => 'btn btn-default',
-            'download' => $document_filename,
-            'href'     => \local_lor\repository::get_file_url(self::get_path_to_project_file($document_filename),
-                $document_filename),
-        ]);
+        // A 'Download Word document' button
+//        $html .= html_writer::tag('a', get_string('download_document', 'lortype_project'), [
+//            'class'    => 'btn btn-default',
+//            'download' => $document_filename,
+//            'href'     => \local_lor\repository::get_file_url(self::get_path_to_project_file($document_filename),
+//                $document_filename),
+//        ]);
 
         return $html;
     }

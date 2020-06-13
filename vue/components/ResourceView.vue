@@ -67,7 +67,7 @@
                         <a class="card-footer-item">
                             {{strings.embed}}
                         </a>
-                        <a class="card-footer-item">
+                        <a class="card-footer-item" :href="'/local/lor/item/edit.php?id=' + resource.id">
                             {{strings.edit}}
                         </a>
                     </footer>

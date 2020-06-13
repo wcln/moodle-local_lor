@@ -57,9 +57,8 @@ export const store = new Vuex.Store({
             const resources = await ajax('local_lor_get_resources', []);
             context.commit('setResources', resources);
         },
-        async fetchResource(context) {
-            const resource = await ajax('local_lor_get_resource', []);
-            context.commit('setResource', resource);
+        async fetchResource(context, resourceId) {
+            return ajax('local_lor_get_resource', {id: resourceId});
         }
     }
 });

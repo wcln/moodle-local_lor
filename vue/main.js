@@ -20,7 +20,7 @@ function init(contextid) {
     const routes = [
         { path: '/', redirect: { name: 'resources-index' }},
         { path: '/resources', component: Resources, name: 'resources-index', meta: { title: 'search_title' } },
-        { path: '/resources/view/:itemId(\\d+)', component: ResourceView, name: 'resource-view', meta: { title: 'view_title' } }
+        { path: '/resources/view/:resourceId(\\d+)', component: ResourceView, name: 'resource-view', meta: { title: 'view_title' } }
     ];
 
     // base URL is /local/lor/index.php/

@@ -20,7 +20,7 @@
             </div>
         </div>
         <footer class="card-footer">
-            <router-link class="card-footer-item" :to="{ name: 'resource-view', params: { itemId: resource.id } }">
+            <router-link class="card-footer-item" :to="{ name: 'resource-view', params: { resourceId: resource.id } }">
                 {{strings.view}}
             </router-link>
         </footer>

@@ -32,7 +32,7 @@ if ($confirm) {
     }
 
     if ( ! item::delete($itemid)) {
-        print_error('delete_error', 'local_lor');
+        print_error('delete_error', 'local_lor', $return_url);
     }
 
     redirect($return_url, get_string('delete_success', 'local_lor'));

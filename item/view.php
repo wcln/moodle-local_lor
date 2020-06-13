@@ -18,6 +18,8 @@ page::set_up($page_url, $item->name, $item->name);
 $PAGE->navbar->add(get_string('lor_page', 'local_lor'), $return_url);
 $PAGE->navbar->add(get_string('view_title', 'local_lor'), $page_url);
 
+$PAGE->requires->js_call_amd('local_lor/modal');
+
 $renderer = page::get_renderer();
 
 echo $renderer->header();

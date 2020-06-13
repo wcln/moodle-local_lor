@@ -30,7 +30,7 @@ if ($form->is_cancelled()) {
     redirect($return_url);
 } else {
     if ($form_data = $form->get_data()) {
-        if (item::update($itemid, $form_data)) {
+        if (item::update($itemid, $form_data, $form)) {
             redirect($return_url, get_string('edit_success', 'local_lor'));
         } else {
             print_error('edit_error', 'local_lor', $return_url);

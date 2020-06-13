@@ -1,6 +1,5 @@
 <?php
 
-use local_lor\output\search_page;
 use local_lor\page;
 
 require_once(__DIR__ . '/../../config.php');
@@ -15,9 +14,15 @@ page::set_up(
 $renderer = page::get_renderer();
 
 echo $renderer->header();
-echo $renderer->heading(get_string('search_heading', 'local_lor'));
 
-$search_page = new search_page();
-echo $renderer->render($search_page);
+$PAGE->requires->js_call_amd('local_lor/app-lazy', 'init', [
+    'contextid' => context_system::instance()->id,
+]);
+
+echo <<<HTML
+<div id="local-lor-app">
+  <router-view></router-view>
+</div>
+HTML;
 
 echo $renderer->footer();

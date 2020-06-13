@@ -41,7 +41,7 @@ if (empty($type)) {
     } else {
 
         if ($form_data = $form->get_data()) {
-            if (item::create($form_data)) {
+            if (item::create($form_data, $form)) {
                 redirect($return_url, get_string('add_success', 'local_lor'));
             } else {
                 print_error('add_error', 'local_lor', $return_url);

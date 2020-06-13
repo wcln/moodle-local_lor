@@ -57,9 +57,11 @@ trait type
      * @param $itemid int The ID of the LOR item that was just created
      * @param $data   stdClass Raw form data from the submitted item form and any custom type elements
      *
+     * @param  null  $form A copy of the Moodle form in case we need to deal with files
+     *
      * @return bool True on success, false on failure
      */
-    public abstract static function create($itemid, $data);
+    public abstract static function create($itemid, $data, $form = null);
 
     /**
      * Called after an item of this type is updated
@@ -69,9 +71,11 @@ trait type
      * @param $itemid int The ID of the LOR item that was just created
      * @param $data   stdClass Raw form data from the submitted item form containing any custom type elements added by this type
      *
+     * @param  null  $form A copy of the Moodle form in case we need to deal with files
+     *
      * @return bool True on success, false on failure
      */
-    public abstract static function update($itemid, $data);
+    public abstract static function update($itemid, $data, $form = null);
 
     /**
      * Called after a LOR item of this type is deleted

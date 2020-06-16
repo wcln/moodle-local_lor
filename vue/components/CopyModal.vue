@@ -7,7 +7,7 @@
                 <button class="delete" aria-label="close" @click="hide()"></button>
             </header>
             <section class="modal-card-body">
-                <textarea readonly class="textarea" rows="10" v-html="content"></textarea>
+                <textarea readonly class="textarea" :rows="rows" v-html="content"></textarea>
             </section>
             <footer class="modal-card-foot">
                 <button id="copy-btn" class="button is-success" @click="copyContentToClipboard($event)">{{strings.copy_to_clipboard}}
@@ -23,7 +23,14 @@
 
     export default {
         name: "CopyModal",
-        props: ['content', 'title'],
+        props: {
+          content: String,
+          title: String,
+          rows: {
+              type: Number,
+              default: 10
+          }
+        },
         computed: mapState(['strings']),
         data() {
             return {
@@ -74,6 +81,8 @@
     }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+    .modal .textarea {
+        box-sizing: border-box;
+    }
 </style>

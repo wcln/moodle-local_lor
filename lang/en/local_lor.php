@@ -203,8 +203,10 @@ $string['repository_setting_desc'] = 'The folder name of the repository you crea
 $string['copy_to_clipboard']       = 'Copy to clipboard';
 $string['close_modal']             = 'Close';
 
-$string['home']          = 'Home';
-$string['next_page']     = 'Next page';
-$string['previous_page'] = 'Previous';
-$string['view']          = 'View';
-$string['back']          = 'Back';
+$string['home']              = 'Home';
+$string['next_page']         = 'Next page';
+$string['previous_page']     = 'Previous';
+$string['view']              = 'View';
+$string['back']              = 'Back';
+$string['embed_modal_title'] = 'Embed this resource';
+$string['copied']            = 'Copied';

@@ -64,7 +64,7 @@
                         <a class="card-footer-item">
                             {{strings.related}}
                         </a>
-                        <a class="card-footer-item" @click="showEmbedModal = true">
+                        <a class="card-footer-item" @click="showEmbedModal()">
                             {{strings.embed}}
                         </a>
                         <a class="card-footer-item" :href="'/local/lor/item/edit.php?id=' + resource.id">
@@ -82,31 +82,34 @@
             </button>
         </router-link>
 
-        <embed-modal :embed-html="resource.embed" :is-active="showEmbedModal"></embed-modal>
+        <embed-modal
+                ref="embedModal"
+                :content="resource.embed"
+                :title="strings.embed_modal_title">
+        </embed-modal>
     </div>
 </template>
 
 <script>
     import {mapState} from "vuex";
-    import EmbedModal from "./EmbedModal";
+    import CopyModal from "./CopyModal";
 
     export default {
         name: "resource-view",
-        components: {EmbedModal},
+        components: {'embedModal': CopyModal},
         computed: mapState(['strings']),
         data() {
             return {
                 resource: {},
-                showEmbedModal: false
             }
         },
-        beforeMount() {
+        created() {
             this.$store.dispatch('fetchResource', this.$route.params.resourceId).then(resource => {
                 this.resource = resource;
             })
         },
         methods: {
-            showEmbed() {
+            showEmbedModal() {
                 this.$refs.embedModal.show();
             }
         }

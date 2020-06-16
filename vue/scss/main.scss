@@ -5,8 +5,9 @@ This MUST come first in this file, so that we can overwrite these settings with 
 
 */
 #local-lor-app {
-  button {
-    all: initial;
+  button,
+  .label {
+    all: unset;
   }
 
   .modal {

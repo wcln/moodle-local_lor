@@ -12,11 +12,11 @@
         <!-- Page title -->
         <h1 class="title is-1">{{strings.search_title}}</h1>
 
-        <!-- Search form -->
-
-
         <!-- Add a resource button -->
         <a class="button" href="/local/lor/item/add.php">{{strings.add_item_link}}</a>
+
+        <!-- Search form -->
+        <search-form></search-form>
 
         <!-- Resources -->
         <div class="columns is-multiline">
@@ -60,10 +60,11 @@
 <script>
     import { mapState } from 'vuex';
     import ResourceCard from "./ResourceCard";
+    import SearchForm from "./SearchForm";
 
     export default {
         name: "resources-index",
-        components: {ResourceCard},
+        components: {SearchForm, ResourceCard},
         computed: mapState(['strings', 'resources']),
     }
 </script>

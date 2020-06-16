@@ -210,3 +210,4 @@ $string['view']              = 'View';
 $string['back']              = 'Back';
 $string['embed_modal_title'] = 'Embed this resource';
 $string['copied']            = 'Copied';
+$string['share_modal_title'] = 'Share this resource';

@@ -58,7 +58,7 @@
                         </div>
                     </div>
                     <footer class="card-footer">
-                        <a class="card-footer-item">
+                        <a class="card-footer-item" @click="showShareModal()">
                             {{strings.share}}
                         </a>
                         <a class="card-footer-item">
@@ -82,11 +82,18 @@
             </button>
         </router-link>
 
-        <embed-modal
+        <copy-modal
                 ref="embedModal"
                 :content="resource.embed"
                 :title="strings.embed_modal_title">
-        </embed-modal>
+        </copy-modal>
+
+        <copy-modal
+                ref="shareModal"
+                :content="getShareUrl()"
+                :title="strings.share_modal_title"
+                :rows="1">
+        </copy-modal>
     </div>
 </template>
 
@@ -96,7 +103,7 @@
 
     export default {
         name: "resource-view",
-        components: {'embedModal': CopyModal},
+        components: {CopyModal},
         computed: mapState(['strings']),
         data() {
             return {
@@ -111,6 +118,12 @@
         methods: {
             showEmbedModal() {
                 this.$refs.embedModal.show();
+            },
+            showShareModal() {
+                this.$refs.shareModal.show();
+            },
+            getShareUrl() {
+                return window.location.href;
             }
         }
     }

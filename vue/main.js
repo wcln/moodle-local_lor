@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import { store } from './store';
-import Resources from './components/Resources'
 import './scss/main.scss';
+import Resources from './components/Resources'
 import ResourceView from "./components/ResourceView";
 
 function init(contextid) {

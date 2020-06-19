@@ -34,6 +34,7 @@
                     <search-form></search-form>
                 </div>
             </div>
+
         </section>
 
         <!-- Resources -->
@@ -89,11 +90,11 @@
 
 <style scoped lang="scss">
     .hero {
-        background-image: url('/local/lor/vue/assets/images/search_background.jpeg');
+        background: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url('/local/lor/vue/assets/images/search_background.jpg');
         background-size: cover;
 
         .hero-head {
-            padding: 1rem;
+            padding: 1rem 1rem 0 0;
         }
     }
 

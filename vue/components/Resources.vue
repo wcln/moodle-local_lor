@@ -20,7 +20,7 @@
                     <span>{{strings.add_item_link}}</span>
                 </a>
                 <!-- Filters button -->
-                <a class="button is-primary is-inverted" @click="showFiltersModal()">
+                <a class="button is-primary is-inverted" @click="showFiltersModal = true">
                     <span class="icon">
                         <i class="fas fa-filter"></i>
                     </span>
@@ -74,24 +74,24 @@
         </nav>
 
         <!-- Filters modal (hidden by default) -->
-        <filters-modal ref="filtersModal"></filters-modal>
+        <filters-modal v-if="showFiltersModal" @close="showFiltersModal = false"></filters-modal>
 
     </div>
 </template>
 
 <script>
-    import { mapState } from 'vuex';
+    import {mapState} from 'vuex';
     import ResourceCard from "./ResourceCard";
     import SearchForm from "./SearchForm";
     import FiltersModal from "./FiltersModal";
 
     export default {
         name: "resources-index",
-        components: { SearchForm, ResourceCard, FiltersModal },
+        components: {SearchForm, ResourceCard, FiltersModal},
         computed: mapState(['strings', 'resources']),
-        methods: {
-            showFiltersModal() {
-                this.$refs.filtersModal.show();
+        data() {
+            return {
+                showFiltersModal: false
             }
         }
     }
@@ -99,7 +99,7 @@
 
 <style scoped lang="scss">
     .hero {
-        background: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url('/local/lor/vue/assets/images/search_background.jpg');
+        background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('/local/lor/vue/assets/images/search_background.jpg');
         background-size: cover;
 
         .hero-head {

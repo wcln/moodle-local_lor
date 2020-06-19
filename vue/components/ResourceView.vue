@@ -58,13 +58,13 @@
                         </div>
                     </div>
                     <footer class="card-footer">
-                        <a class="card-footer-item" @click="showShareModal()">
+                        <a class="card-footer-item" @click="showShareModal = true">
                             {{strings.share}}
                         </a>
                         <a class="card-footer-item">
                             {{strings.related}}
                         </a>
-                        <a class="card-footer-item" @click="showEmbedModal()">
+                        <a class="card-footer-item" @click="showEmbedModal = true">
                             {{strings.embed}}
                         </a>
                         <a class="card-footer-item" :href="'/local/lor/item/edit.php?id=' + resource.id">
@@ -89,12 +89,16 @@
 
         <copy-modal
                 ref="embedModal"
+                v-if="showEmbedModal"
+                @close="showEmbedModal = false"
                 :content="resource.embed"
                 :title="strings.embed_modal_title">
         </copy-modal>
 
         <copy-modal
                 ref="shareModal"
+                v-if="showShareModal"
+                @close="showShareModal = false"
                 :content="getShareUrl()"
                 :title="strings.share_modal_title"
                 :rows="1">
@@ -113,6 +117,8 @@
         data() {
             return {
                 resource: {},
+                showShareModal: false,
+                showEmbedModal: false,
             }
         },
         created() {
@@ -121,12 +127,6 @@
             })
         },
         methods: {
-            showEmbedModal() {
-                this.$refs.embedModal.show();
-            },
-            showShareModal() {
-                this.$refs.shareModal.show();
-            },
             getShareUrl() {
                 return window.location.href;
             }

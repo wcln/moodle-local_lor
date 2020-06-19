@@ -1,10 +1,10 @@
 <template>
-    <div class="modal" v-bind:class="{ 'is-active': isActive }">
-        <div class="modal-background" @click="hide()"></div>
+    <div class="modal is-active">
+        <div class="modal-background" @click="$emit('close')"></div>
         <div class="modal-card">
             <header class="modal-card-head">
                 <p class="modal-card-title">{{title}}</p>
-                <button class="delete" aria-label="close" @click="hide()"></button>
+                <button class="delete" aria-label="close" @click="$emit('close')"></button>
             </header>
             <section class="modal-card-body">
                 <textarea readonly class="textarea" :rows="rows" v-html="content"></textarea>
@@ -13,7 +13,7 @@
                 <a id="copy-btn" class="button is-success" @click="copyContentToClipboard($event)">
                     {{strings.copy_to_clipboard}}
                 </a>
-                <a class="button" @click="hide()">{{strings.close_modal}}</a>
+                <a class="button" @click="$emit('close')">{{strings.close_modal}}</a>
             </footer>
         </div>
     </div>
@@ -33,19 +33,7 @@
           }
         },
         computed: mapState(['strings']),
-        data() {
-            return {
-                isActive: false
-            }
-        },
         methods: {
-            show() {
-                this.isActive = true;
-            },
-            hide() {
-                this.isActive = false;
-                this.enableCopyButton();
-            },
 
             /**
              * Copy the text area content to the clipboard

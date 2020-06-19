@@ -24,6 +24,14 @@ This MUST come first in this file, so that we can overwrite these settings with 
 
   @import './variables';
 
-  /* Import the bulma CSS framework */
+  /*
+    Import the Bulma CSS framework
+    See: https://bulma.io/
+   */
   @import "../node_modules/bulma/bulma";
+
+  /* Import vue-multiselect styles
+     See: https://vue-multiselect.js.org/
+   */
+  @import "../node_modules/vue-multiselect/dist/vue-multiselect.min.css";
 }

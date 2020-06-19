@@ -20,7 +20,7 @@
                     <span>{{strings.add_item_link}}</span>
                 </a>
                 <!-- Filters button -->
-                <a class="button is-primary is-inverted">
+                <a class="button is-primary is-inverted" @click="showFiltersModal()">
                     <span class="icon">
                         <i class="fas fa-filter"></i>
                     </span>
@@ -73,6 +73,9 @@
             </ul>
         </nav>
 
+        <!-- Filters modal (hidden by default) -->
+        <filters-modal ref="filtersModal"></filters-modal>
+
     </div>
 </template>
 
@@ -80,11 +83,17 @@
     import { mapState } from 'vuex';
     import ResourceCard from "./ResourceCard";
     import SearchForm from "./SearchForm";
+    import FiltersModal from "./FiltersModal";
 
     export default {
         name: "resources-index",
-        components: {SearchForm, ResourceCard},
+        components: { SearchForm, ResourceCard, FiltersModal },
         computed: mapState(['strings', 'resources']),
+        methods: {
+            showFiltersModal() {
+                this.$refs.filtersModal.show();
+            }
+        }
     }
 </script>
 

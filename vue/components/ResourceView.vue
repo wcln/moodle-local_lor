@@ -77,9 +77,14 @@
         </div>
 
         <router-link :to="{ name: 'resources-index' }">
-            <button class="button is-default">
-                {{strings.back}}
-            </button>
+            <a class="button is-primary">
+                <span class="icon">
+                    <i class="fas fa-chevron-circle-left"></i>
+                </span>
+                <span>
+                    Back to resources
+                </span>
+            </a>
         </router-link>
 
         <copy-modal

@@ -10,9 +10,10 @@
                 <textarea readonly class="textarea" :rows="rows" v-html="content"></textarea>
             </section>
             <footer class="modal-card-foot">
-                <button id="copy-btn" class="button is-success" @click="copyContentToClipboard($event)">{{strings.copy_to_clipboard}}
-                </button>
-                <button class="button" @click="hide()">{{strings.close_modal}}</button>
+                <a id="copy-btn" class="button is-success" @click="copyContentToClipboard($event)">
+                    {{strings.copy_to_clipboard}}
+                </a>
+                <a class="button" @click="hide()">{{strings.close_modal}}</a>
             </footer>
         </div>
     </div>

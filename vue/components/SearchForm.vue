@@ -14,7 +14,7 @@
                     </div>
                 </div>
                 <div class="control has-icons-left">
-                    <input class="input is-medium is-primary" type="text" placeholder="Search all resources" aria-label="Search all resources">
+                    <input id="search" class="input is-medium is-primary" type="text" placeholder="Search all resources" aria-label="Search all resources">
                     <span class="icon is-left">
                     <i class="fas fa-search" aria-hidden="true"></i>
                 </span>
@@ -36,5 +36,9 @@
 </script>
 
 <style scoped lang="scss">
-
+    @media (min-width: 1024px) {
+        #search {
+            width: 500px;
+        }
+    }
 </style>

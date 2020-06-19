@@ -109,6 +109,7 @@
 <script>
     import {mapState} from "vuex";
     import CopyModal from "./CopyModal";
+    import {ajax} from "../store";
 
     export default {
         name: "resource-view",
@@ -122,9 +123,9 @@
             }
         },
         created() {
-            this.$store.dispatch('fetchResource', this.$route.params.resourceId).then(resource => {
+            ajax('local_lor_get_resource', {id: this.$route.params.resourceId}).then(resource => {
                 this.resource = resource;
-            })
+            });
         },
         methods: {
             getShareUrl() {

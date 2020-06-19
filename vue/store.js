@@ -12,22 +12,21 @@ export const store = new Vuex.Store({
         contextID: 0,
         strings: {},
         resources: [],
-        resource: {}
+        filters: {
+            page: 0,
+            keywords: "",
+            type: 0,
+            categories: [],
+            grades: [],
+            sort: 'recent'
+        },
+        pages: 5 // TODO, this should be set when fetching resources
     },
     //strict: process.env.NODE_ENV !== 'production',
     mutations: {
-        setContextID(state, id) {
-            state.contextID = id;
-        },
-        setResources(state, ajaxdata) {
-            state.resources = ajaxdata;
-        },
-        setResource(state, ajaxdata) {
-            state.resource = ajaxdata;
-        },
-        setStrings(state, strings) {
-            state.strings = strings;
-        },
+        setContextID(state, id) { state.contextID = id; },
+        setStrings(state, strings) { state.strings = strings; },
+        setResources(state, resources) { state.resources = resources; }
     },
     actions: {
         async loadComponentStrings(context) {
@@ -53,13 +52,10 @@ export const store = new Vuex.Store({
                 moodleStorage.set(cacheKey, JSON.stringify(strings));
             }
         },
-        async fetchResources(context) {
-            const resources = await ajax('local_lor_get_resources', []);
+        async getResources(context, searchParams) {
+            let resources = await ajax('local_lor_get_resources', searchParams);
             context.commit('setResources', resources);
         },
-        async fetchResource(context, resourceId) {
-            return ajax('local_lor_get_resource', {id: resourceId});
-        }
     }
 });
 

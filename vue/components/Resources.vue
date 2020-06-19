@@ -50,7 +50,7 @@
             <a class="pagination-next">{{strings.next_page}}</a>
             <ul class="pagination-list">
                 <li v-for="page in Array(pages).keys()">
-                    <a v-if="filters.page === page" class="pagination-link is-current" :aria-label="'Goto page' + page" aria-current="page">{{page + 1}}</a>
+                    <a v-if="currentPage === page" class="pagination-link is-current" :aria-label="'Goto page' + page" aria-current="page">{{page + 1}}</a>
                     <a v-else class="pagination-link" aria-label="Goto page 1">{{page + 1}}</a>
                 </li>
             </ul>
@@ -71,7 +71,14 @@
     export default {
         name: "resources-index",
         components: {SearchForm, ResourceCard, FiltersModal},
-        computed: mapState(['strings', 'resources', 'filters', 'pages']),
+        computed: {
+            ...mapState(['strings', 'resources', 'pages', 'filters']),
+            currentPage: {
+                get() {
+                    return this.$store.state.filters.page;
+                }
+            }
+        },
         data() {
             return {
                 showFiltersModal: false,
@@ -79,12 +86,6 @@
         },
         created() {
             this.$store.dispatch('getResources', {});
-        },
-        methods: {
-            search() {
-                // TODO, send search params
-                this.$store.dispatch('getResources', {});
-            }
         }
     }
 </script>

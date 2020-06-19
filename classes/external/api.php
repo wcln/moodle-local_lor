@@ -11,13 +11,34 @@ class api extends external_api
 
     public static function get_resources_parameters()
     {
-        // TODO add search parameters
-        return new external_function_parameters([]);
+        return new external_function_parameters([
+            'page'       => new external_value(PARAM_INT, 'The current page number', VALUE_OPTIONAL),
+            'keywords'   => new external_value(PARAM_TEXT, 'Keywords to search for', VALUE_OPTIONAL),
+            'type'       => new external_value(PARAM_INT, 'Type of resources', VALUE_OPTIONAL),
+            'categories' => new external_multiple_structure(
+                new external_value(PARAM_INT, 'Category ID'), 'List of categories', VALUE_OPTIONAL
+            ),
+            'grades'     => new external_multiple_structure(
+                new external_value(PARAM_INT, 'Grade ID'), 'List of grades', VALUE_OPTIONAL
+            ),
+            'sort'       => new external_value(PARAM_TEXT, 'How to sort the results', VALUE_OPTIONAL),
+        ]);
     }
 
-    public static function get_resources()
-    {
-        $items = array_values(item::search());
+    public static function get_resources(
+        $page = null,
+        $keywords = null,
+        $type = null,
+        $categories = [],
+        $grades = [],
+        $sort = null
+    ) {
+        $params = self::validate_parameters(self::get_resources_parameters(),
+            compact('page', 'keywords', 'type', 'categories', 'grades', 'sort'));
+
+        // TODO implement sort
+        $items = array_values(item::search($params['keywords'], $params['type'], $params['categories'],
+            $params['grades']));
 
         foreach ($items as $item) {
             $item->image = item::get_image_url($item->id);
@@ -95,7 +116,7 @@ class api extends external_api
             'grades'       => new external_value(PARAM_TEXT, 'Item grades'),
             'topics'       => new external_value(PARAM_TEXT, 'Item topics'),
             'display'      => new external_value(PARAM_RAW, 'Item display HTML'),
-            'embed'      => new external_value(PARAM_RAW, 'Item embed HTML'),
+            'embed'        => new external_value(PARAM_RAW, 'Item embed HTML'),
             'data'         => new external_multiple_structure(
                 new external_single_structure([
                     'name'  => new external_value(PARAM_TEXT, 'Item data name'),

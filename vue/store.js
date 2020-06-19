@@ -26,7 +26,8 @@ export const store = new Vuex.Store({
     mutations: {
         setContextID(state, id) { state.contextID = id; },
         setStrings(state, strings) { state.strings = strings; },
-        setResources(state, resources) { state.resources = resources; }
+        setResources(state, resources) { state.resources = resources; },
+        setFilters(state, filters) { state.filters = {...state.filters, ...filters} }
     },
     actions: {
         async loadComponentStrings(context) {
@@ -52,9 +53,15 @@ export const store = new Vuex.Store({
                 moodleStorage.set(cacheKey, JSON.stringify(strings));
             }
         },
-        async getResources(context, searchParams) {
-            let resources = await ajax('local_lor_get_resources', searchParams);
+        async getResources(context, filters) {
+
+
+            context.commit('setFilters', filters);
+
+            let resources = await ajax('local_lor_get_resources', context.state.filters);
             context.commit('setResources', resources);
+
+            window.console.log(resources);
         },
     }
 });

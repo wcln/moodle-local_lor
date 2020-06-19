@@ -199,10 +199,10 @@ class item
      * @throws dml_exception
      */
     public static function search(
-        string $keywords = '',
-        string $type = '',
-        array $categories = [],
-        array $grades = [],
+        $keywords = '',
+        $type = '',
+        $categories = [],
+        $grades = [],
         $sort = self::SORT_RECENT
     ) {
         global $DB;
@@ -215,7 +215,7 @@ class item
             if ($sort === self::SORT_ALPHABETICAL) {
                 $orderby = 'name ASC';
             } else {
-                print_error('error_uknown_sort', 'local_lor');
+                print_error('error_unknown_sort', 'local_lor');
             }
         }
 
@@ -234,7 +234,39 @@ class item
             $items = self::filter_by_grade($items, $grades);
         }
 
+        if ( ! empty($keywords)) {
+            $items = self::filter_by_keywords($items, $keywords);
+        }
+
         return $items;
+    }
+
+    private static function filter_by_keywords($items, string $keywords) {
+        return array_filter(
+            $items,
+            function ($item) use ($keywords) {
+
+                // Search item name
+                if (strpos($item->name, $keywords) !== false) {
+                    return true;
+                }
+
+                // Search item description
+                if (strpos($item->description, $keywords) !== false) {
+                    return true;
+                }
+
+                // Search item topics
+                $topics = topic::get_item_data($item->id);
+                foreach ($topics as $topic) {
+                    if (strpos($topic->name, $keywords) !== false) {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        );
     }
 
     /**

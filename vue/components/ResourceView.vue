@@ -99,7 +99,7 @@
                 ref="shareModal"
                 v-if="showShareModal"
                 @close="showShareModal = false"
-                :content="getShareUrl()"
+                :content="window.location.href"
                 :title="strings.share_modal_title"
                 :rows="1">
         </copy-modal>
@@ -126,11 +126,6 @@
             ajax('local_lor_get_resource', {id: this.$route.params.resourceId}).then(resource => {
                 this.resource = resource;
             });
-        },
-        methods: {
-            getShareUrl() {
-                return window.location.href;
-            }
         }
     }
 </script>

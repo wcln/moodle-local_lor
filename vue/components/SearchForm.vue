@@ -14,13 +14,13 @@
                     </div>
                 </div>
                 <div class="control has-icons-left">
-                    <input id="search" class="input is-medium is-primary" type="text" placeholder="Search all resources" aria-label="Search all resources">
+                    <input v-model="keywords" id="search" class="input is-medium is-primary" type="text" placeholder="Search all resources" aria-label="Search all resources">
                     <span class="icon is-left">
                     <i class="fas fa-search" aria-hidden="true"></i>
                 </span>
                 </div>
                 <div class="control">
-                    <a class="button is-info is-medium">
+                    <a class="button is-info is-medium" @click="search()">
                         Search
                     </a>
                 </div>
@@ -30,8 +30,26 @@
 </template>
 
 <script>
+    import {mapState} from 'vuex';
+
     export default {
         name: "SearchForm",
+        computed: {
+            ...mapState(['filters']),
+            keywords: {
+                get() {
+                    return this.$store.state.filters.keywords;
+                },
+                set(keywords) {
+                    this.$store.commit('setFilters', {keywords: keywords});
+                }
+            },
+        },
+        methods: {
+            search() {
+                this.$store.dispatch('getResources', {});
+            }
+        }
     }
 </script>
 

@@ -191,7 +191,7 @@ $string['item_contributors_help']
 $string['item_topics']             = 'Topics';
 $string['item_topics_help']
                                    = 'Enter comma separated topics / keywords that will help people search for this resource';
-$string['add_item_link']           = '+ Add resource';
+$string['add_item_link']           = 'Add resource';
 $string['item_type']               = 'Resource type';
 $string['type_form_help']
                                    = 'Select the type of resource you would like to add, then click \'Next\'.';

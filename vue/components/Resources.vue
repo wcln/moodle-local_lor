@@ -9,17 +9,35 @@
             </ul>
         </nav>
 
-        <!-- Page title -->
-        <h1 class="title is-1">{{strings.search_title}}</h1>
-
-        <!-- Add a resource button -->
-        <a class="button" href="/local/lor/item/add.php">{{strings.add_item_link}}</a>
-
         <!-- Search form -->
-        <search-form></search-form>
+        <section class="hero is-primary is-medium">
+            <div class="hero-head has-text-right">
+                <!-- Add a resource button -->
+                <a class="button is-primary is-inverted" href="/local/lor/item/add.php">
+                    <span class="icon">
+                        <i class="fas fa-plus"></i>
+                    </span>
+                    <span>{{strings.add_item_link}}</span>
+                </a>
+                <!-- Filters button -->
+                <a class="button is-primary is-inverted">
+                    <span class="icon">
+                        <i class="fas fa-filter"></i>
+                    </span>
+                    <span>Filters</span>
+                </a>
+            </div>
+
+            <div class="hero-body">
+                <div class="container has-text-centered">
+                    <h1 class="title is-size-1">Learning resources</h1>
+                    <search-form></search-form>
+                </div>
+            </div>
+        </section>
 
         <!-- Resources -->
-        <div class="columns is-multiline">
+        <div class="columns is-multiline resource-results">
             <div class="column is-one-fifth-desktop is-one-quarter-tablet" v-for="resource in resources">
                 <resource-card :resource="resource"></resource-card>
             </div>
@@ -70,5 +88,17 @@
 </script>
 
 <style scoped lang="scss">
+    .hero {
+        background-image: url('/local/lor/vue/assets/images/search_background.jpeg');
+        background-size: cover;
 
+        .hero-head {
+            padding: 1rem;
+        }
+    }
+
+    /* ID is required to override Bulma .columns margin styling */
+    #local-lor-app .resource-results.columns {
+        margin-top: 1rem;
+    }
 </style>

@@ -22,6 +22,8 @@ This MUST come first in this file, so that we can overwrite these settings with 
 /* Only apply our styles to the Vue app div, otherwise all of Moodle will be affected */
 #local-lor-app {
 
+  @import './variables';
+
   /* Import the bulma CSS framework */
   @import "../node_modules/bulma/bulma";
 }

@@ -14,13 +14,13 @@
                     </div>
                 </div>
                 <div class="control has-icons-left">
-                    <input v-model="keywords" id="search" class="input is-medium is-primary" type="text" placeholder="Search all resources" aria-label="Search all resources">
+                    <input v-model="keywords" id="search" class="input is-medium is-primary" type="text" placeholder="Search all resources" aria-label="Search all resources" @keyup.enter="search">
                     <span class="icon is-left">
                     <i class="fas fa-search" aria-hidden="true"></i>
                 </span>
                 </div>
                 <div class="control">
-                    <a class="button is-primary is-medium" @click="search()">
+                    <a class="button is-primary is-medium" @click="search">
                         Search
                     </a>
                 </div>

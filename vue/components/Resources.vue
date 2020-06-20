@@ -44,6 +44,14 @@
             </div>
         </div>
 
+        <!-- Show a message if no results were found -->
+        <div class="columns is-centered no-results-message" v-if="resources.length === 0">
+            <alert-message class="column is-one-third-desktop" :show-close="false">
+                <template slot="header">No results found</template>
+                No results were found which match your search filters. Please try again.
+            </alert-message>
+        </div>
+
         <!-- Pagination bar -->
         <nav class="pagination" role="navigation" aria-label="pagination">
             <a class="pagination-previous">{{strings.previous_page}}</a>
@@ -67,10 +75,11 @@
     import ResourceCard from "./ResourceCard";
     import SearchForm from "./SearchForm";
     import FiltersModal from "./FiltersModal";
+    import AlertMessage from "./AlertMessage";
 
     export default {
         name: "resources-index",
-        components: {SearchForm, ResourceCard, FiltersModal},
+        components: { SearchForm, ResourceCard, FiltersModal, AlertMessage },
         computed: {
             ...mapState(['strings', 'resources', 'pages', 'filters']),
             currentPage: {
@@ -103,5 +112,10 @@
     /* ID is required to override Bulma .columns margin styling */
     #local-lor-app .resource-results.columns {
         margin-top: 1rem;
+    }
+
+    #local-lor-app .no-results-message {
+        margin-top: 2rem;
+        margin-bottom: 2rem;
     }
 </style>

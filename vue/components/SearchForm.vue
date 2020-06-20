@@ -20,7 +20,7 @@
                 </span>
                 </div>
                 <div class="control">
-                    <a class="button is-info is-medium" @click="search()">
+                    <a class="button is-primary is-medium" @click="search()">
                         Search
                     </a>
                 </div>

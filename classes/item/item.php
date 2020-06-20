@@ -247,19 +247,19 @@ class item
             function ($item) use ($keywords) {
 
                 // Search item name
-                if (strpos($item->name, $keywords) !== false) {
+                if (strpos(strtolower($item->name), strtolower($keywords)) !== false) {
                     return true;
                 }
 
                 // Search item description
-                if (strpos($item->description, $keywords) !== false) {
+                if (strpos(strtolower($item->description), strtolower($keywords)) !== false) {
                     return true;
                 }
 
                 // Search item topics
                 $topics = topic::get_item_data($item->id);
                 foreach ($topics as $topic) {
-                    if (strpos($topic->name, $keywords) !== false) {
+                    if (strpos(strtolower($topic->name), strtolower($keywords)) !== false) {
                         return true;
                     }
                 }

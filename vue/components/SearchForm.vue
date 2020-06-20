@@ -4,12 +4,9 @@
             <div class="field has-addons">
                 <div class="control">
                     <div class="select is-primary is-medium">
-                        <select>
-                            <option>All resources</option>
-                            <option>Games / media</option>
-                            <option>Inquiry projects</option>
-                            <option>Videos</option>
-                            <option>Group activities</option>
+                        <select v-model="typeFilter" aria-label="Resource type">
+                            <option value="all">All resources</option>
+                            <option v-for="resourceType in resourceTypes" :value="resourceType.value">{{resourceType.name}}</option>
                         </select>
                     </div>
                 </div>
@@ -35,7 +32,7 @@
     export default {
         name: "SearchForm",
         computed: {
-            ...mapState(['filters']),
+            ...mapState(['filters', 'resourceTypes']),
             keywords: {
                 get() {
                     return this.$store.state.filters.keywords;
@@ -44,11 +41,22 @@
                     this.$store.commit('setFilters', {keywords: keywords});
                 }
             },
+            typeFilter: {
+                get() {
+                    return this.$store.state.filters.type;
+                },
+                set(typeFilter) {
+                    this.$store.commit('setFilters', {type: typeFilter});
+                }
+            }
         },
         methods: {
             search() {
                 this.$store.dispatch('getResources', {});
             }
+        },
+        created() {
+            this.$store.dispatch('getResourceTypes');
         }
     }
 </script>

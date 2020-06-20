@@ -9,12 +9,21 @@ require_once("$CFG->libdir/externallib.php");
 class api extends external_api
 {
 
+    /*
+    |--------------------------------------------------------------------------
+    | Get resources
+    |--------------------------------------------------------------------------
+    |
+    | Search for resources
+    |
+    */
+
     public static function get_resources_parameters()
     {
         return new external_function_parameters([
             'page'       => new external_value(PARAM_INT, 'The current page number', VALUE_OPTIONAL),
             'keywords'   => new external_value(PARAM_TEXT, 'Keywords to search for', VALUE_OPTIONAL),
-            'type'       => new external_value(PARAM_INT, 'Type of resources', VALUE_OPTIONAL),
+            'type'       => new external_value(PARAM_TEXT, 'Type of resources', VALUE_OPTIONAL),
             'categories' => new external_multiple_structure(
                 new external_value(PARAM_INT, 'Category ID'), 'List of categories', VALUE_OPTIONAL
             ),
@@ -61,6 +70,15 @@ class api extends external_api
             ])
         );
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Get resource
+    |--------------------------------------------------------------------------
+    |
+    | Get a single resource using the item ID
+    |
+    */
 
     public static function get_resource_parameters()
     {
@@ -124,6 +142,85 @@ class api extends external_api
                 ])
             ),
         ]);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Get resource types
+    |--------------------------------------------------------------------------
+    |
+    | Get all of the configured resource types.
+    | For example: "Games / media", "Projects", "Group activities" etc...
+    |
+    */
+
+    public static function get_resource_types_parameters() {
+        return new external_function_parameters([]);
+    }
+
+    public static function get_resource_types() {
+        $resource_types = [];
+        foreach (type::get_all_types() as $value => $name) {
+            $resource_types[] = [
+                'value' => $value,
+                'name' => $name
+            ];
+        }
+
+        return $resource_types;
+    }
+
+    public static function get_resource_types_returns() {
+        return new external_multiple_structure(
+            new external_single_structure([
+                'value' => new external_value(PARAM_TEXT, 'The resource type value'),
+                'name' => new external_value(PARAM_TEXT, 'The resource type name to be displayed'),
+            ])
+        );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Get categories
+    |--------------------------------------------------------------------------
+    |
+    | Get all of the configured categories.
+    | For example: "Math", "Science", "Physics"
+    |
+    */
+
+    public static function get_categories_parameters() {
+        return new external_function_parameters([]);
+    }
+
+    public static function get_categories() {
+
+    }
+
+    public static function get_categories_returns() {
+
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Get grades
+    |--------------------------------------------------------------------------
+    |
+    | Get all of the configured grades.
+    | For example: "1", "2", "10"
+    |
+    */
+
+    public static function get_grades_parameters() {
+        return new external_function_parameters([]);
+    }
+
+    public static function get_grades() {
+
+    }
+
+    public static function get_grades_returns() {
+
     }
 
 }

@@ -222,7 +222,7 @@ class item
         // Get the pre-sorted items
         $items = $DB->get_records(self::TABLE, null, $orderby);
 
-        if ( ! empty($type)) {
+        if ( ! empty($type) && $type !== 'all') {
             $items = self::filter_by_type($items, $type);
         }
 

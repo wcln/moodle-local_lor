@@ -2,6 +2,8 @@
 
 use local_lor\helper;
 use local_lor\item\item;
+use local_lor\item\property\category;
+use local_lor\item\property\grade;
 use local_lor\type\type;
 
 require_once("$CFG->libdir/externallib.php");
@@ -25,10 +27,18 @@ class api extends external_api
             'keywords'   => new external_value(PARAM_TEXT, 'Keywords to search for', VALUE_OPTIONAL),
             'type'       => new external_value(PARAM_TEXT, 'Type of resources', VALUE_OPTIONAL),
             'categories' => new external_multiple_structure(
-                new external_value(PARAM_INT, 'Category ID'), 'List of categories', VALUE_OPTIONAL
+                new external_single_structure([
+                    'id'   => new external_value(PARAM_INT, 'Category ID'),
+                    'name' => new external_value(PARAM_TEXT, 'Category name'),
+                ]),
+                'List of categories', VALUE_OPTIONAL
             ),
             'grades'     => new external_multiple_structure(
-                new external_value(PARAM_INT, 'Grade ID'), 'List of grades', VALUE_OPTIONAL
+                new external_single_structure([
+                    'id'   => new external_value(PARAM_INT, 'Grade ID'),
+                    'name' => new external_value(PARAM_TEXT, 'Grade name'),
+                ]),
+                'List of grades', VALUE_OPTIONAL
             ),
             'sort'       => new external_value(PARAM_TEXT, 'How to sort the results', VALUE_OPTIONAL),
         ]);
@@ -44,10 +54,13 @@ class api extends external_api
     ) {
         $params = self::validate_parameters(self::get_resources_parameters(),
             compact('page', 'keywords', 'type', 'categories', 'grades', 'sort'));
+        
+        // Clean categories and grades (we only want the IDs for the search function)
+        $params['categories'] = array_column($params['categories'], 'id');
+        $params['grades']     = array_column($params['grades'], 'id');
 
-        // TODO implement sort
         $items = array_values(item::search($params['keywords'], $params['type'], $params['categories'],
-            $params['grades']));
+            $params['grades'], $params['sort']));
 
         foreach ($items as $item) {
             $item->image = item::get_image_url($item->id);
@@ -154,27 +167,30 @@ class api extends external_api
     |
     */
 
-    public static function get_resource_types_parameters() {
+    public static function get_resource_types_parameters()
+    {
         return new external_function_parameters([]);
     }
 
-    public static function get_resource_types() {
+    public static function get_resource_types()
+    {
         $resource_types = [];
         foreach (type::get_all_types() as $value => $name) {
             $resource_types[] = [
                 'value' => $value,
-                'name' => $name
+                'name'  => $name,
             ];
         }
 
         return $resource_types;
     }
 
-    public static function get_resource_types_returns() {
+    public static function get_resource_types_returns()
+    {
         return new external_multiple_structure(
             new external_single_structure([
                 'value' => new external_value(PARAM_TEXT, 'The resource type value'),
-                'name' => new external_value(PARAM_TEXT, 'The resource type name to be displayed'),
+                'name'  => new external_value(PARAM_TEXT, 'The resource type name to be displayed'),
             ])
         );
     }
@@ -189,16 +205,24 @@ class api extends external_api
     |
     */
 
-    public static function get_categories_parameters() {
+    public static function get_categories_parameters()
+    {
         return new external_function_parameters([]);
     }
 
-    public static function get_categories() {
-
+    public static function get_categories()
+    {
+        return category::get_all();
     }
 
-    public static function get_categories_returns() {
-
+    public static function get_categories_returns()
+    {
+        return new external_multiple_structure(
+            new external_single_structure([
+                'id'   => new external_value(PARAM_INT, 'The category ID'),
+                'name' => new external_value(PARAM_TEXT, 'The category name'),
+            ])
+        );
     }
 
     /*
@@ -211,16 +235,24 @@ class api extends external_api
     |
     */
 
-    public static function get_grades_parameters() {
+    public static function get_grades_parameters()
+    {
         return new external_function_parameters([]);
     }
 
-    public static function get_grades() {
-
+    public static function get_grades()
+    {
+        return grade::get_all();
     }
 
-    public static function get_grades_returns() {
-
+    public static function get_grades_returns()
+    {
+        return new external_multiple_structure(
+            new external_single_structure([
+                'id'   => new external_value(PARAM_INT, 'The grade ID'),
+                'name' => new external_value(PARAM_TEXT, 'The grade name'),
+            ])
+        );
     }
 
 }

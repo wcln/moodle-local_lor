@@ -302,7 +302,7 @@ class item
             function ($item) use ($categories) {
                 $item_categories = category::get_item_data($item->id);
                 foreach ($item_categories as $category) {
-                    if (in_array($category, $categories)) {
+                    if (in_array($category->id, $categories)) {
                         return true;
                     }
                 }
@@ -327,7 +327,7 @@ class item
             function ($item) use ($grades) {
                 $item_grades = grade::get_item_data($item->id);
                 foreach ($item_grades as $grade) {
-                    if (in_array($grade, $grades)) {
+                    if (in_array($grade->id, $grades)) {
                         return true;
                     }
                 }

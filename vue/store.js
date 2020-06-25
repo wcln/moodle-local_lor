@@ -18,7 +18,7 @@ export const store = new Vuex.Store({
             type: "all",
             categories: [],
             grades: [],
-            sort: 'recent'
+            sort: 'recent' // Sort can be 'recent' or 'alphabetical'
         },
         pages: 5, // TODO, this should be set when fetching resources
         resourceTypes: [],
@@ -31,7 +31,9 @@ export const store = new Vuex.Store({
         setStrings(state, strings) { state.strings = strings; },
         setResources(state, resources) { state.resources = resources; },
         setFilters(state, filters) { state.filters = {...state.filters, ...filters}; },
-        setResourceTypes(state, resourceTypes) { state.resourceTypes = resourceTypes; }
+        setResourceTypes(state, resourceTypes) { state.resourceTypes = resourceTypes; },
+        setCategories(state, categories) { state.categories = categories; },
+        setGrades(state, grades) { state.grades = grades; }
     },
     actions: {
         async loadComponentStrings(context) {
@@ -58,8 +60,6 @@ export const store = new Vuex.Store({
             }
         },
         async getResources(context, filters) {
-
-
             context.commit('setFilters', filters);
 
             const resources = await ajax('local_lor_get_resources', context.state.filters);
@@ -68,7 +68,15 @@ export const store = new Vuex.Store({
         async getResourceTypes(context) {
             const resourceTypes = await ajax('local_lor_get_resource_types', {});
             context.commit('setResourceTypes', resourceTypes);
-        }
+        },
+        async getCategories(context) {
+            const categories = await ajax('local_lor_get_categories', {});
+            context.commit('setCategories', categories);
+        },
+        async getGrades(context) {
+            const grades = await ajax('local_lor_get_grades', {});
+            context.commit('setGrades', grades);
+        },
     }
 });
 

@@ -117,5 +117,9 @@
     #local-lor-app .no-results-message {
         margin-top: 2rem;
         margin-bottom: 2rem;
+
+        article.column {
+            padding: 0;
+        }
     }
 </style>

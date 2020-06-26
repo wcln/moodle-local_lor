@@ -24,7 +24,7 @@ class repository
      */
     public static function get_default_repository()
     {
-        return 'learning_resources';
+        return 'LOR';
     }
 
     /**

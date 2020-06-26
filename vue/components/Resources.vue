@@ -38,7 +38,7 @@
         </section>
 
         <!-- Resources -->
-        <div class="columns is-multiline resource-results is-centered">
+        <div class="columns is-multiline resource-results is-centered is-vcentered">
             <div class="column is-one-fifth-desktop is-one-quarter-tablet" v-for="resource in resources">
                 <resource-card :resource="resource"></resource-card>
             </div>

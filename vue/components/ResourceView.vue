@@ -10,8 +10,23 @@
             </ul>
         </nav>
 
+        <div class="container has-text-centered">
+            <h1 class="title">{{resource.name}}</h1>
+        </div>
+
+        <a class="button is-info" @click="showDetails = ! showDetails">
+            <template v-if="showDetails">
+                <span class="icon"><i class="fas fa-chevron-circle-left"></i></span>
+                <span>Hide</span>
+            </template>
+            <template v-else>
+                <span class="icon"><i class="fas fa-chevron-circle-right"></i></span>
+                <span>Show details</span>
+            </template>
+        </a>
+
         <div class="columns">
-            <div class="column is-one-third-desktop">
+            <div class="column is-one-third-desktop" id="resource-details" :class="{ 'is-active': showDetails }">
                 <div class="card">
                     <div class="card-image">
                         <figure class="image is-4by3">
@@ -125,6 +140,7 @@
                 resource: {},
                 showShareModal: false,
                 showEmbedModal: false,
+                showDetails: false
             }
         },
         created() {
@@ -136,9 +152,30 @@
 </script>
 
 <style scoped lang="scss">
-    .resource-view {
+    .resource-display {
+        min-height: 900px;
+    }
+
+    #local-lor-app .columns {
+        margin-top: 1rem;
+    }
+
+    #local-lor-app .resource-view .title {
+        margin-bottom: 1rem;
+    }
+
+    #resource-details {
         table {
             margin-top: 1em;
+        }
+
+        opacity: 0;
+        position: absolute;
+
+        &.is-active {
+            position: static;
+            opacity: 1;
+            transition: opacity .7s linear;
         }
     }
 </style>

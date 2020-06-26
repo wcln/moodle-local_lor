@@ -17,7 +17,7 @@
         <a class="button is-info" @click="showDetails = ! showDetails">
             <template v-if="showDetails">
                 <span class="icon"><i class="fas fa-chevron-circle-left"></i></span>
-                <span>Hide</span>
+                <span>Hide details</span>
             </template>
             <template v-else>
                 <span class="icon"><i class="fas fa-chevron-circle-right"></i></span>
@@ -175,7 +175,7 @@
         &.is-active {
             position: static;
             opacity: 1;
-            transition: opacity .7s linear;
+            transition: opacity .4s linear;
         }
     }
 </style>

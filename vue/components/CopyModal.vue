@@ -7,7 +7,7 @@
                 <button class="delete" aria-label="close" @click="$emit('close')"></button>
             </header>
             <section class="modal-card-body">
-                <textarea readonly class="textarea" :rows="rows" v-html="content"></textarea>
+                <textarea aria-label="Content to copy" readonly class="textarea" :rows="rows" v-html="content"></textarea>
             </section>
             <footer class="modal-card-foot">
                 <a id="copy-btn" class="button is-success" :disabled="copied" @click="copyContentToClipboard($event)">

@@ -52,7 +52,7 @@ class api extends external_api
         $categories = [],
         $grades = [],
         $sort = null,
-        $perpage = 4
+        $perpage = 8 // Default is 8 resources per page
     ) {
         $params = self::validate_parameters(self::get_resources_parameters(),
             compact('page', 'keywords', 'type', 'categories', 'grades', 'sort', 'perpage'));

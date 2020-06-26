@@ -43,9 +43,14 @@ module.exports = (env, options) => {
                     use: [
                         'vue-style-loader',
                         'css-loader',
+                        // 'resolve-url-loader',
                         'sass-loader'
                     ]
-                }
+                },
+                // {
+                //     test: /\.(png|jpg|jpeg)$/,
+                //     loader: 'url-loader'
+                // }
             ]
         },
         resolve: {

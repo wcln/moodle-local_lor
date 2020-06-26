@@ -2,6 +2,8 @@
 
 use local_lor\helper;
 use local_lor\item\item;
+use local_lor\item\property\category;
+use local_lor\item\property\grade;
 use local_lor\type\type;
 
 require_once("$CFG->libdir/externallib.php");
@@ -9,37 +11,100 @@ require_once("$CFG->libdir/externallib.php");
 class api extends external_api
 {
 
+    /*
+    |--------------------------------------------------------------------------
+    | Get resources
+    |--------------------------------------------------------------------------
+    |
+    | Search for resources
+    |
+    */
+
     public static function get_resources_parameters()
     {
-        // TODO add search parameters
-        return new external_function_parameters([]);
+        return new external_function_parameters([
+            'page'       => new external_value(PARAM_INT, 'The current page number', VALUE_OPTIONAL),
+            'keywords'   => new external_value(PARAM_TEXT, 'Keywords to search for', VALUE_OPTIONAL),
+            'type'       => new external_value(PARAM_TEXT, 'Type of resources', VALUE_OPTIONAL),
+            'categories' => new external_multiple_structure(
+                new external_single_structure([
+                    'id'   => new external_value(PARAM_INT, 'Category ID'),
+                    'name' => new external_value(PARAM_TEXT, 'Category name'),
+                ]),
+                'List of categories', VALUE_OPTIONAL
+            ),
+            'grades'     => new external_multiple_structure(
+                new external_single_structure([
+                    'id'   => new external_value(PARAM_INT, 'Grade ID'),
+                    'name' => new external_value(PARAM_TEXT, 'Grade name'),
+                ]),
+                'List of grades', VALUE_OPTIONAL
+            ),
+            'sort'       => new external_value(PARAM_TEXT, 'How to sort the results', VALUE_OPTIONAL),
+            'perpage'    => new external_value(PARAM_INT, 'The number of items per page', VALUE_OPTIONAL),
+        ]);
     }
 
-    public static function get_resources()
-    {
-        $items = array_values(item::search());
+    public static function get_resources(
+        $page = 0,
+        $keywords = null,
+        $type = null,
+        $categories = [],
+        $grades = [],
+        $sort = null,
+        $perpage = 4
+    ) {
+        $params = self::validate_parameters(self::get_resources_parameters(),
+            compact('page', 'keywords', 'type', 'categories', 'grades', 'sort', 'perpage'));
+
+        // Clean categories and grades (we only want the IDs for the search function)
+        $params['categories'] = array_column($params['categories'], 'id');
+        $params['grades']     = array_column($params['grades'], 'id');
+
+        $items = array_values(item::search($params['keywords'], $params['type'], $params['categories'],
+            $params['grades'], $params['sort']));
+
+        $numpages = ceil(count($items) / $perpage);
+
+        // Paginate
+        $items = array_slice($items, $page * $perpage, $perpage);
 
         foreach ($items as $item) {
             $item->image = item::get_image_url($item->id);
         }
 
-        return $items;
+        return [
+            'resources' => $items,
+            'pages'     => $numpages,
+        ];
     }
 
     public static function get_resources_returns()
     {
-        return new external_multiple_structure(
-            new external_single_structure([
-                'id'           => new external_value(PARAM_INT, 'Item ID'),
-                'type'         => new external_value(PARAM_TEXT, 'Item type'),
-                'name'         => new external_value(PARAM_TEXT, 'Item name'),
-                'image'        => new external_value(PARAM_TEXT, 'Item image'),
-                'description'  => new external_value(PARAM_RAW, 'Item description'),
-                'timecreated'  => new external_value(PARAM_INT, 'Time created'),
-                'timemodified' => new external_value(PARAM_INT, 'Time modified'),
-            ])
-        );
+        return new external_single_structure([
+            'pages'     => new external_value(PARAM_INT, 'The total number of pages'),
+            'resources' => new external_multiple_structure(
+                new external_single_structure([
+                    'id'           => new external_value(PARAM_INT, 'Item ID'),
+                    'type'         => new external_value(PARAM_TEXT, 'Item type'),
+                    'name'         => new external_value(PARAM_TEXT, 'Item name'),
+                    'image'        => new external_value(PARAM_TEXT, 'Item image'),
+                    'description'  => new external_value(PARAM_RAW, 'Item description'),
+                    'timecreated'  => new external_value(PARAM_INT, 'Time created'),
+                    'timemodified' => new external_value(PARAM_INT, 'Time modified'),
+                ])
+            ),
+        ]);
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Get resource
+    |--------------------------------------------------------------------------
+    |
+    | Get a single resource using the item ID
+    |
+    */
 
     public static function get_resource_parameters()
     {
@@ -95,7 +160,7 @@ class api extends external_api
             'grades'       => new external_value(PARAM_TEXT, 'Item grades'),
             'topics'       => new external_value(PARAM_TEXT, 'Item topics'),
             'display'      => new external_value(PARAM_RAW, 'Item display HTML'),
-            'embed'      => new external_value(PARAM_RAW, 'Item embed HTML'),
+            'embed'        => new external_value(PARAM_RAW, 'Item embed HTML'),
             'data'         => new external_multiple_structure(
                 new external_single_structure([
                     'name'  => new external_value(PARAM_TEXT, 'Item data name'),
@@ -103,6 +168,104 @@ class api extends external_api
                 ])
             ),
         ]);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Get resource types
+    |--------------------------------------------------------------------------
+    |
+    | Get all of the configured resource types.
+    | For example: "Games / media", "Projects", "Group activities" etc...
+    |
+    */
+
+    public static function get_resource_types_parameters()
+    {
+        return new external_function_parameters([]);
+    }
+
+    public static function get_resource_types()
+    {
+        $resource_types = [];
+        foreach (type::get_all_types() as $value => $name) {
+            $resource_types[] = [
+                'value' => $value,
+                'name'  => $name,
+            ];
+        }
+
+        return $resource_types;
+    }
+
+    public static function get_resource_types_returns()
+    {
+        return new external_multiple_structure(
+            new external_single_structure([
+                'value' => new external_value(PARAM_TEXT, 'The resource type value'),
+                'name'  => new external_value(PARAM_TEXT, 'The resource type name to be displayed'),
+            ])
+        );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Get categories
+    |--------------------------------------------------------------------------
+    |
+    | Get all of the configured categories.
+    | For example: "Math", "Science", "Physics"
+    |
+    */
+
+    public static function get_categories_parameters()
+    {
+        return new external_function_parameters([]);
+    }
+
+    public static function get_categories()
+    {
+        return category::get_all();
+    }
+
+    public static function get_categories_returns()
+    {
+        return new external_multiple_structure(
+            new external_single_structure([
+                'id'   => new external_value(PARAM_INT, 'The category ID'),
+                'name' => new external_value(PARAM_TEXT, 'The category name'),
+            ])
+        );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Get grades
+    |--------------------------------------------------------------------------
+    |
+    | Get all of the configured grades.
+    | For example: "1", "2", "10"
+    |
+    */
+
+    public static function get_grades_parameters()
+    {
+        return new external_function_parameters([]);
+    }
+
+    public static function get_grades()
+    {
+        return grade::get_all();
+    }
+
+    public static function get_grades_returns()
+    {
+        return new external_multiple_structure(
+            new external_single_structure([
+                'id'   => new external_value(PARAM_INT, 'The grade ID'),
+                'name' => new external_value(PARAM_TEXT, 'The grade name'),
+            ])
+        );
     }
 
 }

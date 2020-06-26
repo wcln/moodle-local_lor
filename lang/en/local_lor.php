@@ -162,7 +162,7 @@ $string['category_save_success']   = 'Category saved successfully!';
 $string['grade_save_success']      = 'Grade saved successfully!';
 $string['no_categories']           = 'No categories yet';
 $string['no_grades']               = 'No grades yet';
-$string['error_uknown_sort']
+$string['error_unknown_sort']
                                    = 'Unknown sort parameter passed to search function';
 
 $string['search_title']   = 'Learning resources';
@@ -191,7 +191,7 @@ $string['item_contributors_help']
 $string['item_topics']             = 'Topics';
 $string['item_topics_help']
                                    = 'Enter comma separated topics / keywords that will help people search for this resource';
-$string['add_item_link']           = '+ Add resource';
+$string['add_item_link']           = 'Add resource';
 $string['item_type']               = 'Resource type';
 $string['type_form_help']
                                    = 'Select the type of resource you would like to add, then click \'Next\'.';

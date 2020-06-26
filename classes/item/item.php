@@ -199,10 +199,10 @@ class item
      * @throws dml_exception
      */
     public static function search(
-        string $keywords = '',
-        string $type = '',
-        array $categories = [],
-        array $grades = [],
+        $keywords = '',
+        $type = '',
+        $categories = [],
+        $grades = [],
         $sort = self::SORT_RECENT
     ) {
         global $DB;
@@ -215,14 +215,14 @@ class item
             if ($sort === self::SORT_ALPHABETICAL) {
                 $orderby = 'name ASC';
             } else {
-                print_error('error_uknown_sort', 'local_lor');
+                print_error('error_unknown_sort', 'local_lor');
             }
         }
 
         // Get the pre-sorted items
         $items = $DB->get_records(self::TABLE, null, $orderby);
 
-        if ( ! empty($type)) {
+        if ( ! empty($type) && $type !== 'all') {
             $items = self::filter_by_type($items, $type);
         }
 
@@ -234,7 +234,39 @@ class item
             $items = self::filter_by_grade($items, $grades);
         }
 
+        if ( ! empty($keywords)) {
+            $items = self::filter_by_keywords($items, $keywords);
+        }
+
         return $items;
+    }
+
+    private static function filter_by_keywords($items, string $keywords) {
+        return array_filter(
+            $items,
+            function ($item) use ($keywords) {
+
+                // Search item name
+                if (strpos(strtolower($item->name), strtolower($keywords)) !== false) {
+                    return true;
+                }
+
+                // Search item description
+                if (strpos(strtolower($item->description), strtolower($keywords)) !== false) {
+                    return true;
+                }
+
+                // Search item topics
+                $topics = topic::get_item_data($item->id);
+                foreach ($topics as $topic) {
+                    if (strpos(strtolower($topic->name), strtolower($keywords)) !== false) {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        );
     }
 
     /**
@@ -270,7 +302,7 @@ class item
             function ($item) use ($categories) {
                 $item_categories = category::get_item_data($item->id);
                 foreach ($item_categories as $category) {
-                    if (in_array($category, $categories)) {
+                    if (in_array($category->id, $categories)) {
                         return true;
                     }
                 }
@@ -295,7 +327,7 @@ class item
             function ($item) use ($grades) {
                 $item_grades = grade::get_item_data($item->id);
                 foreach ($item_grades as $grade) {
-                    if (in_array($grade, $grades)) {
+                    if (in_array($grade->id, $grades)) {
                         return true;
                     }
                 }

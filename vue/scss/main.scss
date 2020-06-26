@@ -5,8 +5,9 @@ This MUST come first in this file, so that we can overwrite these settings with 
 
 */
 #local-lor-app {
-  button {
-    all: initial;
+  button,
+  .label {
+    all: unset;
   }
 
   .modal {
@@ -21,6 +22,16 @@ This MUST come first in this file, so that we can overwrite these settings with 
 /* Only apply our styles to the Vue app div, otherwise all of Moodle will be affected */
 #local-lor-app {
 
-  /* Import the bulma CSS framework */
+  @import './variables';
+
+  /*
+    Import the Bulma CSS framework
+    See: https://bulma.io/
+   */
   @import "../node_modules/bulma/bulma";
+
+  /* Import vue-multiselect styles
+     See: https://vue-multiselect.js.org/
+   */
+  @import "../node_modules/vue-multiselect/dist/vue-multiselect.min.css";
 }

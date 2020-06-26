@@ -99,7 +99,7 @@
                 ref="shareModal"
                 v-if="showShareModal"
                 @close="showShareModal = false"
-                :content="window.location.href"
+                :content="shareLink"
                 :title="strings.share_modal_title"
                 :rows="1">
         </copy-modal>
@@ -114,7 +114,12 @@
     export default {
         name: "resource-view",
         components: {CopyModal},
-        computed: mapState(['strings']),
+        computed: {
+            ...mapState(['strings']),
+            shareLink() {
+                return window.location.href;
+            }
+        },
         data() {
             return {
                 resource: {},

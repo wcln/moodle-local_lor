@@ -20,20 +20,37 @@ export const store = new Vuex.Store({
             grades: [],
             sort: 'recent' // Sort can be 'recent' or 'alphabetical'
         },
-        pages: 5, // TODO, this should be set when fetching resources
+        pages: 1,
         resourceTypes: [],
         categories: [],
         grades: []
     },
     //strict: process.env.NODE_ENV !== 'production',
     mutations: {
-        setContextID(state, id) { state.contextID = id; },
-        setStrings(state, strings) { state.strings = strings; },
-        setResources(state, resources) { state.resources = resources; },
-        setFilters(state, filters) { state.filters = {...state.filters, ...filters}; },
-        setResourceTypes(state, resourceTypes) { state.resourceTypes = resourceTypes; },
-        setCategories(state, categories) { state.categories = categories; },
-        setGrades(state, grades) { state.grades = grades; }
+        setContextID(state, id) {
+            state.contextID = id;
+        },
+        setStrings(state, strings) {
+            state.strings = strings;
+        },
+        setResources(state, resources) {
+            state.resources = resources;
+        },
+        setFilters(state, filters) {
+            state.filters = {...state.filters, ...filters};
+        },
+        setResourceTypes(state, resourceTypes) {
+            state.resourceTypes = resourceTypes;
+        },
+        setCategories(state, categories) {
+            state.categories = categories;
+        },
+        setGrades(state, grades) {
+            state.grades = grades;
+        },
+        setPages(state, pages) {
+            state.pages = pages;
+        }
     },
     actions: {
         async loadComponentStrings(context) {
@@ -62,8 +79,9 @@ export const store = new Vuex.Store({
         async getResources(context, filters) {
             context.commit('setFilters', filters);
 
-            const resources = await ajax('local_lor_get_resources', context.state.filters);
-            context.commit('setResources', resources);
+            const results = await ajax('local_lor_get_resources', context.state.filters);
+            context.commit('setResources', results.resources);
+            context.commit('setPages', results.pages);
         },
         async getResourceTypes(context) {
             const resourceTypes = await ajax('local_lor_get_resource_types', {});

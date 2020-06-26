@@ -98,7 +98,8 @@
                 this.$store.commit('setFilters', {
                     categories: this.selectedCategories,
                     grades: this.selectedGrades,
-                    sort: this.sort
+                    sort: this.sort,
+                    page: 0 // Reset to the first page when we apply filters
                 });
                 this.$emit('close');
                 this.$store.dispatch('getResources', {});

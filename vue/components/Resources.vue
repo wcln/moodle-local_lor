@@ -38,7 +38,7 @@
         </section>
 
         <!-- Resources -->
-        <div class="columns is-multiline resource-results">
+        <div class="columns is-multiline resource-results is-centered">
             <div class="column is-one-fifth-desktop is-one-quarter-tablet" v-for="resource in resources">
                 <resource-card :resource="resource"></resource-card>
             </div>
@@ -53,16 +53,7 @@
         </div>
 
         <!-- Pagination bar -->
-        <nav class="pagination" role="navigation" aria-label="pagination">
-            <a class="pagination-previous">{{strings.previous_page}}</a>
-            <a class="pagination-next">{{strings.next_page}}</a>
-            <ul class="pagination-list">
-                <li v-for="page in Array(pages).keys()">
-                    <a v-if="currentPage === page" class="pagination-link is-current" :aria-label="'Goto page' + page" aria-current="page">{{page + 1}}</a>
-                    <a v-else class="pagination-link" aria-label="Goto page 1">{{page + 1}}</a>
-                </li>
-            </ul>
-        </nav>
+        <pagination-bar></pagination-bar>
 
         <!-- Filters modal (hidden by default) -->
         <filters-modal v-if="showFiltersModal" @close="showFiltersModal = false"></filters-modal>
@@ -76,17 +67,13 @@
     import SearchForm from "./SearchForm";
     import FiltersModal from "./FiltersModal";
     import AlertMessage from "./AlertMessage";
+    import PaginationBar from "./PaginationBar";
 
     export default {
         name: "resources-index",
-        components: { SearchForm, ResourceCard, FiltersModal, AlertMessage },
+        components: {PaginationBar, SearchForm, ResourceCard, FiltersModal, AlertMessage },
         computed: {
             ...mapState(['strings', 'resources', 'pages', 'filters']),
-            currentPage: {
-                get() {
-                    return this.$store.state.filters.page;
-                }
-            }
         },
         data() {
             return {

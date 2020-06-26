@@ -41,20 +41,22 @@ class api extends external_api
                 'List of grades', VALUE_OPTIONAL
             ),
             'sort'       => new external_value(PARAM_TEXT, 'How to sort the results', VALUE_OPTIONAL),
+            'perpage'    => new external_value(PARAM_INT, 'The number of items per page', VALUE_OPTIONAL),
         ]);
     }
 
     public static function get_resources(
-        $page = null,
+        $page = 0,
         $keywords = null,
         $type = null,
         $categories = [],
         $grades = [],
-        $sort = null
+        $sort = null,
+        $perpage = 4
     ) {
         $params = self::validate_parameters(self::get_resources_parameters(),
-            compact('page', 'keywords', 'type', 'categories', 'grades', 'sort'));
-        
+            compact('page', 'keywords', 'type', 'categories', 'grades', 'sort', 'perpage'));
+
         // Clean categories and grades (we only want the IDs for the search function)
         $params['categories'] = array_column($params['categories'], 'id');
         $params['grades']     = array_column($params['grades'], 'id');
@@ -62,26 +64,37 @@ class api extends external_api
         $items = array_values(item::search($params['keywords'], $params['type'], $params['categories'],
             $params['grades'], $params['sort']));
 
+        $numpages = ceil(count($items) / $perpage);
+
+        // Paginate
+        $items = array_slice($items, $page * $perpage, $perpage);
+
         foreach ($items as $item) {
             $item->image = item::get_image_url($item->id);
         }
 
-        return $items;
+        return [
+            'resources' => $items,
+            'pages'     => $numpages,
+        ];
     }
 
     public static function get_resources_returns()
     {
-        return new external_multiple_structure(
-            new external_single_structure([
-                'id'           => new external_value(PARAM_INT, 'Item ID'),
-                'type'         => new external_value(PARAM_TEXT, 'Item type'),
-                'name'         => new external_value(PARAM_TEXT, 'Item name'),
-                'image'        => new external_value(PARAM_TEXT, 'Item image'),
-                'description'  => new external_value(PARAM_RAW, 'Item description'),
-                'timecreated'  => new external_value(PARAM_INT, 'Time created'),
-                'timemodified' => new external_value(PARAM_INT, 'Time modified'),
-            ])
-        );
+        return new external_single_structure([
+            'pages'     => new external_value(PARAM_INT, 'The total number of pages'),
+            'resources' => new external_multiple_structure(
+                new external_single_structure([
+                    'id'           => new external_value(PARAM_INT, 'Item ID'),
+                    'type'         => new external_value(PARAM_TEXT, 'Item type'),
+                    'name'         => new external_value(PARAM_TEXT, 'Item name'),
+                    'image'        => new external_value(PARAM_TEXT, 'Item image'),
+                    'description'  => new external_value(PARAM_RAW, 'Item description'),
+                    'timecreated'  => new external_value(PARAM_INT, 'Time created'),
+                    'timemodified' => new external_value(PARAM_INT, 'Time modified'),
+                ])
+            ),
+        ]);
     }
 
     /*

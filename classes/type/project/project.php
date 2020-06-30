@@ -2,6 +2,7 @@
 
 namespace local_lor\type\project;
 
+use coding_exception;
 use context_system;
 use core\plugininfo\repository;
 use dml_exception;
@@ -80,16 +81,28 @@ class project
         return $html;
     }
 
-    public static function add_to_form(&$item_form)
+    /**
+     * Add type specific elements to the form
+     *
+     * @param $item_form
+     * @param  null  $item  Item is only sent if we are editing
+     *
+     * @throws coding_exception
+     */
+    public static function add_to_form(&$item_form, $item = null)
     {
+//        $draftitemid = file_get_submitted_draft_itemid('pdf');
+//        file_prepare_draft_area($draftitemid, $context->id, 'local_lor', 'preview_image', $item->id);
+//        $item->image = $draftitemid;
+
         // PDF (.pdf)
-        $item_form->addElement('filepicker', 'pdf', get_string('pdf', 'lortype_project'), null,
+        $item_form->addElement('filemanager', 'pdf', get_string('pdf', 'lortype_project'), null,
             ['maxfiles' => 1, 'accepted_types' => ['.pdf']]);
         $item_form->addHelpButton('pdf', 'pdf', 'lortype_project');
         $item_form->addRule('pdf', get_string('required'), 'required');
 
         // Document (.docx)
-        $item_form->addElement('filepicker', 'document', get_string('document', 'lortype_project'), null,
+        $item_form->addElement('filemanager', 'document', get_string('document', 'lortype_project'), null,
             ['maxfiles' => 1, 'accepted_types' => ['.docx']]);
         $item_form->addHelpButton('document', 'document', 'lortype_project');
         $item_form->addRule('document', get_string('required'), 'required');
@@ -103,34 +116,27 @@ class project
      *      - Default is WCLN_Project_{Item_ID}.png/.docx
      *
      * @param  int  $itemid
-     * @param $form
      *
-     * @return array[]
+     * @return array
+     * @throws coding_exception
      * @throws dml_exception
      */
-    private static function process_files(int $itemid, &$form)
+    private static function process_files(int $itemid)
     {
-        $pdf_filename      = self::FILENAME_PREFIX.$itemid.'.pdf';
-        $document_filename = self::FILENAME_PREFIX.$itemid.'.docx';
+        $item = item::get($itemid);
 
-        return [
-            'pdf'      => [
-                'filename' => $pdf_filename,
-                'success'  => $form->save_file(
-                    'pdf',
-                    \local_lor\repository::get_path_to_repository().self::get_path_to_project_file($pdf_filename),
-                    true
-                ),
+        \local_lor\repository::save_to_repository([
+            [
+                'name'     => 'pdf',
+                'filepath' => self::get_path_to_project_file(\local_lor\repository::format_filename("$item->name.pdf")),
             ],
-            'document' => [
-                'filename' => $document_filename,
-                'success'  => $form->save_file(
-                    'document',
-                    \local_lor\repository::get_path_to_repository().self::get_path_to_project_file($document_filename),
-                    true
-                ),
+            [
+                'name'     => 'document',
+                'filepath' => self::get_path_to_project_file(\local_lor\repository::format_filename("$item->name.docx")),
             ],
-        ];
+        ]);
+
+        // TODO we need to return the filepaths so those can be stored in the database correctly
     }
 
     public static function create($itemid, $data, &$form = null)
@@ -139,13 +145,13 @@ class project
 
         $success = true;
 
-        $results = self::process_files($itemid, $form);
+        $results = self::process_files($itemid);
 
         foreach (self::PROPERTIES as $property) {
             $record = [
                 'itemid' => $itemid,
                 'name'   => $property,
-                'value'  => $results[$property]['filename'],
+                'value'  => $results[$property],
             ];
 
             $success = $success
@@ -164,7 +170,7 @@ class project
 
         $success = true;
 
-        $results = self::process_files($itemid, $form);
+        $results = self::process_files($itemid);
 
         foreach (self::PROPERTIES as $property) {
             if ($existing_record = $DB->get_record_select(

@@ -2,6 +2,8 @@
 
 namespace local_lor;
 
+use dml_exception;
+use moodle_exception;
 use moodle_url;
 
 /**
@@ -31,11 +33,11 @@ class repository
      * Get the selected repository directory
      *
      * @return bool|mixed|object|string
-     * @throws \dml_exception
+     * @throws dml_exception
      */
     public static function get_repository()
     {
-        return get_config('local_lor', 'repository') ? : self::get_default_repository();
+        return get_config('local_lor', 'repository') ?: self::get_default_repository();
     }
 
     /**
@@ -45,13 +47,13 @@ class repository
      * @param $filename string The filename (including file extension)
      *
      * @return moodle_url
-     * @throws \moodle_exception
+     * @throws moodle_exception
      */
     public static function get_file_url(string $path, string $filename)
     {
         return new moodle_url(self::PATH_TO_FILE_FETCHER, [
-            'path' => $path,
-            'filename' => $filename
+            'path'     => $path,
+            'filename' => $filename,
         ]);
     }
 
@@ -59,12 +61,48 @@ class repository
      * Get the full server path to the repository directory (located in moodledata)
      *
      * @return string
-     * @throws \dml_exception
+     * @throws dml_exception
      */
     public static function get_path_to_repository()
     {
         global $CFG;
 
-        return $CFG->dataroot.'/repository/'.self::get_repository() . "/";
+        return $CFG->dataroot.'/repository/'.self::get_repository()."/";
+    }
+
+    /**
+     * Clean and format a filename within a filepath
+     *
+     * @param $filepath string A filepath, for example 'projects/MyProject.pdf'
+     *
+     * @return string The same filepath, with the filename formatted
+     */
+    public static function format_filepath($filepath)
+    {
+        // Separate filename into the basename and the file extension (.pdf, .jpg etc...)
+        $file_extension = pathinfo($filepath, PATHINFO_EXTENSION);
+        $filename       = pathinfo($filepath, PATHINFO_FILENAME);
+
+        if (strpos($filepath, '/') !== false) {
+            $dirname = pathinfo($filepath, PATHINFO_DIRNAME);
+        } else {
+            $dirname = false;
+        }
+
+        // Remove anything which isn't a word, whitespace, number
+        // Adapted from: https://stackoverflow.com/a/2021729
+        $filename = mb_ereg_replace("([^\w\s\d])", '', $filename);
+
+        // Shorten the basename if needed
+        $filename = substr($filename, 0, 255);
+
+        // Convert to lowercase
+        $filename = strtolower($filename);
+
+        if ($dirname !== false) {
+            return "$dirname/$filename.$file_extension";
+        }
+
+        return "$filename.$file_extension";
     }
 }

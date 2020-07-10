@@ -105,4 +105,22 @@ class repository
 
         return "$filename.$file_extension";
     }
+
+    /**
+     * Move a file in the repository
+     *
+     * @param $oldfilepath
+     * @param $newfilepath
+     *
+     * @throws dml_exception
+     */
+    public static function update_filepath($oldfilepath, $newfilepath)
+    {
+        $oldfilepath = self::get_path_to_repository().$oldfilepath;
+        $newfilepath = self::get_path_to_repository().$newfilepath;
+
+        if (file_exists($oldfilepath)) {
+            rename($oldfilepath, $newfilepath);
+        }
+    }
 }

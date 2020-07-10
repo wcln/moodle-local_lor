@@ -118,8 +118,6 @@ class project
      * Save the project PDF and .docx to the filesystem
      *
      * - Specify class constant STORAGE_DIR where files are saved
-     * - Specify class constant FILENAME_PREFIX to change how the files are named
-     *      - Default is WCLN_Project_{Item_ID}.png/.docx
      *
      * @param  int  $itemid
      * @param $form
@@ -134,27 +132,27 @@ class project
         $pdf_filename      = repository::format_filepath("$item->name.pdf");
         $document_filename = repository::format_filepath("$item->name.docx");
 
-        $results = [];
-        if ($form->get_file_content('pdf') !== false) {
-            $results['pdf'] = [
+        $results = [
+            'pdf'      => [
                 'filename' => $pdf_filename,
-                'success'  => $form->save_file(
-                    'pdf',
-                    repository::get_path_to_repository().self::get_path_to_project_file($pdf_filename),
-                    true
-                ),
-            ];
+            ],
+            'document' => [
+                'filename' => $document_filename,
+            ],
+        ];
+
+        if ($form->get_file_content('pdf') !== false) {
+            $results['pdf']['saved'] = $form->save_file(
+                'pdf',
+                repository::get_path_to_repository().self::get_path_to_project_file($pdf_filename),
+                true);
         }
 
         if ($form->get_file_content('document') !== false) {
-            $results['document'] = [
-                'filename' => $document_filename,
-                'success'  => $form->save_file(
-                    'document',
-                    repository::get_path_to_repository().self::get_path_to_project_file($document_filename),
-                    true
-                ),
-            ];
+            $results['document']['saved'] = $form->save_file(
+                'document',
+                repository::get_path_to_repository().self::get_path_to_project_file($document_filename),
+                true);
         }
 
         return $results;
@@ -203,21 +201,24 @@ class project
                 ]
             )
             ) {
-                // Check that a file was uploaded here
-                if (isset($results[$property])) {
-                    $record = [
-                        'id'     => $existing_record->id,
-                        'itemid' => $itemid,
-                        'name'   => $property,
-                        'value'  => $results[$property]['filename'],
-                    ];
+                // Make sure the filename on the server matches the item name
+                repository::update_filepath(self::get_path_to_project_file($existing_record->value),
+                    self::get_path_to_project_file($results[$property]['filename']));
 
-                    $success = $success
-                               && $DB->update_record(
-                            data::TABLE,
-                            (object)$record
-                        );
-                }
+                // Update stored filenames
+                $record = [
+                    'id'     => $existing_record->id,
+                    'itemid' => $itemid,
+                    'name'   => $property,
+                    'value'  => $results[$property]['filename'],
+                ];
+
+                $success = $success
+                           && $DB->update_record(
+                        data::TABLE,
+                        (object)$record
+                    );
+
             }
         }
 

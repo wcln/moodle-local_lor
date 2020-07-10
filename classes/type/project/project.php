@@ -2,15 +2,15 @@
 
 namespace local_lor\type\project;
 
-use context_system;
-use core\plugininfo\repository;
+use coding_exception;
 use dml_exception;
 use html_writer;
 use local_lor\helper;
 use local_lor\item\data;
 use local_lor\item\item;
+use local_lor\repository;
 use local_lor\type\type;
-use moodle_url;
+use moodle_exception;
 
 
 class project
@@ -58,49 +58,66 @@ class project
 
     public static function get_display_html($itemid)
     {
-        $item_data         = data::get_item_data($itemid);
-        $pdf_filename      = $item_data['pdf'];
-        $document_filename = $item_data['document'];
+        $item_data    = data::get_item_data($itemid);
+        $pdf_filename = $item_data['pdf'];
 
         $html = html_writer::tag('embed', '', [
-            'src'    => \local_lor\repository::get_file_url(self::get_path_to_project_file($pdf_filename),
+            'src'    => repository::get_file_url(self::get_path_to_project_file($pdf_filename),
                 $pdf_filename),
             'width'  => '100%',
             'height' => '100%',
         ]);
 
-        // A 'Download Word document' button
-//        $html .= html_writer::tag('a', get_string('download_document', 'lortype_project'), [
-//            'class'    => 'btn btn-default',
-//            'download' => $document_filename,
-//            'href'     => \local_lor\repository::get_file_url(self::get_path_to_project_file($document_filename),
-//                $document_filename),
-//        ]);
-
         return $html;
     }
 
-    public static function add_to_form(&$item_form)
+    /**
+     * Add custom project specific form elements to the form
+     *
+     * @param $item_form
+     * @param  int  $itemid  Only given if we are editing an existing item
+     *
+     * @throws moodle_exception
+     * @throws coding_exception
+     * @throws dml_exception
+     */
+    public static function add_to_form(&$item_form, $itemid = 0)
     {
+        // If we are editing, show a message to let the user know they don't need to reupload the files
+        if ( ! empty($itemid)) {
+            $item_data     = data::get_item_data($itemid);
+            $pdf_link      = repository::get_file_url(self::get_path_to_project_file($item_data['pdf']),
+                $item_data['pdf']);
+            $document_link = repository::get_file_url(self::get_path_to_project_file($item_data['document']),
+                $item_data['document']);
+
+            $item_form->addElement('html', get_string('edit_existing_files_info', 'lortype_project', [
+                'pdf_link'      => $pdf_link->out(),
+                'document_link' => $document_link->out(),
+            ]));
+        }
+
         // PDF (.pdf)
         $item_form->addElement('filepicker', 'pdf', get_string('pdf', 'lortype_project'), null,
             ['maxfiles' => 1, 'accepted_types' => ['.pdf']]);
         $item_form->addHelpButton('pdf', 'pdf', 'lortype_project');
-        $item_form->addRule('pdf', get_string('required'), 'required');
 
         // Document (.docx)
         $item_form->addElement('filepicker', 'document', get_string('document', 'lortype_project'), null,
             ['maxfiles' => 1, 'accepted_types' => ['.docx']]);
         $item_form->addHelpButton('document', 'document', 'lortype_project');
-        $item_form->addRule('document', get_string('required'), 'required');
+
+        // Fields are only required if we are creating a new item
+        if (empty($itemid)) {
+            $item_form->addRule('pdf', get_string('required'), 'required');
+            $item_form->addRule('document', get_string('required'), 'required');
+        }
     }
 
     /**
      * Save the project PDF and .docx to the filesystem
      *
      * - Specify class constant STORAGE_DIR where files are saved
-     * - Specify class constant FILENAME_PREFIX to change how the files are named
-     *      - Default is WCLN_Project_{Item_ID}.png/.docx
      *
      * @param  int  $itemid
      * @param $form
@@ -110,27 +127,35 @@ class project
      */
     private static function process_files(int $itemid, &$form)
     {
-        $pdf_filename      = self::FILENAME_PREFIX.$itemid.'.pdf';
-        $document_filename = self::FILENAME_PREFIX.$itemid.'.docx';
+        $item = item::get($itemid);
 
-        return [
+        $pdf_filename      = repository::format_filepath("$item->name.pdf");
+        $document_filename = repository::format_filepath("$item->name.docx");
+
+        $results = [
             'pdf'      => [
                 'filename' => $pdf_filename,
-                'success'  => $form->save_file(
-                    'pdf',
-                    \local_lor\repository::get_path_to_repository().self::get_path_to_project_file($pdf_filename),
-                    true
-                ),
             ],
             'document' => [
                 'filename' => $document_filename,
-                'success'  => $form->save_file(
-                    'document',
-                    \local_lor\repository::get_path_to_repository().self::get_path_to_project_file($document_filename),
-                    true
-                ),
             ],
         ];
+
+        if ($form->get_file_content('pdf') !== false) {
+            $results['pdf']['saved'] = $form->save_file(
+                'pdf',
+                repository::get_path_to_repository().self::get_path_to_project_file($pdf_filename),
+                true);
+        }
+
+        if ($form->get_file_content('document') !== false) {
+            $results['document']['saved'] = $form->save_file(
+                'document',
+                repository::get_path_to_repository().self::get_path_to_project_file($document_filename),
+                true);
+        }
+
+        return $results;
     }
 
     public static function create($itemid, $data, &$form = null)
@@ -176,6 +201,11 @@ class project
                 ]
             )
             ) {
+                // Make sure the filename on the server matches the item name
+                repository::update_filepath(self::get_path_to_project_file($existing_record->value),
+                    self::get_path_to_project_file($results[$property]['filename']));
+
+                // Update stored filenames
                 $record = [
                     'id'     => $existing_record->id,
                     'itemid' => $itemid,
@@ -188,6 +218,7 @@ class project
                         data::TABLE,
                         (object)$record
                     );
+
             }
         }
 

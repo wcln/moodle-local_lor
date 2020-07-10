@@ -121,7 +121,7 @@ class item_form extends moodleform
                 $type_class::get_name()
             )
         );
-        $type_class::add_to_form($mform);
+        $type_class::add_to_form($mform, isset($this->_customdata['id']) ? $this->_customdata['id'] : 0);
 
         $this->add_action_buttons();
     }

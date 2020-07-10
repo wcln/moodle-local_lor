@@ -3,15 +3,13 @@
 namespace local_lor\type\project;
 
 use coding_exception;
-use context_system;
-use core\plugininfo\repository;
 use dml_exception;
 use html_writer;
 use local_lor\helper;
 use local_lor\item\data;
 use local_lor\item\item;
+use local_lor\repository;
 use local_lor\type\type;
-use moodle_url;
 
 
 class project
@@ -61,10 +59,10 @@ class project
     {
         $item_data         = data::get_item_data($itemid);
         $pdf_filename      = $item_data['pdf'];
-        $document_filename = $item_data['document'];
+//        $document_filename = $item_data['document'];
 
         $html = html_writer::tag('embed', '', [
-            'src'    => \local_lor\repository::get_file_url(self::get_path_to_project_file($pdf_filename),
+            'src'    => repository::get_file_url(self::get_path_to_project_file($pdf_filename),
                 $pdf_filename),
             'width'  => '100%',
             'height' => '100%',
@@ -111,7 +109,7 @@ class project
     /**
      * Save the project PDF and .docx to the filesystem
      *
-     * - Specify class constant STORAGE_DIR where files are saved
+     * - Specify class constant STORAGE_DIR where files are saved within the repository
      * - Specify class constant FILENAME_PREFIX to change how the files are named
      *      - Default is WCLN_Project_{Item_ID}.png/.docx
      *
@@ -125,18 +123,16 @@ class project
     {
         $item = item::get($itemid);
 
-        \local_lor\repository::save_to_repository([
+        return repository::save_to_repository([
             [
                 'name'     => 'pdf',
-                'filepath' => self::get_path_to_project_file(\local_lor\repository::format_filename("$item->name.pdf")),
+                'filepath' => self::get_path_to_project_file("$item->name.pdf"),
             ],
             [
                 'name'     => 'document',
-                'filepath' => self::get_path_to_project_file(\local_lor\repository::format_filename("$item->name.docx")),
+                'filepath' => self::get_path_to_project_file("$item->name.docx"),
             ],
         ]);
-
-        // TODO we need to return the filepaths so those can be stored in the database correctly
     }
 
     public static function create($itemid, $data, &$form = null)

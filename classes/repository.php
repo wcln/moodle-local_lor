@@ -78,7 +78,7 @@ class repository
      * @param  array  $elements
      *                  Should be in format: [ 'name' => 'the form name', 'filepath' => 'The path within the repo to store' ]
      *
-     * @return array Results in format [ 'element_name' => 'saved_filepath' ]
+     * @return array Results in format [ 'element_name' => 'formatted filename' ]
      * @throws coding_exception
      * @throws dml_exception
      */
@@ -98,7 +98,7 @@ class repository
             $files = $fs->get_area_files($context->id, 'local_lor', 'temp', $draftitemid);
 
             foreach ($files as $file) {
-                $filepath = self::get_path_to_repository().self::format_filename($element['filepath']);
+                $filepath = self::get_path_to_repository().self::format_filepath($element['filepath']);
 
                 $file->copy_content_to($filepath);
                 $file->delete();
@@ -111,17 +111,18 @@ class repository
     }
 
     /**
-     * Clean and format a filename
+     * Clean and format a filename within a filepath
      *
-     * @param $filename string A filename, for example 'MyProject.pdf'
+     * @param $filepath string A filepath, for example 'projects/MyProject.pdf'
      *
-     * @return string
+     * @return string The same filepath, with the filename formatted
      */
-    public static function format_filename($filename)
+    public static function format_filepath($filepath)
     {
         // Separate filename into the basename and the file extension (.pdf, .jpg etc...)
-        $file_extension = pathinfo($filename, PATHINFO_EXTENSION);
-        $filename       = pathinfo($filename, PATHINFO_FILENAME);
+        $file_extension = pathinfo($filepath, PATHINFO_EXTENSION);
+        $filename       = pathinfo($filepath, PATHINFO_FILENAME);
+        $dirname        = pathinfo($filepath, PATHINFO_DIRNAME);
 
         // Remove anything which isn't a word, whitespace, number
         // Adapted from: https://stackoverflow.com/a/2021729
@@ -133,6 +134,7 @@ class repository
         // Convert to lowercase
         $filename = strtolower($filename);
 
-        return "$filename.$file_extension";
+        // Rebuild the filepath using the formatted filename
+        return "$dirname/$filename.$file_extension";
     }
 }

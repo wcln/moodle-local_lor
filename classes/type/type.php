@@ -111,6 +111,9 @@ trait type
             $types[$name] = $type_class::get_name();
         }
 
+        // Sort types alphabetically
+        asort($types);
+
         return $types;
     }
 

@@ -123,4 +123,17 @@ class repository
             rename($oldfilepath, $newfilepath);
         }
     }
+
+    /**
+     * Create a directory within the repository if it does not exist
+     *
+     * @param $directory
+     *
+     * @throws dml_exception
+     */
+    public static function create_directory($directory) {
+        if (! file_exists(self::get_path_to_repository().$directory)) {
+            mkdir(self::get_path_to_repository().$directory, 0777, true);
+        }
+    }
 }

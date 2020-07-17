@@ -1,12 +1,12 @@
 <?php
 
-namespace local_lor\type\project;
+namespace local_lor\type\learning_guide;
 
 use local_lor\type\file_type;
 use local_lor\type\type;
 
 
-class project
+class learning_guide
 {
     use file_type, type;
 
@@ -17,11 +17,11 @@ class project
      */
     private static function get_storage_directory()
     {
-        return 'projects';
+        return 'learning_guides';
     }
 
     public static function get_name()
     {
-        return get_string('type_name', 'lortype_project');
+        return get_string('type_name', 'lortype_learning_guide');
     }
 }

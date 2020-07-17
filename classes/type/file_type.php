@@ -124,6 +124,8 @@ trait file_type
     {
         $item = item::get($itemid);
 
+        repository::create_directory(self::get_storage_directory());
+
         $pdf_filename      = repository::format_filepath("$item->name.pdf");
         $document_filename = repository::format_filepath("$item->name.docx");
 

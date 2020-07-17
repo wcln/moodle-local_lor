@@ -144,7 +144,7 @@ class item_form extends moodleform
         $errors = [];
 
         // Validate that the 'name' field is unique
-        if ($DB->record_exists_select(item::TABLE, 'name LIKE :name', ['name' => $data['name']])) {
+        if ($DB->record_exists_select(item::TABLE, 'name LIKE :name AND id != :id', ['name' => $data['name'], 'id' => $data['id']])) {
             $errors['name'] = get_string('error:name_exists', 'local_lor');
         }
 

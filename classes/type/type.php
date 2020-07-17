@@ -61,7 +61,7 @@ trait type
      *
      * @return bool True on success, false on failure
      */
-    public abstract static function create($itemid, $data, $form = null);
+    public abstract static function create($itemid, $data, &$form = null);
 
     /**
      * Called after an item of this type is updated
@@ -75,7 +75,7 @@ trait type
      *
      * @return bool True on success, false on failure
      */
-    public abstract static function update($itemid, $data, $form = null);
+    public abstract static function update($itemid, $data, &$form = null);
 
     /**
      * Called after a LOR item of this type is deleted

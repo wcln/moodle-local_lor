@@ -2,6 +2,7 @@
 
 namespace local_lor\form;
 
+use local_lor\item\item;
 use local_lor\item\property\category;
 use local_lor\item\property\contributor;
 use local_lor\item\property\grade;
@@ -124,5 +125,29 @@ class item_form extends moodleform
         $type_class::add_to_form($mform, isset($this->_customdata['id']) ? $this->_customdata['id'] : 0);
 
         $this->add_action_buttons();
+    }
+
+    /**
+     * Validate the form
+     *
+     * @param  array  $data
+     * @param  array  $files
+     *
+     * @return array
+     * @throws \coding_exception
+     * @throws \dml_exception
+     */
+    function validation($data, $files)
+    {
+        global $DB;
+
+        $errors = [];
+
+        // Validate that the 'name' field is unique
+        if ($DB->record_exists_select(item::TABLE, 'name LIKE :name', ['name' => $data['name']])) {
+            $errors['name'] = get_string('error:name_exists', 'local_lor');
+        }
+
+        return $errors;
     }
 }

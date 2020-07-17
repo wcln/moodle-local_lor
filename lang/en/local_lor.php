@@ -211,3 +211,4 @@ $string['back']              = 'Back';
 $string['embed_modal_title'] = 'Embed this resource';
 $string['copied']            = 'Copied';
 $string['share_modal_title'] = 'Share this resource';
+$string['error:name_exists'] = 'A resource with this name already exists. Please enter a different name.';

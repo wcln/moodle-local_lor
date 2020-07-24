@@ -36,9 +36,7 @@
                     <div class="card-content">
                         <div class="media">
                             <div class="media-left">
-                                <figure class="image is-48x48">
-                                    <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
-                                </figure>
+                                <i :class="'has-text-primary fas fa-' + icon"></i>
                             </div>
                             <div class="media-content">
                                 <p class="title is-5">{{resource.name}}</p>
@@ -130,9 +128,19 @@
         name: "resource-view",
         components: {CopyModal},
         computed: {
-            ...mapState(['strings']),
+            ...mapState(['strings', 'resourceTypes']),
             shareLink() {
                 return window.location.href;
+            },
+            icon() {
+                let resourceType = this.resourceTypes.find(type => {
+                    return type.value === this.resource.type;
+                });
+                if (resourceType !== undefined) {
+                    return resourceType.icon;
+                }
+
+                return false;
             }
         },
         data() {
@@ -147,6 +155,8 @@
             ajax('local_lor_get_resource', {id: this.$route.params.resourceId}).then(resource => {
                 this.resource = resource;
             });
+
+            this.$store.dispatch('getResourceTypes');
         }
     }
 </script>
@@ -176,6 +186,10 @@
             position: static;
             opacity: 1;
             transition: opacity .4s linear;
+        }
+
+        .media-left > i {
+            font-size: 36px;
         }
     }
 </style>

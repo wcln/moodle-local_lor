@@ -72,16 +72,24 @@
                     </div>
                     <footer class="card-footer">
                         <a class="card-footer-item" @click="showShareModal = true">
+                            <i class="fas fa-share-square"></i>
                             {{strings.share}}
                         </a>
                         <a class="card-footer-item">
+                            <i class="fas fa-share-alt"></i>
                             {{strings.related}}
                         </a>
                         <a class="card-footer-item" @click="showEmbedModal = true">
+                            <i class="fas fa-code"></i>
                             {{strings.embed}}
                         </a>
-                        <a class="card-footer-item" :href="'/local/lor/item/edit.php?id=' + resource.id">
+                        <a class="card-footer-item has-text-info" :href="'/local/lor/item/edit.php?id=' + resource.id">
+                            <i class="fas fa-edit"></i>
                             {{strings.edit}}
+                        </a>
+                        <a class="card-footer-item has-text-danger" :href="'/local/lor/item/delete.php?id=' + resource.id">
+                            <i class="fas fa-trash"></i>
+                            {{strings.delete}}
                         </a>
                     </footer>
                 </div>
@@ -191,5 +199,9 @@
         .media-left > i {
             font-size: 36px;
         }
+    }
+
+    .card-footer-item > i {
+        margin-right: 1rem;
     }
 </style>

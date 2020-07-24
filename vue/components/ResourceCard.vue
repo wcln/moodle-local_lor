@@ -8,9 +8,7 @@
         <div class="card-content">
             <div class="media">
                 <div class="media-left">
-                    <span class="icon is-large has-text-primary">
-                        <i :class="'fas fa-' + icon"></i>
-                    </span>
+                    <i :class="'has-text-primary fas fa-' + icon"></i>
                 </div>
                 <div class="media-content">
                     <p class="title is-5">{{resource.name}}</p>
@@ -50,7 +48,7 @@
 </script>
 
 <style scoped lang="scss">
-    .media-left > .icon > i {
-        font-size: 30px;
+    .media-left > i {
+        font-size: 32px;
     }
 </style>

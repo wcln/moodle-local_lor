@@ -95,4 +95,8 @@ class video
         return $success;
     }
 
+    public static function get_icon()
+    {
+        return 'video';
+    }
 }

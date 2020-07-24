@@ -20,6 +20,15 @@ trait type
     public abstract static function get_name();
 
     /**
+     * Return a font-awesome icon
+     *
+     * For example, 'video'. Not the whole identifier i.e. fas fa-video, just 'video'
+     *
+     * @return string
+     */
+    public abstract static function get_icon();
+
+    /**
      * Get the HTML code which one can copy & paste to embed this resource
      * into a course or webpage
      *

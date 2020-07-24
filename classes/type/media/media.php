@@ -123,4 +123,8 @@ class media
     }
 
 
+    public static function get_icon()
+    {
+        return 'laptop';
+    }
 }

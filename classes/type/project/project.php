@@ -24,4 +24,9 @@ class project
     {
         return get_string('type_name', 'lortype_project');
     }
+
+    public static function get_icon()
+    {
+        return 'pencil-ruler';
+    }
 }

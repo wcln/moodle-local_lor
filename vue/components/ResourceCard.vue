@@ -8,9 +8,9 @@
         <div class="card-content">
             <div class="media">
                 <div class="media-left">
-                    <figure class="image is-48x48">
-                        <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
-                    </figure>
+                    <span class="icon is-large has-text-primary">
+                        <i :class="'fas fa-' + icon"></i>
+                    </span>
                 </div>
                 <div class="media-content">
                     <p class="title is-5">{{resource.name}}</p>
@@ -33,10 +33,24 @@
     export default {
         name: "resource-card",
         props: ['resource'],
-        computed: mapState(['strings']),
+        computed: {
+            ...mapState(['strings', 'resourceTypes']),
+            icon() {
+                let resourceType = this.resourceTypes.find(type => {
+                    return type.value === this.resource.type;
+                });
+                if (resourceType !== undefined) {
+                    return resourceType.icon;
+                }
+
+                return false;
+            }
+        },
     }
 </script>
 
 <style scoped lang="scss">
-
+    .media-left > .icon > i {
+        font-size: 36px;
+    }
 </style>

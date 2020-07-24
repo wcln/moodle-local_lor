@@ -23,7 +23,10 @@ export const store = new Vuex.Store({
         pages: 1,
         resourceTypes: [],
         categories: [],
-        grades: []
+        grades: [],
+        user: {
+            isAdmin: false
+        }
     },
     //strict: process.env.NODE_ENV !== 'production',
     mutations: {

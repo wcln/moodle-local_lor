@@ -83,11 +83,11 @@
                             <i class="fas fa-code"></i>
                             {{strings.embed}}
                         </a>
-                        <a class="card-footer-item has-text-info" :href="'/local/lor/item/edit.php?id=' + resource.id">
+                        <a v-if="user.isAdmin" class="card-footer-item has-text-info" :href="'/local/lor/item/edit.php?id=' + resource.id">
                             <i class="fas fa-edit"></i>
                             {{strings.edit}}
                         </a>
-                        <a class="card-footer-item has-text-danger" :href="'/local/lor/item/delete.php?id=' + resource.id">
+                        <a v-if="user.isAdmin" class="card-footer-item has-text-danger" :href="'/local/lor/item/delete.php?id=' + resource.id">
                             <i class="fas fa-trash"></i>
                             {{strings.delete}}
                         </a>
@@ -136,7 +136,7 @@
         name: "resource-view",
         components: {CopyModal},
         computed: {
-            ...mapState(['strings', 'resourceTypes']),
+            ...mapState(['strings', 'resourceTypes', 'user']),
             shareLink() {
                 return window.location.href;
             },

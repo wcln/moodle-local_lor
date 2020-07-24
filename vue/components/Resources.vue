@@ -13,7 +13,7 @@
         <section class="hero is-primary is-medium">
             <div class="hero-head has-text-right">
                 <!-- Add a resource button -->
-                <a class="button is-primary is-inverted" href="/local/lor/item/add.php">
+                <a v-if="user.isAdmin" class="button is-primary is-inverted" href="/local/lor/item/add.php">
                     <span class="icon">
                         <i class="fas fa-plus"></i>
                     </span>
@@ -73,7 +73,7 @@
         name: "resources-index",
         components: {PaginationBar, SearchForm, ResourceCard, FiltersModal, AlertMessage },
         computed: {
-            ...mapState(['strings', 'resources', 'pages', 'filters']),
+            ...mapState(['strings', 'resources', 'pages', 'filters', 'user']),
         },
         data() {
             return {

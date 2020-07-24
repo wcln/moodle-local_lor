@@ -51,6 +51,6 @@
 
 <style scoped lang="scss">
     .media-left > .icon > i {
-        font-size: 36px;
+        font-size: 30px;
     }
 </style>

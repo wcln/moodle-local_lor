@@ -24,4 +24,9 @@ class learning_guide
     {
         return get_string('type_name', 'lortype_learning_guide');
     }
+
+    public static function get_icon()
+    {
+        return 'book-reader';
+    }
 }

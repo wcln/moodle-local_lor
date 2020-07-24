@@ -53,7 +53,8 @@ class api extends external_api
         $grades = [],
         $sort = null,
         $perpage = 8 // Default is 8 resources per page
-    ) {
+    )
+    {
         $params = self::validate_parameters(self::get_resources_parameters(),
             compact('page', 'keywords', 'type', 'categories', 'grades', 'sort', 'perpage'));
 
@@ -189,9 +190,11 @@ class api extends external_api
     {
         $resource_types = [];
         foreach (type::get_all_types() as $value => $name) {
+            $type_class       = type::get_class($value);
             $resource_types[] = [
                 'value' => $value,
                 'name'  => $name,
+                'icon'  => $type_class::get_icon(),
             ];
         }
 
@@ -204,6 +207,7 @@ class api extends external_api
             new external_single_structure([
                 'value' => new external_value(PARAM_TEXT, 'The resource type value'),
                 'name'  => new external_value(PARAM_TEXT, 'The resource type name to be displayed'),
+                'icon'  => new external_value(PARAM_TEXT, 'The resource font-awesome icon identifier'),
             ])
         );
     }

@@ -2,6 +2,8 @@
 
 namespace local_lor\type\video;
 
+use dml_exception;
+use html_writer;
 use local_lor\item\data;
 use local_lor\type\type;
 
@@ -10,6 +12,7 @@ class video
     use type;
 
     const PROPERTIES = ['videoid'];
+    const YOUTUBE_EMBED_URL = 'https://www.youtube.com/embed/';
 
     public static function get_name()
     {
@@ -18,12 +21,23 @@ class video
 
     public static function get_embed_html($itemid)
     {
-        // TODO
+        // In this instance, the display function and embed function will return the same HTML
+        return self::get_display_html($itemid);
     }
 
     public static function get_display_html($itemid)
     {
-        // TODO: Implement get_display_html() method.
+        $html = html_writer::start_tag('p', ['align' => 'center']);
+        $html .= html_writer::tag('iframe', '', [
+            'src'             => self::get_embed_url($itemid),
+            'allowfullscreen' => true,
+            'frameborder'     => 0,
+            'height'          => 360,
+            'width'           => 640,
+        ]);
+        $html .= html_writer::end_tag('p');
+
+        return $html;
     }
 
     public static function add_to_form(&$item_form)
@@ -78,10 +92,10 @@ class video
             )
             ) {
                 $record = [
-                    'id' => $existing_record->id,
+                    'id'     => $existing_record->id,
                     'itemid' => $itemid,
-                    'name' => $property,
-                    'value' => $data->{$property},
+                    'name'   => $property,
+                    'value'  => $data->{$property},
                 ];
 
                 $success = $success
@@ -98,5 +112,20 @@ class video
     public static function get_icon()
     {
         return 'video';
+    }
+
+    /**
+     * Build the Youtube video embed URL
+     *
+     * @param  int  $itemid
+     *
+     * @return string
+     * @throws dml_exception
+     */
+    private static function get_embed_url(int $itemid)
+    {
+        $data = data::get_item_data($itemid);
+
+        return self::YOUTUBE_EMBED_URL.$data['videoid'].'?rel=0';
     }
 }

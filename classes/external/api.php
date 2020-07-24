@@ -272,4 +272,34 @@ class api extends external_api
         );
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | Get user
+    |--------------------------------------------------------------------------
+    |
+    | Get the current logged in user. For now this just checks if they are an admin
+    | so we can hide some controls on the front end.
+    |
+    */
+
+    public static function get_user_parameters()
+    {
+        return new external_function_parameters([]);
+    }
+
+    public static function get_user()
+    {
+        return [
+            'isAdmin' => is_siteadmin(),
+        ];
+    }
+
+    public static function get_user_returns()
+    {
+        return new external_single_structure([
+            'isAdmin' => new external_value(PARAM_BOOL,
+                'True if the current logged in user is an admin, otherwise false'),
+        ]);
+    }
+
 }

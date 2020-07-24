@@ -13,6 +13,7 @@ function init(contextid) {
 
     store.commit('setContextID', contextid);
     store.dispatch('loadComponentStrings');
+    store.dispatch('loadUser');
 
     // You have to use child routes if you use the same component. Otherwise the component's beforeRouteUpdate
     // will not be called.

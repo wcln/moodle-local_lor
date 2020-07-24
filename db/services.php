@@ -50,4 +50,13 @@ $functions = [
         'ajax'          => true,
         'loginrequired' => false,
     ],
+    'local_lor_get_user' => [
+        'classname'     => 'api',
+        'methodname'    => 'get_user',
+        'classpath'     => 'local/lor/classes/external/api.php',
+        'description'   => 'Get the current logged in user',
+        'type'          => 'read',
+        'ajax'          => true,
+        'loginrequired' => false,
+    ],
 ];

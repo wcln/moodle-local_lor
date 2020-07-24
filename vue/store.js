@@ -36,6 +36,9 @@ export const store = new Vuex.Store({
         setStrings(state, strings) {
             state.strings = strings;
         },
+        setUser(state, user) {
+            state.user = {...state.user, ...user};
+        },
         setResources(state, resources) {
             state.resources = resources;
         },
@@ -78,6 +81,10 @@ export const store = new Vuex.Store({
                 context.commit('setStrings', strings);
                 moodleStorage.set(cacheKey, JSON.stringify(strings));
             }
+        },
+        async loadUser(context) {
+              const user = await ajax('local_lor_get_user', {});
+              context.commit('setUser', user);
         },
         async getResources(context, filters) {
             context.commit('setFilters', filters);

@@ -2,7 +2,7 @@
     <div class="card">
         <div class="card-image">
             <figure class="image is-4by3">
-                <img :src="resource.image" alt="Image alt">
+                <img :src="resource.image" alt="Resource preview image">
             </figure>
         </div>
         <div class="card-content">
@@ -50,5 +50,9 @@
 <style scoped lang="scss">
     .media-left > i {
         font-size: 32px;
+    }
+
+    .card-image .image img {
+        object-fit: cover;
     }
 </style>

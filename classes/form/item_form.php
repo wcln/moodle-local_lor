@@ -2,6 +2,8 @@
 
 namespace local_lor\form;
 
+use coding_exception;
+use dml_exception;
 use local_lor\item\item;
 use local_lor\item\property\category;
 use local_lor\item\property\contributor;
@@ -134,8 +136,8 @@ class item_form extends moodleform
      * @param  array  $files
      *
      * @return array
-     * @throws \coding_exception
-     * @throws \dml_exception
+     * @throws coding_exception
+     * @throws dml_exception
      */
     function validation($data, $files)
     {
@@ -144,8 +146,20 @@ class item_form extends moodleform
         $errors = [];
 
         // Validate that the 'name' field is unique
-        if ($DB->record_exists_select(item::TABLE, 'name LIKE :name AND id != :id', ['name' => $data['name'], 'id' => $data['id']])) {
+        if ($DB->record_exists_select(item::TABLE, 'name LIKE :name AND id != :id',
+            ['name' => $data['name'], 'id' => $data['id']])
+        ) {
             $errors['name'] = get_string('error:name_exists', 'local_lor');
+        }
+
+        // Validate the length of the 'name' field
+        if (strlen($data['name']) >= 200) {
+            $errors['name'] = get_string('error:name_length', 'local_lor');
+        }
+
+        // Validate the length of the 'description' field
+        if (strlen($data['description']['text'] >= 500)) {
+            $errors['description'] = get_string('error:description_length', 'local_lor');
         }
 
         return $errors;

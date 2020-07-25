@@ -110,7 +110,7 @@ class item
         $item = [
             'name'         => $data->name,
             'type'         => $data->type,
-            'description'  => $data->description['text'],
+            'description'  => is_array($data->description) ? $data->description['text'] : $data->description,
             'timecreated'  => time(),
             'timemodified' => time(),
         ];

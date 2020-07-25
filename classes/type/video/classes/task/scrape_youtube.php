@@ -6,6 +6,8 @@ use coding_exception;
 use core\task\scheduled_task;
 use lang_string;
 use local_lor\item\data;
+use local_lor\item\item;
+use local_lor\item\property\category;
 use stdClass;
 
 defined('MOODLE_INTERNAL') || die();
@@ -66,7 +68,7 @@ class scrape_youtube extends scheduled_task
         // If videos were found (should always occur).
         if (property_exists($response, 'items') && count($response->items) != 0) {
             // Get all categories in database, to be used within loop.
-            $categories = local_lor_get_categories();
+            $categories = category::get_all_menu();
 
             mtrace('Categories retrieved from database.');
 
@@ -106,13 +108,13 @@ class scrape_youtube extends scheduled_task
                         $playlist_title = $response->items[0]->snippet->title;
 
                         // For each of the possible categories (in the database).
-                        foreach ($categories as $category) {
+                        foreach ($categories as $id => $name) {
                             // If the playlist title matches the category name.
-                            if (preg_match("/(?i)$category->name/", $playlist_title)) {
+                            if (preg_match("/(?i)$name/", $playlist_title)) {
                                 // Retrieve the category ID.
-                                $category_to_add = $category->id;
+                                $category_to_add = $id;
 
-                                mtrace("Found a category for the video: '$category->name'");
+                                mtrace("Found a category for the video: '$name'");
 
                                 // Ensure we only set one category.
                                 break;
@@ -148,16 +150,8 @@ class scrape_youtube extends scheduled_task
 
                             mtrace("Found ".count($topics)." topics.");
 
-                            // Create empty record to be inserted into lor_content.
+                            // Create empty record to be inserted into local_lor_item.
                             $record = new stdClass();
-
-                            // Video type.
-                            $record->type = 3;
-
-                            // Clean the title. Remove redundant sub-strings.
-                            $record->title
-                                = preg_replace('/^(?i)[B,W]CLN\s*-*\s*|OSBC\s*-*\s*|Math\s*-*\s*|Chemistry\s*-*\s*|Physics\s*-*\s*|English\s*-*\s*/',
-                                '', $title);
 
                             // Store the medium sized thumbnail image.
                             $record->image = $video->snippet->thumbnails->medium->url;
@@ -168,13 +162,15 @@ class scrape_youtube extends scheduled_task
                             // Insert the record, and retrieve the generated id.
                             $id = $DB->insert_record('lor_content', $record);
 
-                            mtrace("Video added to lor_content table.");
+                            item::create((object) [
+                                 'name' => preg_replace('/^(?i)[B,W]CLN\s*-*\s*|OSBC\s*-*\s*|Math\s*-*\s*|Chemistry\s*-*\s*|Physics\s*-*\s*|English\s*-*\s*/',
+                                     '', $title),
+                                 'type' => 'video',
+                                 'description' => '',
+                                 'videoid' => $video_id
+                            ]);
 
-                            // Add the item category to the database.
-                            $DB->execute('INSERT INTO {lor_content_categories}(content, category) VALUES (?,?)', array(
-                                $id,
-                                (int)$category_to_add,
-                            ));
+                            mtrace("Video added to local_lor_item table.");
 
                             mtrace("Video category added to lor_content_categories table.");
 

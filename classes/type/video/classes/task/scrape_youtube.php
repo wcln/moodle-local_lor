@@ -3,6 +3,7 @@
 namespace lortype_video\task;
 
 use coding_exception;
+use context_system;
 use core\task\scheduled_task;
 use lang_string;
 use local_lor\item\data;
@@ -79,7 +80,8 @@ class scrape_youtube extends scheduled_task
 
                 // If video does not exist in LOR, proceed.
                 if ( ! $DB->record_exists_select(data::TABLE, "name LIKE 'videoid' AND value LIKE :videoid",
-                    ['videoid' => $video_id])) {
+                    ['videoid' => $video_id])
+                ) {
                     // Extract the title for ease of use.
                     $title = $video->snippet->title;
 
@@ -107,6 +109,8 @@ class scrape_youtube extends scheduled_task
                         // Retrive the title of the playlist that this video is in.
                         $playlist_title = $response->items[0]->snippet->title;
 
+                        mtrace("Video in playlist: '$playlist_title'");
+
                         // For each of the possible categories (in the database).
                         foreach ($categories as $id => $name) {
                             // If the playlist title matches the category name.
@@ -114,7 +118,7 @@ class scrape_youtube extends scheduled_task
                                 // Retrieve the category ID.
                                 $category_to_add = $id;
 
-                                mtrace("Found a category for the video: '$name'");
+                                mtrace("Found a category for the video: '$name' with ID: '$id'");
 
                                 // Ensure we only set one category.
                                 break;
@@ -152,56 +156,36 @@ class scrape_youtube extends scheduled_task
 
                             // Create empty record to be inserted into local_lor_item.
                             $record = new stdClass();
-
-                            // Store the medium sized thumbnail image.
-                            $record->image = $video->snippet->thumbnails->medium->url;
-
                             // Convert to MySQL date format.
+                            // TODO modify item::create to accept a date created
                             $record->date_created = date("Y-m-d H:i:s", strtotime($video->snippet->publishedAt));
 
-                            // Insert the record, and retrieve the generated id.
-                            $id = $DB->insert_record('lor_content', $record);
-
-                            item::create((object) [
-                                 'name' => preg_replace('/^(?i)[B,W]CLN\s*-*\s*|OSBC\s*-*\s*|Math\s*-*\s*|Chemistry\s*-*\s*|Physics\s*-*\s*|English\s*-*\s*/',
-                                     '', $title),
-                                 'type' => 'video',
-                                 'description' => '',
-                                 'videoid' => $video_id
+                            $itemid = item::create((object)[
+                                'name'         => preg_replace('/^(?i)[B,W]CLN\s*-*\s*|OSBC\s*-*\s*|Math\s*-*\s*|Chemistry\s*-*\s*|Physics\s*-*\s*|English\s*-*\s*/',
+                                    '', $title),
+                                'type'         => 'video',
+                                'description'  => '',
+                                'videoid'      => $video_id,
+                                'categories'   => [$category_to_add],
+                                'topics'       => implode(',', $topics),
+                                'grades'       => [],
+                                'contributors' => [],
                             ]);
 
                             mtrace("Video added to local_lor_item table.");
 
-                            mtrace("Video category added to lor_content_categories table.");
+                            $fs       = get_file_storage();
+                            $fileinfo = [
+                                'contextid' => context_system::instance()->id,
+                                'component' => 'local_lor',
+                                'filearea'  => 'preview_image',
+                                'itemid'    => $itemid,
+                                'filepath'  => '/',
+                                'filename'  => "$video_id.jpg",
+                            ];
+                            $fs->create_file_from_url($fileinfo, $video->snippet->thumbnails->medium->url);
 
-                            // Insert into lor_topic table and lor_content_topics table.
-                            foreach ($topics as $word) {
-                                // Check if topic exists already, if not then insert.
-                                $existing_record = $DB->get_record_sql('SELECT name FROM {lor_topic} WHERE name=?',
-                                    array($word));
-                                if ($existing_record) {
-                                    $DB->execute('INSERT INTO {lor_content_topics}(content, topic) VALUES (?,?)', array(
-                                        $id,
-                                        $word,
-                                    ));
-                                } else {
-                                    $DB->execute('INSERT INTO {lor_topic}(name) VALUES (?)', array($word));
-                                    $DB->execute('INSERT INTO {lor_content_topics}(content, topic) VALUES (?,?)', array(
-                                        $id,
-                                        $word,
-                                    ));
-                                }
-                            }
-
-                            mtrace("Topics added to database.");
-
-                            // Insert into lor_content_videos table.
-                            $DB->execute('INSERT INTO {lor_content_videos}(content, video_id) VALUES (?, ?)', array(
-                                $id,
-                                $video_id,
-                            ));
-
-                            mtrace("Video ID added to lor_content_videos table.");
+                            mtrace("YouTube preview image saved to the database.");
                         } else {
                             mtrace("No category found. Skipping.");
                         }

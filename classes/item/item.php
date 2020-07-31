@@ -100,7 +100,7 @@ class item
      *
      * @param  null  $form  The Moodle form
      *
-     * @return bool True on success, false on failure
+     * @return int The created item ID
      * @throws dml_exception
      */
     public static function create($data, $form = null)
@@ -117,15 +117,17 @@ class item
 
         // Create the item, and call the type specific create func. as well as property funcs.
         if ($itemid = $DB->insert_record(self::TABLE, (object)$item)) {
-            self::save_image($itemid, $data->image);
+            if (isset($data->image)) {
+                self::save_image($itemid, $data->image);
+            }
             self::save_properties($itemid, $data);
 
             $type_class = type::get_class($data->type);
 
-            return $type_class::create($itemid, $data, $form);
+            $type_class::create($itemid, $data, $form);
         }
 
-        return false;
+        return $itemid;
     }
 
     /**
@@ -241,11 +243,11 @@ class item
         return $items;
     }
 
-    private static function filter_by_keywords($items, string $keywords) {
+    private static function filter_by_keywords($items, string $keywords)
+    {
         return array_filter(
             $items,
             function ($item) use ($keywords) {
-
                 // Search item name
                 if (strpos(strtolower($item->name), strtolower($keywords)) !== false) {
                     return true;

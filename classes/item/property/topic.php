@@ -14,7 +14,7 @@ class topic implements noneditable_property
     /**
      * Get topics for an item
      *
-     * @param int $itemid
+     * @param  int  $itemid
      *
      * @return array of objects containing properties: topic ID and topic name
      * @throws dml_exception
@@ -46,28 +46,30 @@ class topic implements noneditable_property
 
         $topics = explode(',', $data->topics);
         foreach ($topics as $topic) {
-            if ($existing_topic = self::get_topic($topic)) {
-                $DB->insert_record(
-                    self::LINKING_TABLE,
-                    (object)[
-                        'itemid'  => $itemid,
-                        'topicid' => $existing_topic->id,
-                    ],
-                    false
-                );
-            } else {
-                if ($topicid = $DB->insert_record(
-                    self::TABLE,
-                    (object)['name' => $topic]
-                )
-                ) {
+            if ( ! empty($topic)) {
+                if ($existing_topic = self::get_topic($topic)) {
                     $DB->insert_record(
                         self::LINKING_TABLE,
                         (object)[
                             'itemid'  => $itemid,
-                            'topicid' => $topicid,
-                        ]
+                            'topicid' => $existing_topic->id,
+                        ],
+                        false
                     );
+                } else {
+                    if ($topicid = $DB->insert_record(
+                        self::TABLE,
+                        (object)['name' => $topic]
+                    )
+                    ) {
+                        $DB->insert_record(
+                            self::LINKING_TABLE,
+                            (object)[
+                                'itemid'  => $itemid,
+                                'topicid' => $topicid,
+                            ]
+                        );
+                    }
                 }
             }
         }

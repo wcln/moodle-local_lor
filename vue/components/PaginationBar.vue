@@ -61,6 +61,7 @@
                 if (page >= 0 && page < this.pages) {
                     this.currentPage = page;
                     this.$store.dispatch('getResources', {});
+                    document.getElementById('resources').scrollIntoView();
                 }
             }
         }

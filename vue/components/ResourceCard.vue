@@ -11,10 +11,10 @@
                     <i :class="'has-text-primary fas fa-' + icon"></i>
                 </div>
                 <div class="media-content">
-                    <p class="title is-5">{{resource.name}}</p>
+                    <p class="title is-5">{{name}}</p>
                 </div>
             </div>
-            <div class="content" v-html="resource.description">
+            <div class="content" v-html="description">
             </div>
         </div>
         <footer class="card-footer">
@@ -42,6 +42,20 @@
                 }
 
                 return false;
+            },
+            name() {
+                if (this.resource.description.length === 0 && this.resource.name.length > 150) {
+                    return this.resource.name.slice(0, 100) + '...';
+                }
+
+                return this.resource.name;
+            },
+            description() {
+              if (this.resource.description.length === 0 && this.resource.name.length > 150) {
+                return '...' + this.resource.name.slice(100);
+              }
+
+              return this.resource.description;
             }
         },
     }

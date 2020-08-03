@@ -15,7 +15,7 @@ class project
      *
      * @return string
      */
-    private static function get_storage_directory()
+    public static function get_storage_directory()
     {
         return 'projects';
     }

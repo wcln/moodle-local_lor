@@ -15,7 +15,7 @@ class group_activity
      *
      * @return string
      */
-    private static function get_storage_directory()
+    public static function get_storage_directory()
     {
         return 'group_activities';
     }

@@ -15,7 +15,7 @@ class learning_guide
      *
      * @return string
      */
-    private static function get_storage_directory()
+    public static function get_storage_directory()
     {
         return 'learning_guides';
     }

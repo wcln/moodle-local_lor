@@ -3,4 +3,6 @@
 *.sass.map
 *.scss.map
 
+images
+
 vue/node_modules

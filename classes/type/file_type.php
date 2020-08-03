@@ -17,7 +17,7 @@ trait file_type
     /**
      * Override this if you want to use a storage directory other than 'files' in the repo
      */
-    private static function get_storage_directory()
+    public static function get_storage_directory()
     {
         return 'files';
     }

@@ -26,11 +26,15 @@ class media
     {
         $item_data = data::get_item_data($itemid);
 
-        return html_writer::tag('iframe', null, [
+        $html = html_writer::start_tag('p', ['align' => 'center']);
+        $html .= html_writer::tag('iframe', null, [
             'width'  => $item_data['height'],
             'height' => $item_data['height'],
             'src'    => $item_data['url'],
         ]);
+        $html .= html_writer::end_tag('p');
+
+        return $html;
     }
 
     public static function add_to_form(&$item_form)

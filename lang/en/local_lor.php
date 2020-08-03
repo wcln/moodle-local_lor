@@ -230,3 +230,4 @@ $string['download_document']        = 'Download Word document';
 $string['error:name_length']        = 'The name is too long, please enter a name less than 200 characters long';
 $string['error:description_length']
                                     = 'The description is too long, please enter a description less than 500 characters long';
+$string['error:name_no_symbol']     = 'Resource names can not include the symbol \'{$a}\'';

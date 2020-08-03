@@ -9,22 +9,6 @@ use plugin_renderer_base;
 
 class renderer extends plugin_renderer_base
 {
-
-    /**
-     * Render the item view page
-     *
-     * @param $page
-     *
-     * @return bool|string
-     * @throws moodle_exception
-     */
-    public function render_item_view($page)
-    {
-        $data = $page->export_for_template($this);
-
-        return parent::render_from_template('local_lor/item_view', $data);
-    }
-
     /**
      * Render the list of categories on the settings page
      *

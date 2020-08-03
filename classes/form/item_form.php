@@ -162,6 +162,11 @@ class item_form extends moodleform
             $errors['description'] = get_string('error:description_length', 'local_lor');
         }
 
+        // Ensure the title does not include '/'
+        if (strpos($data['name'], '/')) {
+            $errors['name'] = get_string('error:name_no_symbol', 'local_lor', '/');
+        }
+
         return $errors;
     }
 }

@@ -73,14 +73,18 @@
         name: "resources-index",
         components: {PaginationBar, SearchForm, ResourceCard, FiltersModal, AlertMessage },
         computed: {
-            ...mapState(['strings', 'resources', 'pages', 'filters', 'user']),
+            ...mapState(['strings', 'resources', 'pages', 'filters', 'user', 'resourceTypes']),
         },
         data() {
             return {
                 showFiltersModal: false,
             }
         },
-        created() {
+        mounted() {
+            if (this.$route.params.type !== undefined) {
+                this.$store.commit('setFilters', {type: this.$route.params.type});
+            }
+
             this.$store.dispatch('getResources', {});
         }
     }

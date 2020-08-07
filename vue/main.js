@@ -19,7 +19,7 @@ function init(contextid) {
     // will not be called.
     const routes = [
         { path: '/', redirect: { name: 'resources-index' }},
-        { path: '/resources', component: Resources, name: 'resources-index', meta: { title: 'search_title' } },
+        { path: '/resources/:type?', component: Resources, name: 'resources-index', meta: { title: 'search_title' } },
         { path: '/resources/view/:resourceId(\\d+)', component: ResourceView, name: 'resource-view', meta: { title: 'view_title' } }
     ];
 

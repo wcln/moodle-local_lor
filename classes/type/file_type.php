@@ -29,12 +29,10 @@ trait file_type
 
     public static function get_embed_html($itemid)
     {
-        global $CFG;
-
         $item   = item::get($itemid);
         $topics = helper::implode_format($item->topics);
 
-        $pdf = $CFG->wwwroot.self::get_storage_directory().$item->data['pdf'];
+        $pdf = repository::get_file_url($itemid);
         $img = item::get_image_url($itemid);
 
         // TODO: this should be rendered using a template at some point. However, Moodle does not allow template rendering in subplugins...
@@ -55,12 +53,8 @@ trait file_type
 
     public static function get_display_html($itemid)
     {
-        $item_data    = data::get_item_data($itemid);
-        $pdf_filename = $item_data['pdf'];
-
         return html_writer::tag('embed', '', [
-            'src'    => repository::get_file_url(self::get_path_to_file($pdf_filename),
-                $pdf_filename),
+            'src'    => repository::get_file_url($itemid),
             'width'  => '100%',
             'height' => '100%',
         ]);
@@ -81,10 +75,8 @@ trait file_type
         // If we are editing, show a message to let the user know they don't need to reupload the files
         if ( ! empty($itemid)) {
             $item_data     = data::get_item_data($itemid);
-            $pdf_link      = repository::get_file_url(self::get_path_to_file($item_data['pdf']),
-                $item_data['pdf']);
-            $document_link = repository::get_file_url(self::get_path_to_file($item_data['document']),
-                $item_data['document']);
+            $pdf_link      = repository::get_file_url($itemid);
+            $document_link = repository::get_file_url($itemid, 'document');
 
             $item_form->addElement('html', get_string('edit_existing_files_info', 'local_lor', [
                 'pdf_link'      => $pdf_link->out(),
@@ -233,5 +225,24 @@ trait file_type
         return self::get_storage_directory()."/".$filename;
     }
 
+    /**
+     * Get the path to the file we will embed using embed.php
+     *
+     * You can override this in your type if you want to provide a file other
+     * than the PDF
+     *
+     * @param  int  $itemid
+     *
+     * @param  string  $type
+     *
+     * @return string
+     * @throws dml_exception
+     */
+    public static function get_embed_filepath(int $itemid, $type = 'pdf')
+    {
+        $data = data::get_item_data($itemid);
+
+        return self::get_path_to_file($data[$type]);
+    }
 
 }

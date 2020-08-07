@@ -17,7 +17,7 @@ use moodle_url;
 class repository
 {
     /** @var string Path to the file serving script in this plugin which will send files from the repository */
-    private const PATH_TO_FILE_FETCHER = '/local/lor/file.php';
+    private const PATH_TO_FILE_FETCHER = '/local/lor/embed.php';
 
     /**
      * Get the default file system repository name
@@ -43,17 +43,18 @@ class repository
     /**
      * Get a moodle URL to a file stored in the repository
      *
-     * @param $path string Path to the file (within the repository directory) including the filename
-     * @param $filename string The filename (including file extension)
+     * @param  int  $itemid
+     *
+     * @param  string  $type
      *
      * @return moodle_url
      * @throws moodle_exception
      */
-    public static function get_file_url(string $path, string $filename)
+    public static function get_file_url(int $itemid, string $type = 'pdf')
     {
         return new moodle_url(self::PATH_TO_FILE_FETCHER, [
-            'path'     => $path,
-            'filename' => $filename,
+            'id' => $itemid,
+            'type' => $type
         ]);
     }
 
@@ -131,8 +132,9 @@ class repository
      *
      * @throws dml_exception
      */
-    public static function create_directory($directory) {
-        if (! file_exists(self::get_path_to_repository().$directory)) {
+    public static function create_directory($directory)
+    {
+        if ( ! file_exists(self::get_path_to_repository().$directory)) {
             mkdir(self::get_path_to_repository().$directory, 0777, true);
         }
     }

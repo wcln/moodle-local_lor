@@ -144,7 +144,7 @@ $string['category_list_heading']    = 'Categories';
 $string['grade_list_heading']       = 'Grades';
 $string['category_list_desc']       = 'These are categories which a resource can have. Resources can have more than one category. These categories will be
 visible to users when they are searching for resources, and will be shown when viewing resources.';
-$string['grade_list_desc']          = 'These are grades which a resource can have. Resources can have more than one grade. These grades will be 
+$string['grade_list_desc']          = 'These are grades which a resource can have. Resources can have more than one grade. These grades will be
 visible to users when they are searching for resources, and will be shown when viewing resources.';
 
 $string['manage_category']         = 'Manage category';
@@ -174,7 +174,7 @@ $string['item_name']               = 'Name';
 $string['item_name_help']
                                    = 'This is the title of the learning resource, and will be shown on the search page.';
 $string['item_description']        = 'Description';
-$string['item_description_help']   = 'This field is optional. If you want to add more details to describe this item, write them here. 
+$string['item_description_help']   = 'This field is optional. If you want to add more details to describe this item, write them here.
 This description will be shown when a user is viewing a item within the learning resources plugin.';
 $string['item_image']              = 'Preview image';
 $string['item_image_help']
@@ -231,3 +231,4 @@ $string['error:name_length']        = 'The name is too long, please enter a name
 $string['error:description_length']
                                     = 'The description is too long, please enter a description less than 500 characters long';
 $string['error:name_no_symbol']     = 'Resource names can not include the symbol \'{$a}\'';
+$string['error:incorrect_embed_id'] = 'A learning resource with the specified ID can not be found!';

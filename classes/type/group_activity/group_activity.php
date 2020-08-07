@@ -8,7 +8,9 @@ use local_lor\type\type;
 
 class group_activity
 {
-    use file_type, type;
+    use file_type, type {
+        file_type::delete insteadof type;
+    }
 
     /**
      * This is where the files will be stored in the filesystem

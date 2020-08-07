@@ -138,4 +138,15 @@ class repository
             mkdir(self::get_path_to_repository().$directory, 0777, true);
         }
     }
+
+    /**
+     * Delete a file from the repository
+     *
+     * @param $filepath
+     *
+     * @throws dml_exception
+     */
+    public static function delete_file($filepath) {
+        unlink(self::get_path_to_repository() . $filepath);
+    }
 }

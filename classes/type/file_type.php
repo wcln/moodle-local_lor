@@ -43,7 +43,7 @@ trait file_type
                   <td width="200px"><a href="'.$pdf.'"><img src="'.$img.'" width="200"
                                                                       height="150"/></a></td>
                   <td><b><span style="background-color: transparent; color: #7d9fd3; font-size: 16px;">'
-               .$item->data['name'].'</span><br/></b><br/><span
+               .$item->name.'</span><br/></b><br/><span
                               style="color: #c8c8c8;">Topics: '.$topics.'</span></td>
                 </tr>
               </tbody>
@@ -243,6 +243,26 @@ trait file_type
         $data = data::get_item_data($itemid);
 
         return self::get_path_to_file($data[$type]);
+    }
+
+    /**
+     * Called when the item is deleted
+     *
+     * @param $itemid
+     *
+     * @return bool
+     * @throws dml_exception
+     */
+    public static function delete($itemid)
+    {
+        global $DB;
+
+        $data = data::get_item_data($itemid);
+
+        repository::delete_file(self::get_path_to_file($data['pdf']));
+        repository::delete_file(self::get_path_to_file($data['document']));
+
+        return $DB->delete_records(data::TABLE, ['itemid' => $itemid]);
     }
 
 }

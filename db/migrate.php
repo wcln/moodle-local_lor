@@ -22,6 +22,8 @@ foreach ($oldrecords as $oldrecord) {
 
 // Migrate items
 $oldrecords = $DB->get_records('lor_content');
+$fp = fopen('links_to_replace.csv', 'w');
+fputcsv($fp, ['oldlink', 'newlink']);
 foreach ($oldrecords as $oldrecord) {
     // Ignore video tutorials and lessons
     $type = get_type_from_id($oldrecord->type);
@@ -120,8 +122,17 @@ foreach ($oldrecords as $oldrecord) {
         } catch (Exception $e) {
             echo "<p>Could not find item image $image_file</p>";
         }
+
+        if (in_array($type, ['project', 'learning_guide', 'group_activity'])) {
+            $oldlink = '';
+            $newlink = '';
+
+            fputcsv($fp, [$oldlink, $newlink]);
+        }
     }
 }
+
+fclose($fp);
 
 /**
  * Helper function for the upgrade script

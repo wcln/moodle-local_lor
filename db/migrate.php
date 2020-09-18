@@ -1,14 +1,17 @@
 <?php
 
-
 use local_lor\item\data;
 use local_lor\item\item;
 use local_lor\item\property\category;
 use local_lor\item\property\contributor;
 use local_lor\item\property\topic;
+use local_lor\repository;
 use local_lor\type\group_activity\group_activity;
 use local_lor\type\learning_guide\learning_guide;
 use local_lor\type\project\project;
+use local_lor\type\type;
+
+define('CLI_SCRIPT', true);
 
 require_once(__DIR__.'/../../../config.php');
 
@@ -22,8 +25,7 @@ foreach ($oldrecords as $oldrecord) {
 
 // Migrate items
 $oldrecords = $DB->get_records('lor_content');
-$fp = fopen('links_to_replace.csv', 'w');
-fputcsv($fp, ['oldlink', 'newlink']);
+$fp         = fopen('links_to_replace.csv', 'w');
 foreach ($oldrecords as $oldrecord) {
     // Ignore video tutorials and lessons
     $type = get_type_from_id($oldrecord->type);
@@ -83,7 +85,7 @@ foreach ($oldrecords as $oldrecord) {
                 [
                     'firstname' => $names[0],
                     'lastname'  => $names[1],
-                ]);
+                ], 'id', IGNORE_MULTIPLE);
 
             if ($user) {
                 $DB->insert_record(contributor::TABLE, (object)[
@@ -120,12 +122,14 @@ foreach ($oldrecords as $oldrecord) {
         try {
             $fs->create_file_from_pathname($fileinfo, $image_file);
         } catch (Exception $e) {
-            echo "<p>Could not find item image $image_file</p>";
+            mtrace("Could not find item image $image_file");
         }
 
         if (in_array($type, ['project', 'learning_guide', 'group_activity'])) {
-            $oldlink = '';
-            $newlink = '';
+            $oldlink = $oldrecord->link;
+
+            $type_class = type::get_class($type);
+            $newlink    = repository::get_file_url($itemid);
 
             fputcsv($fp, [$oldlink, $newlink]);
         }
@@ -169,14 +173,14 @@ function process_files($oldrecord, $storage_dir, $itemid)
 
     $wcln_www_root = 'https://wcln.ca/';
 
-    \local_lor\repository::create_directory($storage_dir);
+    repository::create_directory($storage_dir);
 
     $pdf      = $oldrecord->link;
     $document = str_replace('.pdf', '.docx', $pdf);
 
-    $filename    = \local_lor\repository::format_filepath("$oldrecord->title.pdf");
+    $filename    = repository::format_filepath("$oldrecord->title.pdf");
     $source      = $CFG->dirroot.'/'.str_replace($wcln_www_root, "", $pdf);
-    $destination = \local_lor\repository::get_path_to_repository().$storage_dir."/"
+    $destination = repository::get_path_to_repository().$storage_dir."/"
                    .$filename;
 
     $DB->insert_record(data::TABLE, (object)[
@@ -188,23 +192,23 @@ function process_files($oldrecord, $storage_dir, $itemid)
     if (file_exists($source)) {
         copy($source, $destination);
     } else {
-        echo "<p>Missing file: $source</p>";
+        mtrace("Missing file: $source");
     }
 
-    $filename    = \local_lor\repository::format_filepath("$oldrecord->title.docx");
+    $filename    = repository::format_filepath("$oldrecord->title.docx");
     $source      = $CFG->dirroot.'/'.str_replace($wcln_www_root, "", $document);
-    $destination = \local_lor\repository::get_path_to_repository().$storage_dir."/"
+    $destination = repository::get_path_to_repository().$storage_dir."/"
                    .$filename;
 
-        $DB->insert_record(data::TABLE, (object)[
-            'itemid' => $itemid,
-            'name'   => 'document',
-            'value'  => $filename,
-        ]);
+    $DB->insert_record(data::TABLE, (object)[
+        'itemid' => $itemid,
+        'name'   => 'document',
+        'value'  => $filename,
+    ]);
 
     if (file_exists($source)) {
         copy($source, $destination);
     } else {
-        echo "<p>Missing file: $source</p>";
+        mtrace("Missing file: $source");
     }
 }

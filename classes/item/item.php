@@ -111,8 +111,8 @@ class item
             'name'         => $data->name,
             'type'         => $data->type,
             'description'  => is_array($data->description) ? $data->description['text'] : $data->description,
-            'timecreated'  => time(),
-            'timemodified' => time(),
+            'timecreated'  => isset($data->timecreated)? $data->timecreated : time(),
+            'timemodified' => isset($data->timecreated)? $data->timecreated : time(),
         ];
 
         // Create the item, and call the type specific create func. as well as property funcs.

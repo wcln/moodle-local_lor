@@ -9,7 +9,6 @@ use lang_string;
 use local_lor\item\data;
 use local_lor\item\item;
 use local_lor\item\property\category;
-use stdClass;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -57,6 +56,7 @@ class scrape_youtube extends scheduled_task
         $curl = curl_init();
 
         mtrace('cURL initialized.');
+        mtrace("Querying URL: $query_url");
 
         // Set the URL.
         curl_setopt_array($curl, array(CURLOPT_RETURNTRANSFER => 1, CURLOPT_URL => $query_url));
@@ -154,12 +154,6 @@ class scrape_youtube extends scheduled_task
 
                             mtrace("Found ".count($topics)." topics.");
 
-                            // Create empty record to be inserted into local_lor_item.
-                            $record = new stdClass();
-                            // Convert to MySQL date format.
-                            // TODO modify item::create to accept a date created
-                            $record->date_created = date("Y-m-d H:i:s", strtotime($video->snippet->publishedAt));
-
                             $itemid = item::create((object)[
                                 'name'         => preg_replace('/^(?i)[B,W]CLN\s*-*\s*|OSBC\s*-*\s*|Math\s*-*\s*|Chemistry\s*-*\s*|Physics\s*-*\s*|English\s*-*\s*/',
                                     '', $title),
@@ -170,6 +164,7 @@ class scrape_youtube extends scheduled_task
                                 'topics'       => implode(',', $topics),
                                 'grades'       => [],
                                 'contributors' => [],
+                                'timecreated'  => strtotime($video->snippet->publishedAt),
                             ]);
 
                             mtrace("Video added to local_lor_item table.");
@@ -183,7 +178,7 @@ class scrape_youtube extends scheduled_task
                                 'filepath'  => '/',
                                 'filename'  => "$video_id.jpg",
                             ];
-                            $fs->create_file_from_url($fileinfo, $video->snippet->thumbnails->medium->url);
+                            $fs->create_file_from_url($fileinfo, $video->snippet->thumbnails->high->url);
 
                             mtrace("YouTube preview image saved to the database.");
                         } else {

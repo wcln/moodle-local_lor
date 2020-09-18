@@ -30,7 +30,7 @@
 
             <div class="hero-body">
                 <div class="container has-text-centered">
-                    <h1 class="title is-size-1">Learning resources</h1>
+                    <h1 class="title is-size-1">Learning Resources</h1>
                     <search-form></search-form>
                 </div>
             </div>

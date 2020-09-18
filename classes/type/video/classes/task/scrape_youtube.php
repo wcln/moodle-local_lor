@@ -66,130 +66,165 @@ class scrape_youtube extends scheduled_task
 
         mtrace('Retrieved response.');
 
-        // If videos were found (should always occur).
-        if (property_exists($response, 'items') && count($response->items) != 0) {
-            // Get all categories in database, to be used within loop.
-            $categories = category::get_all_menu();
+        $counter = 0;
 
-            mtrace('Categories retrieved from database.');
+        while ((isset($response->nextPageToken) && $counter < $config->youtube_max_results) || $counter === 0) {
+            // If videos were found (should always occur).
+            if (property_exists($response, 'items') && count($response->items) != 0) {
+                // Get all categories in database, to be used within loop.
+                $categories = category::get_all_menu();
 
-            // Loop through each video.
-            foreach ($response->items as $video) {
-                // Extract the video id.
-                $video_id = $video->id->videoId;
+                mtrace('Categories retrieved from database.');
 
-                // If video does not exist in LOR, proceed.
-                if ( ! $DB->record_exists_select(data::TABLE, "name LIKE 'videoid' AND value LIKE :videoid",
-                    ['videoid' => $video_id])
-                ) {
-                    // Extract the title for ease of use.
-                    $title = $video->snippet->title;
+                // Loop through each video.
+                foreach ($response->items as $video) {
+                    if ($counter >= $config->youtube_max_results) {
+                        break;
+                    }
 
-                    mtrace("Found a new video: '$title'.");
+                    // Extract the video id.
+                    $video_id = $video->id->videoId;
 
-                    // The category of this video, initialized to null.
-                    $category_to_add = null;
+                    // If video does not exist in LOR, proceed.
+                    if ( ! $DB->record_exists_select(data::TABLE, "name LIKE 'videoid' AND value LIKE :videoid",
+                        ['videoid' => $video_id])
+                    ) {
+                        // Extract the title for ease of use.
+                        $title = $video->snippet->title;
 
-                    // Check if video is in a playlist.
-                    $query = self::YOUTUBE_API_URL
-                             ."playlists"
-                             ."?part=".self::PART
-                             ."&maxResults=1"
-                             ."&key=".$config->google_api_key
-                             ."&channelId=".$config->youtube_channel_id
-                             ."&q=".rawurlencode($title);
-                    curl_setopt_array($curl, array(CURLOPT_RETURNTRANSFER => 1, CURLOPT_URL => $query));
+                        mtrace("Found a new video: '$title'.");
 
-                    // Send the request & save response to $response.
-                    $response = json_decode(curl_exec($curl));
+                        // The category of this video, initialized to null.
+                        $category_to_add = null;
 
-                    // Check if it was found in a playlist.
-                    // We will only add videos which are in playlists.
-                    if (property_exists($response, 'items') && count($response->items) !== 0) {
-                        // Retrive the title of the playlist that this video is in.
-                        $playlist_title = $response->items[0]->snippet->title;
+                        // Check if video is in a playlist.
+                        $query = self::YOUTUBE_API_URL
+                                 ."playlists"
+                                 ."?part=".self::PART
+                                 ."&maxResults=1"
+                                 ."&key=".$config->google_api_key
+                                 ."&channelId=".$config->youtube_channel_id
+                                 ."&q=".rawurlencode($title);
+                        curl_setopt_array($curl, array(CURLOPT_RETURNTRANSFER => 1, CURLOPT_URL => $query));
 
-                        mtrace("Video in playlist: '$playlist_title'");
+                        // Send the request & save response to $response.
+                        $response = json_decode(curl_exec($curl));
 
-                        // For each of the possible categories (in the database).
-                        foreach ($categories as $id => $name) {
-                            // If the playlist title matches the category name.
-                            if (preg_match("/(?i)$name/", $playlist_title)) {
-                                // Retrieve the category ID.
-                                $category_to_add = $id;
+                        // Check if it was found in a playlist.
+                        // We will only add videos which are in playlists.
+                        if (property_exists($response, 'items') && count($response->items) !== 0) {
+                            // Retrive the title of the playlist that this video is in.
+                            $playlist_title = $response->items[0]->snippet->title;
 
-                                mtrace("Found a category for the video: '$name' with ID: '$id'");
+                            mtrace("Video in playlist: '$playlist_title'");
 
-                                // Ensure we only set one category.
-                                break;
-                            }
-                        }
+                            // For each of the possible categories (in the database).
+                            foreach ($categories as $id => $name) {
+                                // If the playlist title matches the category name.
+                                if (preg_match("/(?i)$name/", $playlist_title)) {
+                                    // Retrieve the category ID.
+                                    $category_to_add = $id;
 
-                        // If we found a category for this video, add it to LOR. Otherwise do nothing.
-                        if ( ! is_null($category_to_add)) {
-                            // Get video topics.
-                            $topics  = [];
-                            $connect = file_get_contents("https://www.youtube.com/watch?v=$video_id");
-                            preg_match_all('|<meta property="og\:video\:tag" content="(.+?)">|si', $connect, $tags,
-                                PREG_SET_ORDER);
+                                    mtrace("Found a category for the video: '$name' with ID: '$id'");
 
-                            // For each video tag we found.
-                            foreach ($tags as $tag) {
-                                // Filter out redundant topics.
-                                if ( ! preg_match("/(?i)WCLN|BCLN|math|unit.*|[0-9]+|western|canadian|learning|network|sawatzky/",
-                                    $tag[1])
-                                ) {
-                                    // Ensure the tag is not already in the topics array.
-                                    if ( ! in_array($tag[1], $topics)) {
-                                        // Append the clean tag.
-                                        $topics[] = $tag[1];
-                                    }
-
-                                    // Limit to 5 topics per video, just in case.
-                                    if (count($topics) >= 5) {
-                                        break;
-                                    }
+                                    // Ensure we only set one category.
+                                    break;
                                 }
                             }
 
-                            mtrace("Found ".count($topics)." topics.");
+                            // If we found a category for this video, add it to LOR. Otherwise do nothing.
+                            if ( ! is_null($category_to_add)) {
+                                // Get video topics.
+                                $topics  = [];
+                                $connect = file_get_contents("https://www.youtube.com/watch?v=$video_id");
+                                preg_match_all('|<meta property="og\:video\:tag" content="(.+?)">|si', $connect, $tags,
+                                    PREG_SET_ORDER);
 
-                            $itemid = item::create((object)[
-                                'name'         => preg_replace('/^(?i)[B,W]CLN\s*-*\s*|OSBC\s*-*\s*|Math\s*-*\s*|Chemistry\s*-*\s*|Physics\s*-*\s*|English\s*-*\s*/',
-                                    '', $title),
-                                'type'         => 'video',
-                                'description'  => '',
-                                'videoid'      => $video_id,
-                                'categories'   => [$category_to_add],
-                                'topics'       => implode(',', $topics),
-                                'grades'       => [],
-                                'contributors' => [],
-                                'timecreated'  => strtotime($video->snippet->publishedAt),
-                            ]);
+                                // For each video tag we found.
+                                foreach ($tags as $tag) {
+                                    // Filter out redundant topics.
+                                    if ( ! preg_match("/(?i)WCLN|BCLN|math|unit.*|[0-9]+|western|canadian|learning|network|sawatzky/",
+                                        $tag[1])
+                                    ) {
+                                        // Ensure the tag is not already in the topics array.
+                                        if ( ! in_array($tag[1], $topics)) {
+                                            // Append the clean tag.
+                                            $topics[] = $tag[1];
+                                        }
 
-                            mtrace("Video added to local_lor_item table.");
+                                        // Limit to 5 topics per video, just in case.
+                                        if (count($topics) >= 5) {
+                                            break;
+                                        }
+                                    }
+                                }
 
-                            $fs       = get_file_storage();
-                            $fileinfo = [
-                                'contextid' => context_system::instance()->id,
-                                'component' => 'local_lor',
-                                'filearea'  => 'preview_image',
-                                'itemid'    => $itemid,
-                                'filepath'  => '/',
-                                'filename'  => "$video_id.jpg",
-                            ];
-                            $fs->create_file_from_url($fileinfo, $video->snippet->thumbnails->high->url);
+                                mtrace("Found ".count($topics)." topics.");
 
-                            mtrace("YouTube preview image saved to the database.");
+                                $itemid = item::create((object)[
+                                    'name'         => preg_replace('/^(?i)[B,W]CLN\s*-*\s*|OSBC\s*-*\s*|Math\s*-*\s*|Chemistry\s*-*\s*|Physics\s*-*\s*|English\s*-*\s*/',
+                                        '', $title),
+                                    'type'         => 'video',
+                                    'description'  => '',
+                                    'videoid'      => $video_id,
+                                    'categories'   => [$category_to_add],
+                                    'topics'       => implode(',', $topics),
+                                    'grades'       => [],
+                                    'contributors' => [],
+                                    'timecreated'  => strtotime($video->snippet->publishedAt),
+                                ]);
+
+                                mtrace("Video added to local_lor_item table.");
+
+                                $fs       = get_file_storage();
+                                $fileinfo = [
+                                    'contextid' => context_system::instance()->id,
+                                    'component' => 'local_lor',
+                                    'filearea'  => 'preview_image',
+                                    'itemid'    => $itemid,
+                                    'filepath'  => '/',
+                                    'filename'  => "$video_id.jpg",
+                                ];
+                                $fs->create_file_from_url($fileinfo, $video->snippet->thumbnails->high->url);
+
+                                mtrace("YouTube preview image saved to the database.");
+                            } else {
+                                mtrace("No category found. Skipping.");
+                            }
                         } else {
-                            mtrace("No category found. Skipping.");
+                            mtrace("Video is not in a category playlist. Skipping.");
                         }
-                    } else {
-                        mtrace("Video is not in a category playlist. Skipping.");
                     }
+                    $counter++;
                 }
             }
+
+            // If there is another page, run the query again
+            if (isset($response->nextPageToken)) {
+                mtrace("Fetching next page of results...");
+
+                // Rebuild the query URL to query for the next page
+                $query_url = self::YOUTUBE_API_URL
+                             ."search"
+                             ."?part=".self::PART
+                             ."&key=".$config->google_api_key
+                             ."&channelId=".$config->youtube_channel_id
+                             ."&type=".self::TYPE
+                             ."&maxResults=".$config->youtube_max_results
+                             ."&order=".self::ORDER
+                             ."&pageToken=".$response->nextPageToken;
+
+                // Set the URL.
+                curl_setopt_array($curl, array(CURLOPT_RETURNTRANSFER => 1, CURLOPT_URL => $query_url));
+
+                // Send the request & save response to $response after decoding from JSON.
+                $response = json_decode(curl_exec($curl));
+            } else {
+                mtrace("Reached end of pages. No nextPageToken.");
+            }
         }
+
+        mtrace("Done! Processed $counter videos.");
 
         // Close request to clear up some resources
         curl_close($curl);

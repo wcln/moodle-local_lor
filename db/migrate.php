@@ -4,6 +4,7 @@ use local_lor\item\data;
 use local_lor\item\item;
 use local_lor\item\property\category;
 use local_lor\item\property\contributor;
+use local_lor\item\property\grade;
 use local_lor\item\property\topic;
 use local_lor\repository;
 use local_lor\type\group_activity\group_activity;
@@ -21,6 +22,11 @@ $wcln_www_root = 'https://wcln.ca/';
 $oldrecords = $DB->get_records('lor_category');
 foreach ($oldrecords as $oldrecord) {
     $DB->insert_record(category::TABLE, $oldrecord);
+}
+
+// Migrate grades
+for ($i = 1; $i <= 12; $i++) {
+    $DB->insert_record(grade::TABLE, (object)['name' => $i]);
 }
 
 // Migrate items
@@ -104,6 +110,32 @@ foreach ($oldrecords as $oldrecord) {
         }
         topic::save_item_form($itemid,
             (object)['topics' => implode(',', $topics_array)]);
+
+        // Migrate item categories
+        $categories
+            = $DB->get_records_sql("SELECT RAND(), category FROM {lor_content_categories} WHERE content = :content",
+            ['content' => $oldrecord->id]);
+        foreach ($categories as $category) {
+            $category_record = $DB->get_record('lor_category', ['id' => $category->category]);
+            if ($new_category_record = $DB->get_record_select(category::TABLE, "name LIKE :name",
+                ['name' => $category_record->name])
+            ) {
+                $DB->insert_record(category::LINKING_TABLE,
+                    (object)['itemid' => $itemid, 'categoryid' => $new_category_record->id]);
+            }
+        }
+
+        // Migrate item grades
+        $grades = $DB->get_records_sql("SELECT RAND(), grade FROM {lor_content_grades} WHERE content = :content",
+            ['content' => $oldrecord->id]);
+        foreach ($grades as $grade) {
+            if ($new_grade_record = $DB->get_record_select(grade::TABLE, "name LIKE :name",
+                ['name' => $grade->grade])
+            ) {
+                $DB->insert_record(grade::LINKING_TABLE,
+                    (object)['itemid' => $itemid, 'gradeid' => $new_grade_record->id]);
+            }
+        }
 
         // Save the item's preview image
         $filename = basename($oldrecord->image);

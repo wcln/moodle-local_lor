@@ -199,6 +199,10 @@
         .media-left > i {
             font-size: 36px;
         }
+
+      .card-image .image img {
+        object-fit: cover;
+      }
     }
 
     .card-footer-item > i {

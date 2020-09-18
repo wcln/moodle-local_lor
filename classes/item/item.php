@@ -212,7 +212,7 @@ class item
         // Determine what sorting we are using
         $orderby = null;
         if ($sort === self::SORT_RECENT) {
-            $orderby = 'timecreated ASC';
+            $orderby = 'timecreated DESC';
         } else {
             if ($sort === self::SORT_ALPHABETICAL) {
                 $orderby = 'name ASC';

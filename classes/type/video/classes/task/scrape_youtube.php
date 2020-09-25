@@ -67,18 +67,16 @@ class scrape_youtube extends scheduled_task
         mtrace('Retrieved response.');
 
         $counter = 0;
-
-        while ((isset($response->nextPageToken) && $counter < $config->youtube_max_results) || $counter === 0) {
+        $categories = category::get_all_menu();
+        while ((property_exists($response, 'nextPageToken') && $counter < (int) $config->youtube_max_results) || $counter === 0) {
             // If videos were found (should always occur).
             if (property_exists($response, 'items') && count($response->items) != 0) {
-                // Get all categories in database, to be used within loop.
-                $categories = category::get_all_menu();
 
                 mtrace('Categories retrieved from database.');
 
                 // Loop through each video.
                 foreach ($response->items as $video) {
-                    if ($counter >= $config->youtube_max_results) {
+                    if ($counter >= (int) $config->youtube_max_results) {
                         break;
                     }
 
@@ -200,7 +198,7 @@ class scrape_youtube extends scheduled_task
             }
 
             // If there is another page, run the query again
-            if (isset($response->nextPageToken)) {
+            if (property_exists($response, 'nextPageToken')) {
                 mtrace("Fetching next page of results...");
 
                 // Rebuild the query URL to query for the next page
@@ -214,6 +212,8 @@ class scrape_youtube extends scheduled_task
                              ."&order=".self::ORDER
                              ."&pageToken=".$response->nextPageToken;
 
+                mtrace("Querying URL: $query_url");
+
                 // Set the URL.
                 curl_setopt_array($curl, array(CURLOPT_RETURNTRANSFER => 1, CURLOPT_URL => $query_url));
 
@@ -221,6 +221,7 @@ class scrape_youtube extends scheduled_task
                 $response = json_decode(curl_exec($curl));
             } else {
                 mtrace("Reached end of pages. No nextPageToken.");
+                break;
             }
         }
 

@@ -213,12 +213,10 @@ class item
         $orderby = null;
         if ($sort === self::SORT_RECENT) {
             $orderby = 'timecreated DESC';
+        } elseif ($sort === self::SORT_ALPHABETICAL) {
+            $orderby = 'name ASC';
         } else {
-            if ($sort === self::SORT_ALPHABETICAL) {
-                $orderby = 'name ASC';
-            } else {
-                print_error('error_unknown_sort', 'local_lor');
-            }
+            print_error('error_unknown_sort', 'local_lor');
         }
 
         // Get the pre-sorted items

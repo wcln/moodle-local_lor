@@ -38,7 +38,8 @@
         </section>
 
         <!-- Resources -->
-        <div class="columns is-multiline resource-results is-centered" id="resources">
+      <p id="resource-count">{{resourceCount}} resources matching your search</p>
+      <div class="columns is-multiline resource-results is-centered" id="resources">
             <div class="column is-one-fifth-desktop is-one-quarter-tablet" v-for="resource in resources">
                 <resource-card :resource="resource"></resource-card>
             </div>
@@ -73,7 +74,7 @@
         name: "resources-index",
         components: {PaginationBar, SearchForm, ResourceCard, FiltersModal, AlertMessage },
         computed: {
-            ...mapState(['strings', 'resources', 'pages', 'filters', 'user', 'resourceTypes']),
+            ...mapState(['strings', 'resources', 'pages', 'filters', 'user', 'resourceTypes', 'resourceCount']),
         },
         data() {
             return {
@@ -112,5 +113,11 @@
         article.column {
             padding: 0;
         }
+    }
+
+    #resource-count {
+      text-align: center;
+      margin-top: 1rem;
+      font-style: italic;
     }
 </style>

@@ -65,7 +65,8 @@ class api extends external_api
         $items = array_values(item::search($params['keywords'], $params['type'], $params['categories'],
             $params['grades'], $params['sort']));
 
-        $numpages = ceil(count($items) / $perpage);
+        $numpages       = ceil(count($items) / $perpage);
+        $resource_count = count($items);
 
         // Paginate
         $items = array_slice($items, $page * $perpage, $perpage);
@@ -75,16 +76,18 @@ class api extends external_api
         }
 
         return [
-            'resources' => $items,
-            'pages'     => $numpages,
+            'resources'      => $items,
+            'pages'          => $numpages,
+            'resource_count' => $resource_count,
         ];
     }
 
     public static function get_resources_returns()
     {
         return new external_single_structure([
-            'pages'     => new external_value(PARAM_INT, 'The total number of pages'),
-            'resources' => new external_multiple_structure(
+            'pages'          => new external_value(PARAM_INT, 'The total number of pages'),
+            'resource_count' => new external_value(PARAM_INT, 'The total number of resources matching this search'),
+            'resources'      => new external_multiple_structure(
                 new external_single_structure([
                     'id'           => new external_value(PARAM_INT, 'Item ID'),
                     'type'         => new external_value(PARAM_TEXT, 'Item type'),

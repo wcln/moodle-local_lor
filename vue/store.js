@@ -21,6 +21,7 @@ export const store = new Vuex.Store({
             sort: 'recent' // Sort can be 'recent' or 'alphabetical'
         },
         pages: 1,
+        resourceCount: 0,
         resourceTypes: [],
         categories: [],
         grades: [],
@@ -56,6 +57,9 @@ export const store = new Vuex.Store({
         },
         setPages(state, pages) {
             state.pages = pages;
+        },
+        setResourceCount(state, resourceCount) {
+            state.resourceCount = resourceCount;
         }
     },
     actions: {
@@ -92,6 +96,7 @@ export const store = new Vuex.Store({
             const results = await ajax('local_lor_get_resources', context.state.filters);
             context.commit('setResources', results.resources);
             context.commit('setPages', results.pages);
+            context.commit('setResourceCount', results.resource_count);
         },
         async getResourceTypes(context) {
             const resourceTypes = await ajax('local_lor_get_resource_types', {});

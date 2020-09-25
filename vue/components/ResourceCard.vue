@@ -2,7 +2,7 @@
     <div class="card">
         <div class="card-image">
             <figure class="image is-4by3">
-                <img :src="resource.image" alt="Resource preview image">
+                <img v-if="resource.image !== ''" :src="resource.image" alt="Resource preview image">
             </figure>
         </div>
         <div class="card-content">
@@ -66,10 +66,6 @@
         font-size: 32px;
     }
 
-    .card-image .image img {
-        object-fit: cover;
-    }
-
     .card {
       height: 100%;
       display: flex;
@@ -77,6 +73,16 @@
 
       .card-footer {
         margin-top: auto;
+      }
+
+      .card-image {
+        figure {
+          background-color: #e6e6e6;
+
+          img {
+            object-fit: cover;
+          }
+        }
       }
     }
 </style>

@@ -165,8 +165,8 @@ $string['no_grades']               = 'No grades yet';
 $string['error_unknown_sort']
                                    = 'Unknown sort parameter passed to search function';
 
-$string['search_title']   = 'Learning resources';
-$string['search_heading'] = 'Learning resources';
+$string['search_title']   = 'Learning Resources';
+$string['search_heading'] = 'Learning Resources';
 
 $string['none']                    = 'None';
 $string['item_details']            = 'Item details';

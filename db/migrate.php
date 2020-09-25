@@ -186,12 +186,21 @@ foreach ($oldrecords as $oldrecord) {
 
         // Save list of old link and new link to CSV file so we can replace them site-wide
         if (in_array($type, ['project', 'learning_guide', 'group_activity'])) {
-            $oldlink = $oldrecord->link;
-
             $type_class = type::get_class($type);
-            $newlink    = repository::get_file_url($itemid);
 
-            fputcsv($fp, [$oldlink, $newlink]);
+            // Write the old link to the item
+            $oldlink = $oldrecord->link;
+            $newlink = repository::get_file_url($itemid)->out();
+            if ( ! empty($oldlink) && ! empty($newlink)) {
+                fputcsv($fp, [$oldlink, $newlink]);
+            }
+
+            // Write the old and new preview image links
+            $oldlink = $oldrecord->image;
+            $newlink = item::get_image_url($itemid);
+            if ( ! empty($oldlink) && ! empty($newlink)) {
+                fputcsv($fp, [$oldlink, $newlink]);
+            }
         }
     }
 }

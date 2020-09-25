@@ -56,7 +56,7 @@
                                 </tr>
                                 <tr>
                                     <th>{{strings.topics}}</th>
-                                    <td>{{resource.topics}}</td>
+                                    <td id="topics">{{resource.topics}}</td>
                                 </tr>
                                 <tr>
                                     <th>{{strings.contributors}}</th>
@@ -198,6 +198,10 @@
 
         .media-left > i {
             font-size: 36px;
+        }
+
+        #topics {
+          text-transform: capitalize;
         }
 
       .card-image .image img {

@@ -33,9 +33,9 @@ for ($i = 1; $i <= 12; $i++) {
 $oldrecords = $DB->get_records('lor_content');
 $fp         = fopen('links_to_replace.csv', 'w');
 foreach ($oldrecords as $oldrecord) {
-    // Ignore video tutorials and lessons
+    // Ignore lessons
     $type = get_type_from_id($oldrecord->type);
-    if ($type !== 'video' && $type !== 'lesson') {
+    if ($type !== 'lesson') {
         $oldrecord->title = str_replace('/', '', $oldrecord->title);
 
         $newrecord = [
@@ -70,6 +70,31 @@ foreach ($oldrecords as $oldrecord) {
             process_files($oldrecord, group_activity::get_storage_directory(), $itemid);
         } elseif ($type === 'learning_guide') {
             process_files($oldrecord, learning_guide::get_storage_directory(), $itemid);
+        } elseif ($type === 'video') {
+            // Save the video ID
+            if ($content_video_record = $DB->get_record('lor_content_videos', ['content' => $oldrecord->id])) {
+                $DB->insert_record(data::TABLE, (object)[
+                    'itemid' => $itemid,
+                    'name'   => 'videoid',
+                    'value'  => $content_video_record->video_id,
+                ]);
+            }
+
+            // Save video preview image
+            $fs       = get_file_storage();
+            $fileinfo = [
+                'contextid' => context_system::instance()->id,
+                'component' => 'local_lor',
+                'filearea'  => 'preview_image',
+                'itemid'    => $itemid,
+                'filepath'  => '/',
+                'filename'  => "$content_video_record->video_id.jpg",
+            ];
+            try {
+                $fs->create_file_from_url($fileinfo, $oldrecord->image);
+            } catch (Exception $e) {
+                mtrace("Could not save video image: $oldrecord->image for item with ID: $itemid");
+            }
         }
 
         // Migrate contributors
@@ -138,25 +163,28 @@ foreach ($oldrecords as $oldrecord) {
         }
 
         // Save the item's preview image
-        $filename = basename($oldrecord->image);
-        $fs       = get_file_storage();
-        $fileinfo = [
-            'contextid' => context_system::instance()->id,
-            'component' => 'local_lor',
-            'filearea'  => 'preview_image',
-            'itemid'    => $itemid,
-            'filepath'  => '/',
-            'filename'  => "$filename",
-        ];
+        if ($type !== 'video') {
+            $filename = basename($oldrecord->image);
+            $fs       = get_file_storage();
+            $fileinfo = [
+                'contextid' => context_system::instance()->id,
+                'component' => 'local_lor',
+                'filearea'  => 'preview_image',
+                'itemid'    => $itemid,
+                'filepath'  => '/',
+                'filename'  => "$filename",
+            ];
 
-        $image_file = rawurldecode($CFG->dirroot.'/'.str_replace($wcln_www_root, "", $oldrecord->image));
+            $image_file = rawurldecode($CFG->dirroot.'/'.str_replace($wcln_www_root, "", $oldrecord->image));
 
-        try {
-            $fs->create_file_from_pathname($fileinfo, $image_file);
-        } catch (Exception $e) {
-            mtrace("Could not find item image $image_file");
+            try {
+                $fs->create_file_from_pathname($fileinfo, $image_file);
+            } catch (Exception $e) {
+                mtrace("Could not find item image $image_file for item with ID: $itemid");
+            }
         }
 
+        // Save list of old link and new link to CSV file so we can replace them site-wide
         if (in_array($type, ['project', 'learning_guide', 'group_activity'])) {
             $oldlink = $oldrecord->link;
 
@@ -224,7 +252,7 @@ function process_files($oldrecord, $storage_dir, $itemid)
     if (file_exists($source)) {
         copy($source, $destination);
     } else {
-        mtrace("Missing file: $source");
+        mtrace("Missing file: $source for item with ID: $itemid");
     }
 
     $filename    = repository::format_filepath("$oldrecord->title.docx");
@@ -241,6 +269,6 @@ function process_files($oldrecord, $storage_dir, $itemid)
     if (file_exists($source)) {
         copy($source, $destination);
     } else {
-        mtrace("Missing file: $source");
+        mtrace("Missing file: $source for item with ID: $itemid");
     }
 }

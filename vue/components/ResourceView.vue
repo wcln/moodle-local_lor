@@ -28,11 +28,12 @@
         <div class="columns">
             <div class="column is-one-third-desktop" id="resource-details" :class="{ 'is-active': showDetails }">
                 <div class="card">
-                    <div class="card-image">
-                        <figure class="image is-4by3">
-                            <img :src="resource.image" alt="Image alt">
-                        </figure>
-                    </div>
+                  <!-- Uncomment the lines below if you wish to show the card image -->
+<!--                    <div class="card-image">-->
+<!--                        <figure class="image is-4by3">-->
+<!--                            <img :src="resource.image" alt="Image alt">-->
+<!--                        </figure>-->
+<!--                    </div>-->
                     <div class="card-content">
                         <div class="media">
                             <div class="media-left">

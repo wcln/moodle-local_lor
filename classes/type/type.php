@@ -3,6 +3,7 @@
 namespace local_lor\type;
 
 use core_component;
+use dml_exception;
 use local_lor\form\item_form;
 use local_lor\item\data;
 use stdClass;
@@ -66,7 +67,7 @@ trait type
      * @param $itemid int The ID of the LOR item that was just created
      * @param $data   stdClass Raw form data from the submitted item form and any custom type elements
      *
-     * @param  null  $form A copy of the Moodle form in case we need to deal with files
+     * @param  null  $form  A copy of the Moodle form in case we need to deal with files
      *
      * @return bool True on success, false on failure
      */
@@ -80,7 +81,7 @@ trait type
      * @param $itemid int The ID of the LOR item that was just created
      * @param $data   stdClass Raw form data from the submitted item form containing any custom type elements added by this type
      *
-     * @param  null  $form A copy of the Moodle form in case we need to deal with files
+     * @param  null  $form  A copy of the Moodle form in case we need to deal with files
      *
      * @return bool True on success, false on failure
      */
@@ -96,7 +97,7 @@ trait type
      * @param $itemid int The ID of the LOR item that was just deleted
      *
      * @return bool True on success, false on failure
-     * @throws \dml_exception
+     * @throws dml_exception
      */
     public static function delete($itemid)
     {
@@ -129,13 +130,25 @@ trait type
     /**
      * Get the path to the item type class
      *
-     * @param string $type
+     * @param  string  $type
      *
      * @return string
      */
     public static function get_class(string $type)
     {
         return "local_lor\\type\\$type\\$type";
+    }
+
+    /**
+     * Override this to provide a preview image for all items of this type
+     *
+     * If this does not return false, then the preview image field will be removed from the item form
+     *
+     * @return false
+     */
+    public static function get_image_url()
+    {
+        return false;
     }
 
 }

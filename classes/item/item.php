@@ -4,6 +4,7 @@ namespace local_lor\item;
 
 use context_system;
 use dml_exception;
+use Exception;
 use local_lor\form\item_form;
 use local_lor\item\property\category;
 use local_lor\item\property\contributor;
@@ -111,8 +112,8 @@ class item
             'name'         => $data->name,
             'type'         => $data->type,
             'description'  => is_array($data->description) ? $data->description['text'] : $data->description,
-            'timecreated'  => isset($data->timecreated)? $data->timecreated : time(),
-            'timemodified' => isset($data->timecreated)? $data->timecreated : time(),
+            'timecreated'  => isset($data->timecreated) ? $data->timecreated : time(),
+            'timemodified' => isset($data->timecreated) ? $data->timecreated : time(),
         ];
 
         // Create the item, and call the type specific create func. as well as property funcs.
@@ -383,6 +384,15 @@ class item
     public static function get_image_url($itemid, $filearea = 'preview_image')
     {
         global $DB;
+
+        if ($item = $DB->get_record(self::TABLE, ['id' => $itemid], 'id,type')) {
+            $type_class = type::get_class($item->type);
+            if ($image_url = $type_class::get_image_url()) {
+                return $image_url;
+            }
+        } else {
+            throw new Exception("Item with ID $itemid does not exist!");
+        }
 
         $file = $DB->get_record_select('files',
             "component = :component AND filearea = :filearea AND itemid = :itemid AND filesize > 0", [

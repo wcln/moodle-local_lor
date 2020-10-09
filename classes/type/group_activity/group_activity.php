@@ -4,6 +4,7 @@ namespace local_lor\type\group_activity;
 
 use local_lor\type\file_type;
 use local_lor\type\type;
+use moodle_url;
 
 
 class group_activity
@@ -30,5 +31,10 @@ class group_activity
     public static function get_icon()
     {
         return 'users';
+    }
+
+    public static function get_image_url()
+    {
+        return (new moodle_url('/local/lor/classes/type/group_activity/assets/images/default_preview.jpg'))->out();
     }
 }

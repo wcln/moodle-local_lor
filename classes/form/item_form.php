@@ -29,6 +29,8 @@ class item_form extends moodleform
 
         $mform = $this->_form;
 
+        $type_class = type::get_class($this->_customdata['type']);
+
         $mform->addElement('hidden', 'id', isset($this->_customdata['id']) ? $this->_customdata['id'] : 0);
         $mform->setType('id', PARAM_INT);
 
@@ -58,15 +60,17 @@ class item_form extends moodleform
         $mform->addHelpButton('description', 'item_description', 'local_lor');
 
         // Preview image
-        $mform->addElement(
-            'filemanager',
-            'image',
-            get_string('item_image', 'local_lor'),
-            null,
-            ['maxfiles' => 1, 'accepted_types' => ['.jpg', '.png', '.jpeg']]
-        );
-        $mform->addHelpButton('image', 'item_image', 'local_lor');
-        $mform->addRule('image', get_string('required'), 'required');
+        if ($type_class::get_image_url() === false) {
+            $mform->addElement(
+                'filemanager',
+                'image',
+                get_string('item_image', 'local_lor'),
+                null,
+                ['maxfiles' => 1, 'accepted_types' => ['.jpg', '.png', '.jpeg']]
+            );
+            $mform->addHelpButton('image', 'item_image', 'local_lor');
+            $mform->addRule('image', get_string('required'), 'required');
+        }
 
         // Topics
         $mform->addElement(
@@ -114,7 +118,6 @@ class item_form extends moodleform
         // Add type specific elements to the form
         $mform->addElement('hidden', 'type', $this->_customdata['type']);
         $mform->setType('type', PARAM_TEXT);
-        $type_class = type::get_class($this->_customdata['type']);
         $mform->addElement(
             'header',
             'type_header',

@@ -4,6 +4,7 @@ namespace local_lor\type\learning_guide;
 
 use local_lor\type\file_type;
 use local_lor\type\type;
+use moodle_url;
 
 
 class learning_guide
@@ -30,5 +31,10 @@ class learning_guide
     public static function get_icon()
     {
         return 'book-reader';
+    }
+
+    public static function get_image_url()
+    {
+        return (new moodle_url('/local/lor/classes/type/learning_guide/assets/images/default_preview.png'))->out();
     }
 }

@@ -10,6 +10,3 @@ $string['setting:google_api_key']          = 'Google API key';
 $string['setting:google_api_key_desc']     = 'The Google API key used to query the YouTube API to scrape LOR videos.';
 $string['setting:youtube_channel_id']      = 'YouTube channel ID';
 $string['setting:youtube_channel_id_desc'] = 'The ID of the YouTube channel to use to scrape videos for the LOR.';
-$string['setting:youtube_max_results']     = 'YouTube max videos';
-$string['setting:youtube_max_results_desc']
-                                           = 'The maximum number of videos you may post in 24 hours. If more than this amount are posted on YouTube, they will not be added to the LOR.';

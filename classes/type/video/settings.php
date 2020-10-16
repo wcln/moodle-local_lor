@@ -24,15 +24,6 @@ if ($hassiteconfig) {
         PARAM_TEXT
     ));
 
-    // YouTube max results
-    $settings->add(new admin_setting_configtext(
-        'lortype_video/youtube_max_results',
-        get_string('setting:youtube_max_results', 'lortype_video'),
-        get_string('setting:youtube_max_results_desc', 'lortype_video'),
-        25,
-        PARAM_INT
-    ));
-
     $ADMIN->add('local_lor_category', $settings);
 
 }

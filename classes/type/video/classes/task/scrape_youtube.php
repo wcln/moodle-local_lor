@@ -20,6 +20,7 @@ class scrape_youtube extends scheduled_task
     const PART = 'snippet';
     const TYPE = 'video';
     const YOUTUBE_API_URL = 'https://www.googleapis.com/youtube/v3/';
+    const MAX_RESULTS = 50;
 
     /**
      * Get the name of this task
@@ -34,6 +35,11 @@ class scrape_youtube extends scheduled_task
 
     /**
      * Execute the task
+     *
+     * We will query for a list of playlists in a specified channel
+     * Then we will query for a list of videos in each playlist and add those to LOR categories
+     * depending on the playlist name.
+     *
      */
     public function execute()
     {
@@ -43,13 +49,14 @@ class scrape_youtube extends scheduled_task
         $config = get_config('lortype_video');
 
         // Construct the query URL using constants.
+        // First we will query
         $query_url = self::YOUTUBE_API_URL
                      ."search"
                      ."?part=".self::PART
                      ."&key=".$config->google_api_key
                      ."&channelId=".$config->youtube_channel_id
                      ."&type=".self::TYPE
-                     ."&maxResults=".$config->youtube_max_results
+                     ."&maxResults=".self::MAX_RESULTS
                      ."&order=".self::ORDER;
 
         // Get cURL resource.
@@ -68,7 +75,7 @@ class scrape_youtube extends scheduled_task
 
         $counter = 0;
         $categories = category::get_all_menu();
-        while ((property_exists($response, 'nextPageToken') && $counter < (int) $config->youtube_max_results) || $counter === 0) {
+        while ((property_exists($response, 'nextPageToken') && $counter < self::MAX_RESULTS) || $counter === 0) {
             // If videos were found (should always occur).
             if (property_exists($response, 'items') && count($response->items) != 0) {
 
@@ -76,7 +83,7 @@ class scrape_youtube extends scheduled_task
 
                 // Loop through each video.
                 foreach ($response->items as $video) {
-                    if ($counter >= (int) $config->youtube_max_results) {
+                    if ($counter >= self::MAX_RESULTS) {
                         break;
                     }
 
@@ -96,23 +103,23 @@ class scrape_youtube extends scheduled_task
                         $category_to_add = null;
 
                         // Check if video is in a playlist.
-                        $query = self::YOUTUBE_API_URL
+                        $category_query = self::YOUTUBE_API_URL
                                  ."playlists"
                                  ."?part=".self::PART
                                  ."&maxResults=1"
                                  ."&key=".$config->google_api_key
                                  ."&channelId=".$config->youtube_channel_id
                                  ."&q=".rawurlencode($title);
-                        curl_setopt_array($curl, [CURLOPT_RETURNTRANSFER => 1, CURLOPT_URL => $query]);
+                        curl_setopt_array($curl, [CURLOPT_RETURNTRANSFER => 1, CURLOPT_URL => $category_query]);
 
-                        // Send the request & save response to $response.
-                        $response = json_decode(curl_exec($curl));
+                        mtrace("Querying for video category: $category_query");
+                        $category_response = json_decode(curl_exec($curl));
 
                         // Check if it was found in a playlist.
                         // We will only add videos which are in playlists.
-                        if (property_exists($response, 'items') && count($response->items) !== 0) {
+                        if (property_exists($category_response, 'items') && count($category_response->items) !== 0) {
                             // Retrive the title of the playlist that this video is in.
-                            $playlist_title = $response->items[0]->snippet->title;
+                            $playlist_title = $category_response->items[0]->snippet->title;
 
                             mtrace("Video in playlist: '$playlist_title'");
 
@@ -208,7 +215,7 @@ class scrape_youtube extends scheduled_task
                              ."&key=".$config->google_api_key
                              ."&channelId=".$config->youtube_channel_id
                              ."&type=".self::TYPE
-                             ."&maxResults=".$config->youtube_max_results
+                             ."&maxResults=".self::MAX_RESULTS
                              ."&order=".self::ORDER
                              ."&pageToken=".$response->nextPageToken;
 

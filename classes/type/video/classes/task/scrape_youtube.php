@@ -103,7 +103,7 @@ class scrape_youtube extends scheduled_task
                                  ."&key=".$config->google_api_key
                                  ."&channelId=".$config->youtube_channel_id
                                  ."&q=".rawurlencode($title);
-                        curl_setopt_array($curl, array(CURLOPT_RETURNTRANSFER => 1, CURLOPT_URL => $query));
+                        curl_setopt_array($curl, [CURLOPT_RETURNTRANSFER => 1, CURLOPT_URL => $query]);
 
                         // Send the request & save response to $response.
                         $response = json_decode(curl_exec($curl));
@@ -215,7 +215,7 @@ class scrape_youtube extends scheduled_task
                 mtrace("Querying URL: $query_url");
 
                 // Set the URL.
-                curl_setopt_array($curl, array(CURLOPT_RETURNTRANSFER => 1, CURLOPT_URL => $query_url));
+                curl_setopt_array($curl, [CURLOPT_RETURNTRANSFER => 1, CURLOPT_URL => $query_url]);
 
                 // Send the request & save response to $response after decoding from JSON.
                 $response = json_decode(curl_exec($curl));

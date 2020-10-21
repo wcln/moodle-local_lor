@@ -17,7 +17,7 @@ defined('MOODLE_INTERNAL') || die();
 class scrape_youtube extends scheduled_task
 {
     const YOUTUBE_API_URL = 'https://www.googleapis.com/youtube/v3/';
-    const MAX_RESULTS = 1000;
+    const MAX_RESULTS = 1000; // We will set this to 1000, even though YouTube limits the perpage results to 50
 
     /**
      * Get the name of this task
@@ -29,6 +29,7 @@ class scrape_youtube extends scheduled_task
     {
         return get_string('scrape_youtube', 'lortype_video');
     }
+
 
     /**
      * Execute the task
@@ -51,9 +52,7 @@ class scrape_youtube extends scheduled_task
                           ."&key=".$config->google_api_key
                           ."&channelId=".$config->youtube_channel_id
                           ."&maxResults=".self::MAX_RESULTS;
-
-        // Get cURL resource.
-        $curl = curl_init();
+        $curl           = curl_init();
 
         mtrace('cURL initialized.');
         mtrace("The channel ID is: $config->youtube_channel_id");
@@ -83,30 +82,19 @@ class scrape_youtube extends scheduled_task
                 // Query for videos within this playlist
                 mtrace("Querying for videos in playlist: ".$playlist->snippet->title);
 
-                $vidoes_query = self::YOUTUBE_API_URL
-                                ."playlistItems"
-                                ."?part=snippet"
-                                ."&key=".$config->google_api_key
-                                ."&channelId=".$config->youtube_channel_id
-                                ."&maxResults=".self::MAX_RESULTS
-                                ."&order=date"
-                                ."&playlistId=".$playlist->id;
-                curl_setopt_array($curl, [CURLOPT_RETURNTRANSFER => 1, CURLOPT_URL => $vidoes_query]);
-                mtrace("Querying for videos: $vidoes_query");
-                $videos = json_decode(curl_exec($curl));
-
-                if (isset($videos->items)) {
-                    mtrace("Found ".count($videos->items)." videos in playlist ".$playlist->snippet->title);
+                $videos = self::query_videos($playlist->id);
+                if ( ! empty($videos)) {
+                    mtrace("Found ".count($videos)." videos in playlist ".$playlist->snippet->title);
 
                     // Process videos in this playlist
-                    foreach ($videos->items as $video) {
+                    foreach ($videos as $video) {
                         if (self::process_video($video, $categoryid)) {
                             $num_videos_added++;
                         }
                         $num_videos_processed++;
                     }
                 } else {
-                    mtrace("No videos found in playlist ".$playlist->snippet->title);
+                    mtrace("No videos found in playlist");
                 }
             }
         } else {
@@ -114,11 +102,7 @@ class scrape_youtube extends scheduled_task
         }
 
         mtrace("Done! Processed $num_videos_processed videos and added $num_videos_added videos to the database.");
-
-        // Close request to clear up some resources
         curl_close($curl);
-
-        mtrace("cURL closed. Update complete.");
     }
 
     /**
@@ -237,5 +221,56 @@ class scrape_youtube extends scheduled_task
         }
 
         return true;
+    }
+
+    /**
+     * Query for videos within a playlist
+     *
+     * This function uses pagination since the YouTube API limits page results to 50 items
+     *
+     * @param $playlist_id
+     *
+     * @return array
+     * @throws dml_exception
+     */
+    private static function query_videos($playlist_id)
+    {
+        $config = get_config('lortype_video');
+        $curl   = curl_init();
+
+        $result     = null;
+        $videos     = [];
+        $base_query = self::YOUTUBE_API_URL
+                      ."playlistItems"
+                      ."?part=snippet"
+                      ."&key=".$config->google_api_key
+                      ."&channelId=".$config->youtube_channel_id
+                      ."&maxResults=".self::MAX_RESULTS
+                      ."&order=date"
+                      ."&playlistId=".$playlist_id;
+
+        $page = 0;
+        while (isset($result->nextPageToken) || $page === 0) {
+            if ($page !== 0) {
+                $vidoes_query = "$base_query&pageToken=$result->nextPageToken";
+            } else {
+                $vidoes_query = $base_query;
+            }
+
+            curl_setopt_array($curl, [CURLOPT_RETURNTRANSFER => 1, CURLOPT_URL => $vidoes_query]);
+            mtrace("Querying for videos (page $page of results): $vidoes_query");
+            $result = json_decode(curl_exec($curl));
+            if (isset($result->items)) {
+                $videos = array_merge($videos, $result->items);
+            } else {
+                break;
+            }
+
+            $page++;
+        }
+
+        curl_close($curl);
+
+        return $videos;
     }
 }

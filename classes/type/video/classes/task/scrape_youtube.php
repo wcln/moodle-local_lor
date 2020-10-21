@@ -16,8 +16,24 @@ defined('MOODLE_INTERNAL') || die();
 
 class scrape_youtube extends scheduled_task
 {
+
+    /** @var string The URL of the YouTube API which we will query */
     const YOUTUBE_API_URL = 'https://www.googleapis.com/youtube/v3/';
-    const MAX_RESULTS = 1000; // We will set this to 1000, even though YouTube limits the perpage results to 50
+
+    /** @var int Max per page results
+     * - we will set this to 1000 which is essentially unlimited since YouTube caps the perpage results at 50
+     */
+    const MAX_RESULTS = 1000;
+
+    /** @var bool Enable pagination of video results?
+     *
+     *  If this is disabled, only the first 50 videos in a playlist will be processed.
+     *  Enable this if you want to scrape all videos in all playlists.
+     *  Disable this to decrease server load and API calls.
+     *
+     *  Default: false
+     */
+    const ENABLE_PAGINATION = false;
 
     /**
      * Get the name of this task
@@ -263,6 +279,11 @@ class scrape_youtube extends scheduled_task
             if (isset($result->items)) {
                 $videos = array_merge($videos, $result->items);
             } else {
+                break;
+            }
+
+            if (! self::ENABLE_PAGINATION && isset($result->nextPageToken)) {
+                mtrace("Pagination is disabled in local/lor/classes/type/video/classes/task/scrape_youtube.php, not continuing to next page!");
                 break;
             }
 

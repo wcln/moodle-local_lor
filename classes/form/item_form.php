@@ -164,7 +164,7 @@ class item_form extends moodleform
         }
 
         // Validate the length of the 'description' field
-        if (strlen($data['description']['text'] >= self::DESCRIPTION_MAX_LENGTH)) {
+        if (strlen($data['description']['text']) >= self::DESCRIPTION_MAX_LENGTH) {
             $errors['description'] = get_string('error:description_length', 'local_lor');
         }
 

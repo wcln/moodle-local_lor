@@ -109,9 +109,9 @@ class item
         global $DB;
 
         $item = [
-            'name'         => $data->name,
+            'name'         => substr($data->name, 0, item_form::NAME_MAX_LENGTH),
             'type'         => $data->type,
-            'description'  => is_array($data->description) ? $data->description['text'] : $data->description,
+            'description'  => substr(is_array($data->description) ? $data->description['text'] : $data->description, 0, item_form::DESCRIPTION_MAX_LENGTH),
             'timecreated'  => isset($data->timecreated) ? $data->timecreated : time(),
             'timemodified' => isset($data->timecreated) ? $data->timecreated : time(),
         ];
@@ -150,9 +150,9 @@ class item
 
         $item = [
             'id'           => $itemid,
-            'name'         => $data->name,
+            'name'         => substr($data->name, 0, item_form::NAME_MAX_LENGTH),
             'type'         => $data->type,
-            'description'  => $data->description['text'],
+            'description'  => substr($data->description['text'], 0, item_form::DESCRIPTION_MAX_LENGTH),
             'timemodified' => time(),
         ];
 

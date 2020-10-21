@@ -18,6 +18,9 @@ defined('MOODLE_INTERNAL') || die;
 class item_form extends moodleform
 {
 
+    const NAME_MAX_LENGTH = 200;
+    const DESCRIPTION_MAX_LENGTH = 500;
+
     /**
      * Define the item form
      *
@@ -156,12 +159,12 @@ class item_form extends moodleform
         }
 
         // Validate the length of the 'name' field
-        if (strlen($data['name']) >= 200) {
+        if (strlen($data['name']) >= self::NAME_MAX_LENGTH) {
             $errors['name'] = get_string('error:name_length', 'local_lor');
         }
 
         // Validate the length of the 'description' field
-        if (strlen($data['description']['text'] >= 500)) {
+        if (strlen($data['description']['text'] >= self::DESCRIPTION_MAX_LENGTH)) {
             $errors['description'] = get_string('error:description_length', 'local_lor');
         }
 

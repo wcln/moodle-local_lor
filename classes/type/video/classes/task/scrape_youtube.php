@@ -8,6 +8,7 @@ use core\task\scheduled_task;
 use dml_exception;
 use file_exception;
 use lang_string;
+use local_lor\form\item_form;
 use local_lor\item\data;
 use local_lor\item\item;
 use local_lor\item\property\category;
@@ -161,8 +162,8 @@ class scrape_youtube extends scheduled_task
         global $DB;
 
         $video_id    = $video->snippet->resourceId->videoId;
-        $title       = $video->snippet->title;
-        $description = $video->snippet->description;
+        $title       = substr($video->snippet->title, 0, item_form::NAME_MAX_LENGTH);
+        $description = substr($video->snippet->description, 0, item_form::DESCRIPTION_MAX_LENGTH);
 
         if ($title === "Deleted video") {
             mtrace("Video is deleted, skipping.");
@@ -282,7 +283,7 @@ class scrape_youtube extends scheduled_task
                 break;
             }
 
-            if (! self::ENABLE_PAGINATION && isset($result->nextPageToken)) {
+            if ( ! self::ENABLE_PAGINATION && isset($result->nextPageToken)) {
                 mtrace("Pagination is disabled in local/lor/classes/type/video/classes/task/scrape_youtube.php, not continuing to next page!");
                 break;
             }

@@ -10,7 +10,8 @@ class media
 {
     use type;
 
-    const PROPERTIES = ['url', 'width', 'height'];
+    const PROPERTIES = ['url'];
+    const MEDIA_HEIGHT = '900px';
 
     public static function get_name()
     {
@@ -19,20 +20,20 @@ class media
 
     public static function get_embed_html($itemid)
     {
-        return html_writer::tag('p', self::get_display_html($itemid), ['align' => 'center']);
+        return self::get_display_html($itemid);
     }
 
     public static function get_display_html($itemid)
     {
         $item_data = data::get_item_data($itemid);
 
-        $html = html_writer::start_tag('p', ['align' => 'center']);
+        $html = html_writer::start_tag('div', ['align' => 'center', 'style' => 'height: ' . self::MEDIA_HEIGHT, 'id' => "lor-$itemid"]);
         $html .= html_writer::tag('iframe', null, [
-            'width'  => $item_data['height'],
-            'height' => $item_data['height'],
+            'width'  => "100%",
+            'height' => "100%",
             'src'    => $item_data['url'],
         ]);
-        $html .= html_writer::end_tag('p');
+        $html .= html_writer::end_tag('div');
 
         return $html;
     }
@@ -47,26 +48,6 @@ class media
         );
         $item_form->setType('url', PARAM_RAW);
         $item_form->addRule('url', get_string('required'), 'required');
-
-        // Width
-        $item_form->addElement(
-            'text',
-            'width',
-            get_string('width', 'lortype_media')
-        );
-        $item_form->setType('width', PARAM_INT);
-        $item_form->addRule('width', get_string('required'), 'required');
-        $item_form->addHelpButton('width', 'width', 'lortype_media');
-
-        // Height
-        $item_form->addElement(
-            'text',
-            'height',
-            get_string('height', 'lortype_media')
-        );
-        $item_form->setType('height', PARAM_INT);
-        $item_form->addRule('height', get_string('required'), 'required');
-        $item_form->addHelpButton('height', 'height', 'lortype_media');
     }
 
     public static function create($itemid, $data)

@@ -162,8 +162,6 @@ $string['category_save_success']   = 'Category saved successfully!';
 $string['grade_save_success']      = 'Grade saved successfully!';
 $string['no_categories']           = 'No categories yet';
 $string['no_grades']               = 'No grades yet';
-$string['error_unknown_sort']
-                                   = 'Unknown sort parameter passed to search function';
 
 $string['search_title']   = 'Learning Resources';
 $string['search_heading'] = 'Learning Resources';
@@ -232,3 +230,4 @@ $string['error:description_length']
                                     = 'The description is too long, please enter a description less than 500 characters long';
 $string['error:name_no_symbol']     = 'Resource names can not include the symbol \'{$a}\'';
 $string['error:incorrect_embed_id'] = 'A learning resource with the specified ID can not be found!';
+$string['cachedef_resource_count']  = 'Cache of LOR resources count';

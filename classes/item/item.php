@@ -2,6 +2,8 @@
 
 namespace local_lor\item;
 
+use cache;
+use coding_exception;
 use context_system;
 use dml_exception;
 use Exception;
@@ -111,7 +113,8 @@ class item
         $item = [
             'name'         => substr($data->name, 0, item_form::NAME_MAX_LENGTH),
             'type'         => $data->type,
-            'description'  => substr(is_array($data->description) ? $data->description['text'] : $data->description, 0, item_form::DESCRIPTION_MAX_LENGTH),
+            'description'  => substr(is_array($data->description) ? $data->description['text'] : $data->description, 0,
+                item_form::DESCRIPTION_MAX_LENGTH),
             'timecreated'  => isset($data->timecreated) ? $data->timecreated : time(),
             'timemodified' => isset($data->timecreated) ? $data->timecreated : time(),
         ];
@@ -191,55 +194,178 @@ class item
     /**
      * Search for items by filtering all items
      *
+     * @param  int  $page
      * @param  string  $keywords
      * @param  string  $type
      * @param  array  $categories
      * @param  array  $grades
      * @param  string  $sort
      *
+     * @param  int  $perpage
+     *
      * @return array
-     * @throws moodle_exception
      * @throws dml_exception
+     * @throws moodle_exception
      */
     public static function search(
         $keywords = '',
         $type = '',
         $categories = [],
         $grades = [],
-        $sort = self::SORT_RECENT
+        $sort = self::SORT_RECENT,
+        $page = 0,
+        $perpage = 8
     ) {
         global $DB;
 
+        list($sql, $params) = self::build_search_query($keywords, $type, $categories, $grades, $sort, $page, $perpage);
+
+        // Execute the query
+        return $DB->get_records_sql($sql, $params);
+    }
+
+    /**
+     * Count the number of resources matching a search
+     *
+     * This function utilizes the cache to enhance performance
+     *
+     * @param  string  $keywords
+     * @param  string  $type
+     * @param  array  $categories
+     * @param  array  $grades
+     *
+     * @return int
+     * @throws coding_exception
+     * @throws dml_exception
+     */
+    public static function count_search_results(
+        $keywords = '',
+        $type = 'all',
+        $categories = [],
+        $grades = []
+    ) {
+        global $DB;
+
+        $cachekey = "$keywords-$type-".implode(',', $categories)."-".implode(',', $grades);
+        $cache    = cache::make('local_lor', 'resource_count');
+        if ($count = $cache->get($cachekey)) {
+            return $count;
+        }
+
+        list($sql, $params) = self::build_search_query($keywords, $type, $categories, $grades, null, null, null, true);
+        if ($count = $DB->count_records_sql($sql, $params)) {
+            $cache->set($cachekey, $count);
+
+            return $count;
+        }
+
+        return 0;
+    }
+
+    /**
+     * Construct a resource search query
+     *
+     * @param  string  $keywords
+     * @param  string  $type
+     * @param  array  $categories
+     * @param  array  $grades
+     * @param  string  $sort
+     * @param  int  $page
+     * @param  int  $perpage
+     * @param  false  $count
+     *
+     * @return array
+     */
+    private static function build_search_query(
+        $keywords = '',
+        $type = '',
+        $categories = [],
+        $grades = [],
+        $sort = self::SORT_RECENT,
+        $page = 0,
+        $perpage = 8,
+        $count = false
+    ) {
+        global $DB;
+
+        // Define parts of the SQL query
+        $select  = "i.*";
+        $from    = "{".self::TABLE."} i";
+        $joins   = "";
+        $where   = "1 = 1";
+        $orderby = "timecreated DESC";
+        $limit   = $perpage;
+        $offset  = $perpage * $page;
+        $params  = [];
+
         // Determine what sorting we are using
-        $orderby = null;
         if ($sort === self::SORT_RECENT) {
-            $orderby = 'timecreated DESC';
+            $orderby = 'i.timecreated DESC';
         } elseif ($sort === self::SORT_ALPHABETICAL) {
-            $orderby = 'name ASC';
-        } else {
-            print_error('error_unknown_sort', 'local_lor');
+            $orderby = 'i.name ASC';
         }
 
-        // Get the pre-sorted items
-        $items = $DB->get_records(self::TABLE, null, $orderby);
-
+        // Filter by type
         if ( ! empty($type) && $type !== 'all') {
-            $items = self::filter_by_type($items, $type);
+            $where          .= " AND i.`type` LIKE :type";
+            $params['type'] = $type;
         }
 
+        // Filter by categories
         if ( ! empty($categories)) {
-            $items = self::filter_by_category($items, $categories);
+            $joins .= " JOIN {".category::LINKING_TABLE."} ic ON ic.itemid = i.id";
+
+            list($categories_sql, $categories_params) = $DB->get_in_or_equal($categories, SQL_PARAMS_NAMED);
+            $where  .= " AND ic.categoryid $categories_sql";
+            $params += $categories_params;
         }
 
+        // Filter by grades
         if ( ! empty($grades)) {
-            $items = self::filter_by_grade($items, $grades);
+            $joins .= " JOIN {".grade::LINKING_TABLE."} ig ON ig.itemid = i.id";
+
+            list($grades_sql, $grades_params) = $DB->get_in_or_equal($grades, SQL_PARAMS_NAMED);
+            $where  .= " AND ig.gradeid $grades_sql";
+            $params += $grades_params;
         }
 
+        // Filter by keywords
         if ( ! empty($keywords)) {
-            $items = self::filter_by_keywords($items, $keywords);
+            $joins .= " JOIN {".topic::LINKING_TABLE."} it ON it.itemid = i.id";
+            $joins .= " JOIN {".topic::TABLE."} t ON t.id = it.topicid";
+
+            $where .= " AND(
+                (INSTR(:keywords_topic, t.name) > 0
+                OR i.description LIKE CONCAT('%', :keywords_desc, '%')
+	            OR i.name LIKE CONCAT('%', :keywords_name, '%'))
+	            AND t.name NOT LIKE ' '
+            )";
+
+            $params['keywords_topic'] = $keywords;
+            $params['keywords_desc']  = $keywords;
+            $params['keywords_name']  = $keywords;
         }
 
-        return $items;
+        // Check if we are just counting the results, or performing a full search
+        if ($count) {
+            $sql = "SELECT COUNT(*) FROM (
+                SELECT DISTINCT i.id
+                FROM $from
+                $joins
+                WHERE $where) as countable
+        ";
+        } else {
+            $sql = "
+                SELECT DISTINCT $select
+                FROM $from
+                $joins
+                WHERE $where
+                ORDER BY $orderby
+                LIMIT $limit OFFSET $offset
+        ";
+        }
+
+        return [$sql, $params];
     }
 
     private static function filter_by_keywords($items, string $keywords)

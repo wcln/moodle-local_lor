@@ -62,22 +62,21 @@ class api extends external_api
         $params['categories'] = array_column($params['categories'], 'id');
         $params['grades']     = array_column($params['grades'], 'id');
 
-        $items = array_values(item::search($params['keywords'], $params['type'], $params['categories'],
-            $params['grades'], $params['sort']));
+        $items = item::search($params['keywords'], $params['type'], $params['categories'],
+            $params['grades'], $params['sort'], $params['page'], $params['perpage']);
 
-        $numpages       = ceil(count($items) / $perpage);
-        $resource_count = count($items);
+        $resource_count = item::count_search_results($params['keywords'], $params['type'], $params['categories'],
+            $params['grades']);
+        $num_pages      = ceil($resource_count / $perpage);
 
-        // Paginate
-        $items = array_slice($items, $page * $perpage, $perpage);
-
+        // Include the image URLs as well
         foreach ($items as $item) {
             $item->image = item::get_image_url($item->id);
         }
 
         return [
             'resources'      => $items,
-            'pages'          => $numpages,
+            'pages'          => $num_pages,
             'resource_count' => $resource_count,
         ];
     }

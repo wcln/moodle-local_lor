@@ -151,4 +151,13 @@ trait type
         return false;
     }
 
+    /**
+     * Get a unique identifier we can use to search the database and find where this item is used.
+     *
+     * @param  int  $itemid
+     *
+     * @return string
+     */
+    public abstract static function get_unique_identifier(int $itemid);
+
 }

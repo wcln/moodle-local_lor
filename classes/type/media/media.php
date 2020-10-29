@@ -27,7 +27,8 @@ class media
     {
         $item_data = data::get_item_data($itemid);
 
-        $html = html_writer::start_tag('div', ['align' => 'center', 'style' => 'height: ' . self::MEDIA_HEIGHT, 'id' => "lor-$itemid"]);
+        $html = html_writer::start_tag('div',
+            ['align' => 'center', 'style' => 'height: '.self::MEDIA_HEIGHT, 'id' => "lor-$itemid"]);
         $html .= html_writer::tag('iframe', null, [
             'width'  => "100%",
             'height' => "100%",
@@ -111,5 +112,12 @@ class media
     public static function get_icon()
     {
         return 'laptop';
+    }
+
+    public static function get_unique_identifier(int $itemid)
+    {
+        $data = data::get_item_data($itemid);
+
+        return $data['url'];
     }
 }

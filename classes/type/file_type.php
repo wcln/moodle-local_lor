@@ -265,4 +265,19 @@ trait file_type
         return $DB->delete_records(data::TABLE, ['itemid' => $itemid]);
     }
 
+    /**
+     * Get a unique identifier we can use to search the database and find where this item is used.
+     *
+     * @param  int  $itemid
+     *
+     * @return string
+     * @throws dml_exception
+     */
+    public static function get_unique_identifier(int $itemid)
+    {
+        $url = self::get_embed_filepath($itemid);
+
+        return substr($url, 0, strpos($url, "&"));
+    }
+
 }

@@ -128,4 +128,9 @@ class video
 
         return self::YOUTUBE_EMBED_URL.$data['videoid'].'?rel=0';
     }
+
+    public static function get_unique_identifier(int $itemid)
+    {
+        return self::get_embed_url($itemid);
+    }
 }

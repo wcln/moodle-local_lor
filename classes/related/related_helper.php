@@ -5,6 +5,7 @@ namespace local_lor\related;
 use dml_exception;
 use local_lor\item\item;
 use local_lor\type\type;
+use moodle_exception;
 
 /**
  * Class related_helper
@@ -17,23 +18,70 @@ use local_lor\type\type;
 class related_helper
 {
 
+    private const LTI_BOOK_URL = 'https://wcln.ca/local/lti/index.php?type=book';
+    private const LTI_PAGE_URL = 'https://wcln.ca/local/lti/index.php?type=page';
+
+    /**
+     * Get related resources
+     *
+     * @param  int  $itemid
+     *
+     * @return array Of item IDs
+     * @throws dml_exception|moodle_exception
+     */
     public static function get_related_items(int $itemid)
+    {
+        global $DB;
+
+        $lti_book_type = $DB->get_record_select('lti_types', "baseurl LIKE :url", ['url' => self::LTI_BOOK_URL], 'id');
+        $lti_page_type = $DB->get_record_select('lti_types', "baseurl LIKE :url", ['url' => self::LTI_PAGE_URL], 'id');
+
+        if ($lti_page_type && $lti_book_type) {
+            $lti_type_ids = [$lti_book_type->id, $lti_page_type->id];
+        } else {
+            throw new moodle_exception('error:unknown_lti_type', 'local_lor');
+        }
+
+        $related_item_ids = [];
+        $courseids        = self::get_courses_used($itemid, $lti_type_ids);
+
+        // For each resource, see if it is also used in any of these courses
+        foreach (
+            $DB->get_fieldset_sql("SELECT id FROM {".item::TABLE."} WHERE id != :itemid", ['itemid' => $itemid]) as
+            $another_itemid
+        ) {
+            $another_courseids = self::get_courses_used($another_itemid, $lti_type_ids);
+
+            if ( ! empty(array_intersect($courseids, $another_courseids))) {
+                $related_item_ids[] = $another_itemid;
+            }
+        }
+
+        return $related_item_ids;
+    }
+
+    /**
+     * Find which LTI courses use a LOR item
+     *
+     * @param  int  $itemid
+     *
+     * @param  array  $lti_type_ids
+     *
+     * @return array
+     * @throws dml_exception
+     */
+    private static function get_courses_used(int $itemid, array $lti_type_ids)
     {
         // Search course activities to find where this item is used
         $activities = self::search_activities($itemid);
 
-        // For each course activity, find LTI activities which reference it
+        // Find which LTI courses are using this activity
         $courseids = [];
         foreach ($activities as $cmid) {
-            $courseids = array_merge($courseids, self::search_lti_courses($cmid));
+            $courseids = array_merge($courseids, self::search_lti_courses($cmid, $lti_type_ids));
         }
 
         return $courseids;
-
-        // TODO Get a list of LTI provider course IDs this item is used in
-
-        // TODO See which other resources are used in these courses
-
     }
 
     /**
@@ -86,17 +134,11 @@ class related_helper
         return [];
     }
 
-    private static function search_lti_courses(int $cmid)
+    private static function search_lti_courses(int $cmid, array $lti_type_ids)
     {
         global $DB;
 
         $courses = [];
-
-        $lti_book_url = 'https://wcln.ca/local/lti/index.php?type=book';
-        $lti_page_url = 'https://wcln.ca/local/lti/index.php?type=page';
-
-        $lti_book_type = $DB->get_record_select('lti_types', "baseurl LIKE :url", ['url' => $lti_book_url]);
-        $lti_page_type = $DB->get_record_select('lti_types', "baseurl LIKE :url", ['url' => $lti_page_url]);
 
         $sql    = "
                 SELECT c.id
@@ -112,17 +154,8 @@ class related_helper
             'cmid' => $cmid,
         ];
 
-        // Find LTI books referncing this cmid
-        if ($lti_book_type) {
-            $params['typeid'] = $lti_book_type->id;
-            if ($result = $DB->get_fieldset_sql($sql, $params)) {
-                $courses = array_merge($courses, $result);
-            }
-        }
-
-        // Find LTI pages referencing this cmid
-        if ($lti_page_type) {
-            $params['typeid'] = $lti_page_type->id;
+        foreach ($lti_type_ids as $type_id) {
+            $params['typeid'] = $type_id;
             if ($result = $DB->get_fieldset_sql($sql, $params)) {
                 $courses = array_merge($courses, $result);
             }

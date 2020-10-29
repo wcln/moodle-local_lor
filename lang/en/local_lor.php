@@ -231,3 +231,5 @@ $string['error:description_length']
 $string['error:name_no_symbol']     = 'Resource names can not include the symbol \'{$a}\'';
 $string['error:incorrect_embed_id'] = 'A learning resource with the specified ID can not be found!';
 $string['cachedef_resource_count']  = 'Cache of LOR resources count';
+$string['error:unknown_lti_type']
+                                    = 'LTI Page and LTI Book types can not be found in the database! Unable to find related resources.';

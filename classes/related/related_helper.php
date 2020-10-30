@@ -2,6 +2,7 @@
 
 namespace local_lor\related;
 
+use cache;
 use dml_exception;
 use local_lor\item\item;
 use local_lor\type\type;
@@ -33,6 +34,12 @@ class related_helper
     {
         global $DB;
 
+        $cache = cache::make('local_lor', 'related_items');
+
+        if ($related_item_ids = $cache->get($itemid)) {
+            return $related_item_ids;
+        }
+
         $lti_book_type = $DB->get_record_select('lti_types', "baseurl LIKE :url", ['url' => self::LTI_BOOK_URL], 'id');
         $lti_page_type = $DB->get_record_select('lti_types', "baseurl LIKE :url", ['url' => self::LTI_PAGE_URL], 'id');
 
@@ -56,6 +63,8 @@ class related_helper
                 $related_item_ids[] = $another_itemid;
             }
         }
+
+        $cache->set($itemid, $related_item_ids);
 
         return $related_item_ids;
     }

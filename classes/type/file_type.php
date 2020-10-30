@@ -271,13 +271,10 @@ trait file_type
      * @param  int  $itemid
      *
      * @return string
-     * @throws dml_exception
      */
     public static function get_unique_identifier(int $itemid)
     {
-        $url = self::get_embed_filepath($itemid);
-
-        return substr($url, 0, strpos($url, "&"));
+        return repository::get_file_url($itemid)->out();
     }
 
 }

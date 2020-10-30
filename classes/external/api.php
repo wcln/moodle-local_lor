@@ -4,6 +4,7 @@ use local_lor\helper;
 use local_lor\item\item;
 use local_lor\item\property\category;
 use local_lor\item\property\grade;
+use local_lor\related\related_helper;
 use local_lor\type\type;
 
 require_once("$CFG->libdir/externallib.php");
@@ -303,5 +304,90 @@ class api extends external_api
                 'True if the current logged in user is an admin, otherwise false'),
         ]);
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Get related items/resources
+    |--------------------------------------------------------------------------
+    |
+    | Get resources which are used in the same courses as an item
+    |
+    */
+
+    public static function get_related_items_parameters()
+    {
+        return new external_function_parameters([
+            'id' => new external_value(PARAM_INT, 'The item ID to find related items for'),
+        ]);
+    }
+
+    public static function get_related_items(int $id)
+    {
+        $params = self::validate_parameters(self::get_related_items_parameters(), compact('id'));
+
+        return related_helper::get_related_items($params['id']);
+    }
+
+    public static function get_related_items_returns()
+    {
+        return new external_multiple_structure(
+            new external_single_structure([
+                'id'      => new external_value(PARAM_INT, 'ID of the related item'),
+                'name'    => new external_value(PARAM_TEXT),
+                'image'   => new external_value(PARAM_TEXT),
+                'url'     => new external_value(PARAM_URL),
+                'courses' => new external_multiple_structure(
+                    new external_single_structure([
+                        'id'        => new external_value(PARAM_INT, 'ID of the course this item is used in'),
+                        'fullname'  => new external_value(PARAM_TEXT),
+                        'shortname' => new external_value(PARAM_TEXT),
+                        'url'       => new external_value(PARAM_URL),
+                    ])
+                ),
+            ])
+        );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Get courses that this resource is used in
+    |--------------------------------------------------------------------------
+    |
+    | Get courses that this resource is used in. This supports 'Related' functionality.
+    |
+    */
+
+    public static function get_courses_used_parameters()
+    {
+        return new external_function_parameters([
+            'id' => new external_value(PARAM_INT, 'The item ID to find related items for'),
+        ]);
+    }
+
+    public static function get_courses_used(int $id)
+    {
+        $params = self::validate_parameters(self::get_courses_used_parameters(), compact('id'));
+
+        if ($courses = related_helper::get_courses_used($params['id'], related_helper::get_lti_type_ids())) {
+            foreach ($courses as $course) {
+                $course->url = (new moodle_url('/course/view.php', ['id' => $course->id]))->out();
+            }
+        }
+
+        return $courses;
+    }
+
+    public static function get_courses_used_returns()
+    {
+        return new external_multiple_structure(
+            new external_single_structure([
+                'id'        => new external_value(PARAM_INT, 'Course ID'),
+                'fullname'  => new external_value(PARAM_INT, 'Course full name'),
+                'shortname' => new external_value(PARAM_INT, 'Course short name'),
+                'url'       => new external_value(PARAM_INT, 'Link to course page'),
+            ])
+        );
+    }
+
 
 }

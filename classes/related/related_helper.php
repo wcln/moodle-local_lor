@@ -7,6 +7,7 @@ use dml_exception;
 use local_lor\item\item;
 use local_lor\type\type;
 use moodle_exception;
+use moodle_url;
 
 /**
  * Class related_helper
@@ -36,8 +37,62 @@ class related_helper
 
         $cache = cache::make('local_lor', 'related_items');
 
-        if ($related_items = $cache->get($itemid)) {
+        $related_items = $cache->get($itemid);
+        if ($related_items !== false) {
             return $related_items;
+        }
+
+        $related_items = [];
+        $lti_type_ids  = self::get_lti_type_ids();
+        $courses       = self::get_courses_used($itemid, $lti_type_ids);
+
+        if ( ! empty($courses)) {
+            // For each resource, see if it is also used in any of these courses
+            foreach (
+                $DB->get_records_sql("SELECT id, name FROM {".item::TABLE."} WHERE id != :itemid",
+                    ['itemid' => $itemid])
+                as
+                $another_item
+            ) {
+                $another_courses = self::get_courses_used($another_item->id, self::get_lti_type_ids());
+
+                $courseids       = array_column($courses, 'id');
+                $related_courses = [];
+                foreach ($another_courses as $course) {
+                    if (in_array($course->id, $courseids)) {
+                        $related_courses[] = [
+                            'id'        => $course->id,
+                            'fullname'  => $course->fullname,
+                            'shortname' => $course->shortname,
+                            'url'       => (new moodle_url('/course/view.php', ['id' => $course->id]))->out(),
+                        ];
+                    }
+                }
+
+                if ( ! empty($related_courses)) {
+                    $related_items[] = [
+                        'id'      => $another_item->id,
+                        'name'    => $another_item->name,
+                        'image'   => item::get_image_url($another_item->id),
+                        'url'     => (new moodle_url('/local/lor/index.php/resources/view/'.$another_item->id))->out(),
+                        'courses' => $related_courses,
+                    ];
+                }
+            }
+        }
+
+        $cache->set($itemid, $related_items);
+
+        return $related_items;
+    }
+
+    public static function get_lti_type_ids()
+    {
+        global $DB;
+
+        $cache = cache::make('local_lor', 'lti_type_ids');
+        if (($lti_type_ids = $cache->get('lti_type_ids')) !== false) {
+            return $lti_type_ids;
         }
 
         $lti_book_type = $DB->get_record_select('lti_types', "baseurl LIKE :url", ['url' => self::LTI_BOOK_URL], 'id');
@@ -49,28 +104,9 @@ class related_helper
             throw new moodle_exception('error:unknown_lti_type', 'local_lor');
         }
 
-        $related_items = [];
-        $courseids     = self::get_courses_used($itemid, $lti_type_ids);
+        $cache->set('lti_type_ids', $lti_type_ids);
 
-        // For each resource, see if it is also used in any of these courses
-        foreach (
-            $DB->get_fieldset_sql("SELECT id FROM {".item::TABLE."} WHERE id != :itemid", ['itemid' => $itemid]) as
-            $another_itemid
-        ) {
-            $another_courseids = self::get_courses_used($another_itemid, $lti_type_ids);
-
-            $related_course_ids = array_intersect($courseids, $another_courseids);
-            foreach ($related_course_ids as $related_course_id) {
-                $related_items[] = [
-                    'courseid' => $related_course_id,
-                    'itemid'   => $another_itemid,
-                ];
-            }
-        }
-
-        $cache->set($itemid, $related_items);
-
-        return $related_items;
+        return $lti_type_ids;
     }
 
     /**
@@ -83,18 +119,25 @@ class related_helper
      * @return array
      * @throws dml_exception
      */
-    private static function get_courses_used(int $itemid, array $lti_type_ids)
+    public static function get_courses_used(int $itemid, array $lti_type_ids)
     {
+        $cache = cache::make('local_lor', 'courses_used');
+        if (($courses = $cache->get($itemid)) !== false) {
+            return $courses;
+        }
+
         // Search course activities to find where this item is used
         $activities = self::search_activities($itemid);
 
         // Find which LTI courses are using this activity
-        $courseids = [];
+        $courses = [];
         foreach ($activities as $cmid) {
-            $courseids = array_merge($courseids, self::search_lti_courses($cmid, $lti_type_ids));
+            $courses += self::search_lti_courses($cmid, $lti_type_ids);
         }
 
-        return $courseids;
+        $cache->set($itemid, $courses);
+
+        return $courses;
     }
 
     /**
@@ -154,7 +197,7 @@ class related_helper
         $courses = [];
 
         $sql    = "
-                SELECT c.id
+                SELECT DISTINCT c.id, c.fullname, c.shortname
                 FROM {lti} l
                 JOIN {course} c ON l.course = c.id
                 JOIN {course_categories} cc ON c.category = cc.id
@@ -169,8 +212,8 @@ class related_helper
 
         foreach ($lti_type_ids as $type_id) {
             $params['typeid'] = $type_id;
-            if ($result = $DB->get_fieldset_sql($sql, $params)) {
-                $courses = array_merge($courses, $result);
+            if ($result = $DB->get_records_sql($sql, $params)) {
+                $courses += $result;
             }
         }
 

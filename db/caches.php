@@ -9,4 +9,10 @@ $definitions = [
     'related_items'  => [
         'mode' => cache_store::MODE_APPLICATION,
     ],
+    'courses_used'   => [
+        'mode' => cache_store::MODE_APPLICATION,
+    ],
+    'lti_type_ids'   => [
+        'mode' => cache_store::MODE_APPLICATION,
+    ],
 ];

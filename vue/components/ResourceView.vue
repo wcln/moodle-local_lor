@@ -76,7 +76,7 @@
                             <i class="fas fa-share-square"></i>
                             {{strings.share}}
                         </a>
-                        <a class="card-footer-item">
+                        <a class="card-footer-item" @click="showRelatedModal = true">
                             <i class="fas fa-share-alt"></i>
                             {{strings.related}}
                         </a>
@@ -125,6 +125,14 @@
                 :title="strings.share_modal_title"
                 :rows="1">
         </copy-modal>
+
+      <related-modal
+        ref="relatedModal"
+        v-if="showRelatedModal"
+        @close="showRelatedModal = false"
+        :resource="resource"
+      >
+      </related-modal>
     </div>
 </template>
 
@@ -132,10 +140,11 @@
     import {mapState} from "vuex";
     import CopyModal from "./CopyModal";
     import {ajax} from "../store";
+    import RelatedModal from "./RelatedModal";
 
     export default {
         name: "resource-view",
-        components: {CopyModal},
+        components: {RelatedModal, CopyModal},
         computed: {
             ...mapState(['strings', 'resourceTypes', 'user']),
             shareLink() {
@@ -157,6 +166,7 @@
                 resource: {},
                 showShareModal: false,
                 showEmbedModal: false,
+                showRelatedModal: false,
                 showDetails: false
             }
         },

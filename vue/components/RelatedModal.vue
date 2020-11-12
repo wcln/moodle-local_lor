@@ -7,6 +7,7 @@
         <button class="delete" aria-label="close" @click="$emit('close')"></button>
       </header>
       <section class="modal-card-body">
+        <p class="has-text-centered">{{strings.related_help}}</p>
         <div class="columns is-multiline is-centered">
           <div class="column is-four-fifths" v-for="relatedItem in relatedItems" v-if="relatedItems.length > 0">
             <div class="related-card">
@@ -83,5 +84,11 @@ export default {
 
   a.title {
     display: block;
+  }
+
+  #local-lor-app .modal-card-body > p {
+    margin-bottom: 2rem;
+    color: grey;
+    font-style: italic;
   }
 </style>

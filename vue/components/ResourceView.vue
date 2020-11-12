@@ -198,13 +198,10 @@
             margin-top: 1em;
         }
 
-        opacity: 0;
-        position: absolute;
+        display: none;
 
         &.is-active {
-            position: static;
-            opacity: 1;
-            transition: opacity .4s linear;
+            display: block;
         }
 
         .media-left > i {

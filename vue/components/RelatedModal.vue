@@ -8,8 +8,15 @@
       </header>
       <section class="modal-card-body">
         <p class="has-text-centered">{{strings.related_help}}</p>
-        <div class="columns is-multiline is-centered">
-          <div class="column is-four-fifths" v-for="relatedItem in relatedItems" v-if="relatedItems.length > 0">
+        <div class="columns is-multiline is-centered" v-for="resourceType in resourceTypes" v-if="relatedItems.length > 0">
+          <section class="hero is-info is-small" v-if="relatedItems.filter(i => i.type === resourceType.value).length > 0">
+            <div class="hero-body">
+              <div class="container has-text-centered">
+                <h3 class="title is-3"><i :class="'m-r-1 fas fa-' + resourceType.icon"></i>{{resourceType.name}}</h3>
+              </div>
+            </div>
+          </section>
+          <div class="column is-four-fifths" v-for="relatedItem in relatedItems.filter(i => i.type === resourceType.value)">
             <div class="related-card">
                 <div class="card">
                   <div class="columns">
@@ -32,6 +39,8 @@
                 </div>
             </div>
           </div>
+        </div>
+        <div class="columns is-multiline is-centered">
           <alert-message v-if="(! isLoading) && relatedItems.length === 0" :show-close="false">
             No related resources found
           </alert-message>
@@ -57,7 +66,7 @@ export default {
   name: "RelatedModal",
   components: {AlertMessage},
   computed: {
-    ...mapState(['strings'])
+    ...mapState(['strings', 'resourceTypes'])
   },
   props: {
     resource: Object
@@ -90,5 +99,17 @@ export default {
     margin-bottom: 2rem;
     color: grey;
     font-style: italic;
+  }
+
+  .hero {
+    width: 100%;
+  }
+
+  .card-image {
+    position: relative;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
   }
 </style>

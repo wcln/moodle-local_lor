@@ -334,6 +334,7 @@ class api extends external_api
             new external_single_structure([
                 'id'      => new external_value(PARAM_INT, 'ID of the related item'),
                 'name'    => new external_value(PARAM_TEXT),
+                'type'    => new external_value(PARAM_TEXT),
                 'image'   => new external_value(PARAM_TEXT),
                 'url'     => new external_value(PARAM_URL),
                 'courses' => new external_multiple_structure(

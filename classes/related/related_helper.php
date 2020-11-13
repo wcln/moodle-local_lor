@@ -47,9 +47,10 @@ class related_helper
         $courses       = self::get_courses_used($itemid, $lti_type_ids);
 
         if ( ! empty($courses)) {
+
             // For each resource, see if it is also used in any of these courses
             foreach (
-                $DB->get_records_sql("SELECT id, name FROM {".item::TABLE."} WHERE id != :itemid",
+                $DB->get_records_sql("SELECT id, name, type FROM {".item::TABLE."} WHERE id != :itemid",
                     ['itemid' => $itemid])
                 as
                 $another_item
@@ -73,6 +74,7 @@ class related_helper
                     $related_items[] = [
                         'id'      => $another_item->id,
                         'name'    => $another_item->name,
+                        'type'    => $another_item->type,
                         'image'   => item::get_image_url($another_item->id),
                         'url'     => (new moodle_url('/local/lor/index.php/resources/view/'.$another_item->id))->out(),
                         'courses' => $related_courses,

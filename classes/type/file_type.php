@@ -56,7 +56,7 @@ trait file_type
         return html_writer::tag('embed', '', [
             'src'    => repository::get_file_url($itemid),
             'width'  => '100%',
-            'height' => '100%',
+            'height' => '900px',
         ]);
     }
 

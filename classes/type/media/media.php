@@ -11,7 +11,6 @@ class media
     use type;
 
     const PROPERTIES = ['url'];
-    const MEDIA_HEIGHT = '900px';
 
     public static function get_name()
     {
@@ -27,16 +26,10 @@ class media
     {
         $item_data = data::get_item_data($itemid);
 
-        $html = html_writer::start_tag('div',
-            ['align' => 'center', 'style' => 'height: '.self::MEDIA_HEIGHT, 'id' => "lor-$itemid"]);
-        $html .= html_writer::tag('iframe', null, [
+        return html_writer::tag('iframe', null, [
             'width'  => "100%",
-            'height' => "100%",
             'src'    => $item_data['url'],
         ]);
-        $html .= html_writer::end_tag('div');
-
-        return $html;
     }
 
     public static function add_to_form(&$item_form)

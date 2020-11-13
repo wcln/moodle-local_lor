@@ -176,15 +176,26 @@
             });
 
             this.$store.dispatch('getResourceTypes');
-        }
+        },
+      watch: {
+          resource(val) {
+            if (val) {
+              this.$nextTick(() => {
+                let iframe = document.querySelector('.resource-display iframe');
+                if (iframe !== null && iframe.src.includes(window.location.host)) {
+                  iframe.onload = () => {
+                    iframe.height = iframe.contentWindow.document.body.scrollHeight + 10;
+                    window.console.log("setting height to " + iframe.height);
+                  };
+                }
+              });
+            }
+          }
+      }
     }
 </script>
 
 <style scoped lang="scss">
-    .resource-display {
-        min-height: 900px;
-    }
-
     #local-lor-app .columns {
         margin-top: 1rem;
     }

@@ -293,7 +293,7 @@ class api extends external_api
     public static function get_user()
     {
         return [
-            'isAdmin' => is_siteadmin(),
+            'isAdmin' => has_capability('local/lor:manage', context_system::instance()),
         ];
     }
 

@@ -20,6 +20,9 @@ page::set_up(
 $PAGE->navbar->add(get_string('lor_page', 'local_lor'), $return_url);
 $PAGE->navbar->add(get_string('add_title', 'local_lor'), $page_url);
 
+require_login();
+require_capability('local/lor:manage', context_system::instance());
+
 $renderer = page::get_renderer();
 
 if (empty($type)) {

@@ -110,6 +110,8 @@ class item
     {
         global $DB;
 
+        require_capability('local/lor:manage', context_system::instance());
+
         $item = [
             'name'         => substr($data->name, 0, item_form::NAME_MAX_LENGTH),
             'type'         => $data->type,
@@ -149,6 +151,8 @@ class item
     {
         global $DB;
 
+        require_capability('local/lor:manage', context_system::instance());
+
         self::save_image($itemid, $data->image);
 
         $item = [
@@ -182,6 +186,8 @@ class item
     public static function delete(int $itemid)
     {
         global $DB;
+
+        require_capability('local/lor:manage', context_system::instance());
 
         // Make sure we grab the type before the item is deleted
         $type = self::get_type($itemid);

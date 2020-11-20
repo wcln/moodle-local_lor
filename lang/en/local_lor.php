@@ -233,6 +233,6 @@ $string['error:incorrect_embed_id'] = 'A learning resource with the specified ID
 $string['cachedef_resource_count']  = 'Cache of LOR resources count';
 $string['error:unknown_lti_type']
                                     = 'LTI Page and LTI Book types can not be found in the database! Unable to find related resources.';
-$string['related_help']             = 'Below are resources that are also used in the same units as this resource.';
+$string['related_help']             = 'Below are resources that are also used in the same units as this resource. This list is updated nightly.';
 $string['lor:manage']               = 'Add, edit, and delete learning resources';
 $string['task:cache_related']       = 'Build related items cache';

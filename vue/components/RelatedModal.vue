@@ -32,7 +32,7 @@
                         <a :href="relatedItem.url" class="title is-5">
                           <p>{{relatedItem.name}}</p>
                         </a>
-                        <a class="course-tag" :href="course.url" v-for="course in relatedItem.courses"><span class="tag">{{course.shortname}}</span></a>
+                        <a class="course-tag" :href="section.url" v-for="section in relatedItem.sections"><span class="tag">{{section.course.fullname}}</span></a>
                       </div>
                     </div>
                   </div>
@@ -41,13 +41,18 @@
           </div>
         </div>
         <div class="columns is-multiline is-centered">
-          <alert-message v-if="(! isLoading) && relatedItems.length === 0" :show-close="false">
+          <alert-message v-if="(! isLoading) && relatedItems.length === 0 && ! disabled" :show-close="false">
             No related resources found
           </alert-message>
           <div v-if="isLoading">
             <p>Searching for related resources...</p>
             <progress class="progress is-medium is-info" max="100"></progress>
           </div>
+        </div>
+        <div class="columns is-multiline is-centered">
+          <alert-message v-if="disabled" :show-close="false" :color="'is-danger'">
+            Related functionality is currently disabled while the cache is rebuilt. Please try again later.
+          </alert-message>
         </div>
       </section>
       <footer class="modal-card-foot">
@@ -74,12 +79,14 @@ export default {
   data() {
     return {
       relatedItems: [],
-      isLoading: true
+      isLoading: true,
+      disabled: false
     }
   },
   created() {
-    ajax('local_lor_get_related_items', {id: this.resource.id}).then(relatedItems => {
-      this.relatedItems = relatedItems;
+    ajax('local_lor_get_related_items', {id: this.resource.id}).then(response => {
+      this.relatedItems = response.related;
+      this.disabled = response.disabled;
       this.isLoading = false;
     });
   }

@@ -69,14 +69,5 @@ $functions = [
         'type'          => 'read',
         'ajax'          => true,
         'loginrequired' => false,
-    ],
-    'local_lor_get_courses_used' => [
-        'classname'     => 'api',
-        'methodname'    => 'get_courses_used',
-        'classpath'     => 'local/lor/classes/external/api.php',
-        'description'   => 'Get courses that this resource is used in',
-        'type'          => 'read',
-        'ajax'          => true,
-        'loginrequired' => false,
-    ],
+    ]
 ];

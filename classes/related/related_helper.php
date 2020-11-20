@@ -44,40 +44,55 @@ class related_helper
 
         $related_items = [];
         $lti_type_ids  = self::get_lti_type_ids();
-        $courses       = self::get_courses_used($itemid, $lti_type_ids);
+        $sections       = self::get_sections_used($itemid, $lti_type_ids);
 
-        if ( ! empty($courses)) {
-
+        if ( ! empty($sections)) {
             // For each resource, see if it is also used in any of these courses
+            $all_resources = $DB->get_records_sql("SELECT id, name, type FROM {".item::TABLE."} WHERE id != :itemid",
+                ['itemid' => $itemid]);
+            $total_resource_count = count($all_resources) + 1;
+            $counter = 1;
             foreach (
-                $DB->get_records_sql("SELECT id, name, type FROM {".item::TABLE."} WHERE id != :itemid",
-                    ['itemid' => $itemid])
+                $all_resources
                 as
                 $another_item
             ) {
-                $another_courses = self::get_courses_used($another_item->id, self::get_lti_type_ids());
+                $counter++;
 
-                $courseids       = array_column($courses, 'id');
-                $related_courses = [];
-                foreach ($another_courses as $course) {
-                    if (in_array($course->id, $courseids)) {
-                        $related_courses[] = [
-                            'id'        => $course->id,
-                            'fullname'  => $course->fullname,
-                            'shortname' => $course->shortname,
-                            'url'       => (new moodle_url('/course/view.php', ['id' => $course->id]))->out(),
+                // Output script progress if we are running this in debug mode (from the scheduled task)
+                if (defined('DEBUG')) {
+                    echo "Processing item $another_item->id, which is item $counter / $total_resource_count.\n";
+                }
+
+                $another_sections = self::get_sections_used($another_item->id, self::get_lti_type_ids());
+
+                $section_ids      = array_column($sections, 'id');
+                $related_sections = [];
+                foreach ($another_sections as $section) {
+                    if (in_array($section->id, $section_ids)) {
+                        $related_sections[] = [
+                            'id'      => $section->id,
+                            'section' => $section->section,
+                            'name'    => $section->name,
+                            'url'     => (new moodle_url('/course/view.php', ['id' => $section->courseid]))->out()
+                                         ."#section-$section->section",
+                            'course'  => [
+                                'id'        => $section->courseid,
+                                'fullname'  => $section->course_fullname,
+                                'shortname' => $section->course_shortname,
+                            ],
                         ];
                     }
                 }
 
-                if ( ! empty($related_courses)) {
+                if ( ! empty($related_sections)) {
                     $related_items[] = [
-                        'id'      => $another_item->id,
-                        'name'    => $another_item->name,
-                        'type'    => $another_item->type,
-                        'image'   => item::get_image_url($another_item->id),
-                        'url'     => (new moodle_url('/local/lor/index.php/resources/view/'.$another_item->id))->out(),
-                        'courses' => $related_courses,
+                        'id'       => $another_item->id,
+                        'name'     => $another_item->name,
+                        'type'     => $another_item->type,
+                        'image'    => item::get_image_url($another_item->id),
+                        'url'      => (new moodle_url('/local/lor/index.php/resources/view/'.$another_item->id))->out(),
+                        'sections' => $related_sections,
                     ];
                 }
             }
@@ -121,25 +136,25 @@ class related_helper
      * @return array
      * @throws dml_exception
      */
-    public static function get_courses_used(int $itemid, array $lti_type_ids)
+    public static function get_sections_used(int $itemid, array $lti_type_ids)
     {
-        $cache = cache::make('local_lor', 'courses_used');
-        if (($courses = $cache->get($itemid)) !== false) {
-            return $courses;
+        $cache = cache::make('local_lor', 'sections_used');
+        if (($sections = $cache->get($itemid)) !== false) {
+            return $sections;
         }
 
         // Search course activities to find where this item is used
         $activities = self::search_activities($itemid);
 
-        // Find which LTI courses are using this activity
-        $courses = [];
+        // Find which LTI course sections are using this activity
+        $sections = [];
         foreach ($activities as $cmid) {
-            $courses += self::search_lti_courses($cmid, $lti_type_ids);
+            $sections += self::search_lti_sections($cmid, $lti_type_ids);
         }
 
-        $cache->set($itemid, $courses);
+        $cache->set($itemid, $sections);
 
-        return $courses;
+        return $sections;
     }
 
     /**
@@ -192,17 +207,19 @@ class related_helper
         return [];
     }
 
-    private static function search_lti_courses(int $cmid, array $lti_type_ids)
+    private static function search_lti_sections(int $cmid, array $lti_type_ids)
     {
         global $DB;
 
-        $courses = [];
+        $sections = [];
 
         $sql    = "
-                SELECT DISTINCT c.id, c.fullname, c.shortname
+                SELECT DISTINCT cs.id, cs.section, cs.name, c.id AS courseid, c.fullname AS course_fullname, c.shortname AS course_shortname
                 FROM {lti} l
                 JOIN {course} c ON l.course = c.id
-                JOIN {course_categories} cc ON c.category = cc.id
+                JOIN {course_categories} cc ON c.category = cc.id   
+                JOIN {course_sections} cs ON cs.course = c.id
+                JOIN {course_modules} cm ON cm.course = c.id AND cm.section = cs.id AND cm.instance = l.id
                 WHERE typeid = :typeid
                 AND instructorcustomparameters LIKE CONCAT('%=', :cmid)
                 AND c.visible = 1
@@ -215,11 +232,11 @@ class related_helper
         foreach ($lti_type_ids as $type_id) {
             $params['typeid'] = $type_id;
             if ($result = $DB->get_records_sql($sql, $params)) {
-                $courses += $result;
+                $sections += $result;
             }
         }
 
-        return $courses;
+        return $sections;
     }
 
 }

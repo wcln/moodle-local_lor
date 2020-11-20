@@ -325,70 +325,47 @@ class api extends external_api
     {
         $params = self::validate_parameters(self::get_related_items_parameters(), compact('id'));
 
-        return related_helper::get_related_items($params['id']);
+        $cache = cache::make('local_lor', 'sections_used');
+        if ($cache->get($id) !== false) {
+            return [
+                'related'  => related_helper::get_related_items($params['id']),
+                'disabled' => false,
+            ];
+        }
+
+        // The cache is not up to date, we should disable related functionality until the scheduled task
+        // runs this night. Otherwise users could be stuck waiting for the cache to build for a long time.
+        return [
+            'related'  => [],
+            'disabled' => true,
+        ];
     }
 
     public static function get_related_items_returns()
     {
-        return new external_multiple_structure(
-            new external_single_structure([
-                'id'      => new external_value(PARAM_INT, 'ID of the related item'),
-                'name'    => new external_value(PARAM_TEXT),
-                'type'    => new external_value(PARAM_TEXT),
-                'image'   => new external_value(PARAM_TEXT),
-                'url'     => new external_value(PARAM_URL),
-                'courses' => new external_multiple_structure(
-                    new external_single_structure([
-                        'id'        => new external_value(PARAM_INT, 'ID of the course this item is used in'),
-                        'fullname'  => new external_value(PARAM_TEXT),
-                        'shortname' => new external_value(PARAM_TEXT),
-                        'url'       => new external_value(PARAM_URL),
-                    ])
-                ),
-            ])
-        );
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Get courses that this resource is used in
-    |--------------------------------------------------------------------------
-    |
-    | Get courses that this resource is used in. This supports 'Related' functionality.
-    |
-    */
-
-    public static function get_courses_used_parameters()
-    {
-        return new external_function_parameters([
-            'id' => new external_value(PARAM_INT, 'The item ID to find related items for'),
+        return new external_single_structure([
+            'related'  => new external_multiple_structure(
+                new external_single_structure([
+                    'id'       => new external_value(PARAM_INT, 'ID of the related item'),
+                    'name'     => new external_value(PARAM_TEXT),
+                    'type'     => new external_value(PARAM_TEXT),
+                    'image'    => new external_value(PARAM_TEXT),
+                    'url'      => new external_value(PARAM_URL),
+                    'sections' => new external_multiple_structure(
+                        new external_single_structure([
+                            'id'     => new external_value(PARAM_INT, 'ID of the section this item is used in'),
+                            'name'   => new external_value(PARAM_TEXT),
+                            'course' => new external_single_structure([
+                                'id'        => new external_value(PARAM_INT, 'ID of the course containing this item'),
+                                'fullname'  => new external_value(PARAM_TEXT),
+                                'shortname' => new external_value(PARAM_TEXT),
+                            ]),
+                            'url'    => new external_value(PARAM_URL),
+                        ])
+                    ),
+                ])
+            ),
+            'disabled' => new external_value(PARAM_BOOL, 'Is the related functionality disabled?'),
         ]);
     }
-
-    public static function get_courses_used(int $id)
-    {
-        $params = self::validate_parameters(self::get_courses_used_parameters(), compact('id'));
-
-        if ($courses = related_helper::get_courses_used($params['id'], related_helper::get_lti_type_ids())) {
-            foreach ($courses as $course) {
-                $course->url = (new moodle_url('/course/view.php', ['id' => $course->id]))->out();
-            }
-        }
-
-        return $courses;
-    }
-
-    public static function get_courses_used_returns()
-    {
-        return new external_multiple_structure(
-            new external_single_structure([
-                'id'        => new external_value(PARAM_INT, 'Course ID'),
-                'fullname'  => new external_value(PARAM_INT, 'Course full name'),
-                'shortname' => new external_value(PARAM_INT, 'Course short name'),
-                'url'       => new external_value(PARAM_INT, 'Link to course page'),
-            ])
-        );
-    }
-
-
 }

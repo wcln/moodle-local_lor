@@ -108,7 +108,7 @@ class item
      */
     public static function create($data, $form = null)
     {
-        global $DB;
+        global $DB, $USER;
 
         require_capability('local/lor:manage', context_system::instance());
 
@@ -131,6 +131,14 @@ class item
             $type_class = type::get_class($data->type);
 
             $type_class::create($itemid, $data, $form);
+
+            // Trigger 'resource created' event
+            $event = \local_lor\event\resource_created::create([
+                'context'       => context_system::instance(),
+                'objectid'      => $itemid,
+                'relateduserid' => $USER->id,
+            ]);
+            $event->trigger();
         }
 
         return $itemid;
@@ -149,7 +157,7 @@ class item
      */
     public static function update(int $itemid, $data, $form = null)
     {
-        global $DB;
+        global $DB, $USER;
 
         require_capability('local/lor:manage', context_system::instance());
 
@@ -169,6 +177,14 @@ class item
 
             $type_class = type::get_class($data->type);
 
+            // Trigger 'resource updated' event
+            $event = \local_lor\event\resource_updated::create([
+                'context'       => context_system::instance(),
+                'objectid'      => $itemid,
+                'relateduserid' => $USER->id,
+            ]);
+            $event->trigger();
+
             return $type_class::update($itemid, $data, $form);
         }
 
@@ -185,16 +201,26 @@ class item
      */
     public static function delete(int $itemid)
     {
-        global $DB;
+        global $DB, $USER;
 
         require_capability('local/lor:manage', context_system::instance());
 
         // Make sure we grab the type before the item is deleted
         $type = self::get_type($itemid);
 
-        return $DB->delete_records(self::TABLE, ['id' => $itemid])
+        $result = $DB->delete_records(self::TABLE, ['id' => $itemid])
                && (type::get_class($type))::delete($itemid)
                && self::delete_properties($itemid);
+
+        // Trigger 'resource created' event
+        $event = \local_lor\event\resource_deleted::create([
+            'context'       => context_system::instance(),
+            'objectid'      => $itemid,
+            'relateduserid' => $USER->id,
+        ]);
+        $event->trigger();
+
+        return $result;
     }
 
     /**

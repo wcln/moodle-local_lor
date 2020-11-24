@@ -211,28 +211,35 @@ $string['copied']            = 'Copied';
 $string['share_modal_title'] = 'Share this resource';
 $string['error:name_exists'] = 'A resource with this name already exists. Please enter a different name.';
 
-$string['edit_existing_files_info'] = '<p>Only upload new files if you wish to overwrite the existing ones. The existing files are:</p>
+$string['edit_existing_files_info']    = '<p>Only upload new files if you wish to overwrite the existing ones. The existing files are:</p>
 <ul>
     <li><a target="_blank" href="{$a->pdf_link}">PDF</a></li>
     <li><a target="_blank" href="{$a->document_link}">Word document</a></li>
 </ul>
 <br>
 ';
-$string['pdf']                      = 'PDF';
+$string['pdf']                         = 'PDF';
 $string['pdf_help']
-                                    = 'Upload a PDF version of the project which will be given to students. This will overwrite any existing PDF.';
-$string['document']                 = 'Word document';
+                                       = 'Upload a PDF version of the project which will be given to students. This will overwrite any existing PDF.';
+$string['document']                    = 'Word document';
 $string['document_help']
-                                    = 'Upload a Word document version of the project. This is required in case any changes to the project are needed. This will overwrite any existing file.';
-$string['download_document']        = 'Download Word document';
-$string['error:name_length']        = 'The name is too long, please enter a name less than 200 characters long';
+                                       = 'Upload a Word document version of the project. This is required in case any changes to the project are needed. This will overwrite any existing file.';
+$string['download_document']           = 'Download Word document';
+$string['error:name_length']           = 'The name is too long, please enter a name less than 200 characters long';
 $string['error:description_length']
-                                    = 'The description is too long, please enter a description less than 500 characters long';
-$string['error:name_no_symbol']     = 'Resource names can not include the symbol \'{$a}\'';
-$string['error:incorrect_embed_id'] = 'A learning resource with the specified ID can not be found!';
-$string['cachedef_resource_count']  = 'Cache of LOR resources count';
+                                       = 'The description is too long, please enter a description less than 500 characters long';
+$string['error:name_no_symbol']        = 'Resource names can not include the symbol \'{$a}\'';
+$string['error:incorrect_embed_id']    = 'A learning resource with the specified ID can not be found!';
+$string['cachedef_resource_count']     = 'Cache of LOR resources count';
 $string['error:unknown_lti_type']
-                                    = 'LTI Page and LTI Book types can not be found in the database! Unable to find related resources.';
-$string['related_help']             = 'Below are resources that are also used in the same units as this resource. This list is updated nightly.';
-$string['lor:manage']               = 'Add, edit, and delete learning resources';
-$string['task:cache_related']       = 'Build related items cache';
+                                       = 'LTI Page and LTI Book types can not be found in the database! Unable to find related resources.';
+$string['related_help']
+                                       = 'Below are resources that are also used in the same units as this resource. This list is updated nightly.';
+$string['lor:manage']                  = 'Add, edit, and delete learning resources';
+$string['task:cache_related']          = 'Build related items cache';
+$string['event:resource_created']      = 'LOR resource created';
+$string['event:resource_created_desc'] = 'New LOR resource created with id \'{$a->itemid}\' by user with id \'{$a->userid}\'.';
+$string['event:resource_updated']      = 'LOR resource updated';
+$string['event:resource_updated_desc'] = 'LOR resource with id \'{$a->itemid}\' updated by user with id \'{$a->userid}\'.';
+$string['event:resource_deleted']      = 'LOR resource deleted';
+$string['event:resource_deleted_desc'] = 'LOR resource with id \'{$a->itemid}\' deleted by user with id \'{$a->userid}\'.';

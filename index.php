@@ -2,7 +2,7 @@
 
 use local_lor\page;
 
-require_once(__DIR__ . '/../../config.php');
+require_once(__DIR__.'/../../config.php');
 
 $page_url = new moodle_url('/local/lor/index.php');
 page::set_up(
@@ -19,10 +19,8 @@ $PAGE->requires->js_call_amd('local_lor/app-lazy', 'init', [
     'contextid' => context_system::instance()->id,
 ]);
 
-echo <<<HTML
-<div id="local-lor-app">
-  <router-view></router-view>
-</div>
-HTML;
+// Render the Vue app
+$index_view = new \local_lor\output\index();
+echo $renderer->render($index_view);
 
 echo $renderer->footer();

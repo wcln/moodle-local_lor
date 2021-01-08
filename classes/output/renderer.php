@@ -38,4 +38,19 @@ class renderer extends plugin_renderer_base
 
         return parent::render_from_template('local_lor/grade_list', $data);
     }
+
+    /**
+     * Render the main (index) view which contains the Vue app
+     *
+     * @param $page
+     *
+     * @return bool|string
+     * @throws moodle_exception
+     */
+    public function render_index($page)
+    {
+        $data = $page->export_for_template($this);
+
+        return parent::render_from_template('local_lor/index', $data);
+    }
 }

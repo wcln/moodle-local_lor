@@ -37,16 +37,20 @@
 
         </section>
 
-        <!-- Resources -->
-      <p id="resource-count">{{resourceCount}} resources matching your search</p>
-      <div class="columns is-multiline resource-results is-centered" id="resources">
+      <transition name="fade">
+        <progress v-if="resourcesLoading" class="progress is-info is-large" max="100"></progress>
+      </transition>
+
+      <!-- Resources -->
+      <p id="resource-count" :class="{'is-loading': resourcesLoading}">{{resourceCount}} resources matching your search</p>
+      <div :class="'columns is-multiline resource-results is-centered ' + (resourcesLoading ? 'is-loading':'')" id="resources">
             <div class="column is-one-fifth-desktop is-one-quarter-tablet" v-for="resource in resources">
                 <resource-card :resource="resource"></resource-card>
             </div>
         </div>
 
         <!-- Show a message if no results were found -->
-        <div class="columns is-centered no-results-message" v-if="resources.length === 0">
+        <div class="columns is-centered no-results-message" v-if="resources.length === 0 && ! resourcesLoading">
             <alert-message class="column is-one-third-desktop" :show-close="false">
                 <template slot="header">No results found</template>
                 No results were found which match your search filters. Please try again.
@@ -74,7 +78,7 @@
         name: "resources-index",
         components: {PaginationBar, SearchForm, ResourceCard, FiltersModal, AlertMessage },
         computed: {
-            ...mapState(['strings', 'resources', 'pages', 'filters', 'user', 'resourceTypes', 'resourceCount']),
+            ...mapState(['strings', 'resources', 'pages', 'filters', 'user', 'resourceTypes', 'resourceCount', 'resourcesLoading']),
         },
         data() {
             return {
@@ -92,32 +96,66 @@
 </script>
 
 <style scoped lang="scss">
-    .hero {
-        background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('/local/lor/vue/assets/images/search_background.jpg');
-        background-size: cover;
+#local-lor-app {
+  .hero {
+    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('/local/lor/vue/assets/images/search_background.jpg');
+    background-size: cover;
 
-        .hero-head {
-            padding: 1rem 1rem 0 0;
-        }
+    .hero-head {
+      padding: 1rem 1rem 0 0;
     }
+  }
 
-    /* ID is required to override Bulma .columns margin styling */
-    #local-lor-app .resource-results.columns {
-        margin-top: 1rem;
+  /* ID is required to override Bulma .columns margin styling */
+  .resource-results.columns {
+    margin-top: 1rem;
+
+    &.is-loading {
+      opacity: .2;
+      transition: opacity 1s linear;
     }
+  }
 
-    #local-lor-app .no-results-message {
-        margin-top: 2rem;
-        margin-bottom: 2rem;
+  #local-lor-app .no-results-message {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
 
-        article.column {
-            padding: 0;
-        }
+    article.column {
+      padding: 0;
     }
+  }
 
-    #resource-count {
-      text-align: center;
-      margin-top: 1rem;
-      font-style: italic;
+  #resource-count {
+    text-align: center;
+    margin-top: 1rem;
+    font-style: italic;
+
+    &.is-loading {
+      opacity: .2;
+      transition: opacity 1s linear;
     }
+  }
+
+  .resources-index {
+    position: relative;
+  }
+
+  progress.progress {
+    position: absolute;
+    width: 50%;
+    z-index: 2;
+    margin: 7rem auto 0 auto;
+    left: 0;
+    right: 0;
+  }
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+
+
 </style>

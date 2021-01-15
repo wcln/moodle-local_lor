@@ -1,6 +1,6 @@
 #local-lor-app {
   /* Safari */ }
-  #local-lor-app .loader {
+  #local-lor-app div.loader {
     border: 5px solid #f3f3f3;
     border-radius: 50%;
     border-top: 5px solid #474647;

@@ -27,7 +27,8 @@ export const store = new Vuex.Store({
         grades: [],
         user: {
             isAdmin: false
-        }
+        },
+        resourcesLoading: false
     },
     //strict: process.env.NODE_ENV !== 'production',
     mutations: {
@@ -60,6 +61,9 @@ export const store = new Vuex.Store({
         },
         setResourceCount(state, resourceCount) {
             state.resourceCount = resourceCount;
+        },
+        setLoading(state, isLoading) {
+            state.resourcesLoading = isLoading;
         }
     },
     actions: {
@@ -91,12 +95,14 @@ export const store = new Vuex.Store({
               context.commit('setUser', user);
         },
         async getResources(context, filters) {
+            context.commit('setLoading', true);
             context.commit('setFilters', filters);
 
             const results = await ajax('local_lor_get_resources', context.state.filters);
             context.commit('setResources', results.resources);
             context.commit('setPages', results.pages);
             context.commit('setResourceCount', results.resource_count);
+            context.commit('setLoading', false);
         },
         async getResourceTypes(context) {
             const resourceTypes = await ajax('local_lor_get_resource_types', {});

@@ -4,11 +4,10 @@
     @template local_lor/index
 }}
 <div class="local_lor_index">
-
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-
     <div id="local-lor-app">
-        <router-view></router-view>
+        <router-view>
+            <div class="loader"></div>
+        </router-view>
     </div>
 </div>
 

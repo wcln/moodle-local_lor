@@ -20,7 +20,7 @@ foreach ($contributors as $contributor) {
     mtrace("Found " . count($items) . " matching contributor $contributor->name");
 
     foreach ($items as $item) {
-        $newItem = $DB->get_record_select('local_lor_item', "name LIKE :name", ['name' => $item->title], null, IGNORE_MULTIPLE);
+        $newItem = $DB->get_record_select('local_lor_item', "name LIKE :name", ['name' => $item->title], '*', IGNORE_MULTIPLE);
         if (! $DB->record_exists('local_lor_item_contributors', ['itemid' => $newItem->id])) {
             $DB->insert_record('local_lor_item_contributors', (object) ['itemid' => $newItem->id, 'userid' => OSBC_USERID]);
             mtrace("Adding OSBC as contributor for item $item->id");

@@ -45,7 +45,6 @@
               data-size="32"
               :data-url="resource.url"
               :data-title="resource.name"
-              :data-body="resource.description"
           >
           </div>
         </div>

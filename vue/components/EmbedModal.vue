@@ -42,7 +42,7 @@
           <div
               id="g-sharetoclassroom"
               class="g-sharetoclassroom"
-              data-size="32"
+              data-size="64"
               :data-url="resource.url"
               :data-title="resource.name"
           >

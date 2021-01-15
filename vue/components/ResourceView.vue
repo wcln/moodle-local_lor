@@ -117,14 +117,12 @@
                 :title="strings.embed_modal_title">
         </embed-modal>
 
-        <copy-modal
+        <share-modal
                 ref="shareModal"
                 v-if="showShareModal"
-                @close="showShareModal = false"
-                :content="shareLink"
-                :title="strings.share_modal_title"
-                :rows="1">
-        </copy-modal>
+                :resource="resource"
+                @close="showShareModal = false">
+        </share-modal>
 
       <related-modal
         ref="relatedModal"
@@ -138,19 +136,16 @@
 
 <script>
     import {mapState} from "vuex";
-    import CopyModal from "./CopyModal";
+    import ShareModal from "./ShareModal";
     import EmbedModal from "./EmbedModal";
     import {ajax} from "../store";
     import RelatedModal from "./RelatedModal";
 
     export default {
         name: "resource-view",
-        components: {RelatedModal, CopyModal, EmbedModal},
+        components: {RelatedModal, ShareModal, EmbedModal},
         computed: {
             ...mapState(['strings', 'resourceTypes', 'user']),
-            shareLink() {
-                return window.location.href;
-            },
             icon() {
                 let resourceType = this.resourceTypes.find(type => {
                     return type.value === this.resource.type;

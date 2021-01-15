@@ -209,8 +209,8 @@ class item
         $type = self::get_type($itemid);
 
         $result = $DB->delete_records(self::TABLE, ['id' => $itemid])
-               && (type::get_class($type))::delete($itemid)
-               && self::delete_properties($itemid);
+                  && (type::get_class($type))::delete($itemid)
+                  && self::delete_properties($itemid);
 
         // Trigger 'resource created' event
         $event = \local_lor\event\resource_deleted::create([
@@ -365,17 +365,23 @@ class item
         if ( ! empty($keywords)) {
             $joins .= " JOIN {".topic::LINKING_TABLE."} it ON it.itemid = i.id";
             $joins .= " JOIN {".topic::TABLE."} t ON t.id = it.topicid";
+            $joins .= " LEFT JOIN {".contributor::TABLE."} ct ON ct.itemid = i.id";
+            $joins .= " LEFT JOIN {user} u ON u.id = ct.userid";
 
             $where .= " AND(
                 (INSTR(:keywords_topic, TRIM(t.name)) > 0
                 OR i.description LIKE CONCAT('%', :keywords_desc, '%')
-	            OR i.name LIKE CONCAT('%', :keywords_name, '%'))
+	            OR i.name LIKE CONCAT('%', :keywords_name, '%')
+	            OR INSTR(:keywords_contrib1, u.firstname) > 0
+	            OR INSTR(:keywords_contrib2, u.lastname) > 0)
 	            AND t.name NOT LIKE ' '
             )";
 
-            $params['keywords_topic'] = $keywords;
-            $params['keywords_desc']  = $keywords;
-            $params['keywords_name']  = $keywords;
+            $params['keywords_topic']    = $keywords;
+            $params['keywords_desc']     = $keywords;
+            $params['keywords_name']     = $keywords;
+            $params['keywords_contrib1'] = $keywords;
+            $params['keywords_contrib2'] = $keywords;
         }
 
         // Check if we are just counting the results, or performing a full search

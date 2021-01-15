@@ -120,4 +120,11 @@ class media
 
         return $data['url'];
     }
+
+    public static function get_resource_url(int $itemid)
+    {
+        $data = data::get_item_data($itemid);
+
+        return $data['url'];
+    }
 }

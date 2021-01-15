@@ -160,4 +160,15 @@ trait type
      */
     public abstract static function get_unique_identifier(int $itemid);
 
+
+    /**
+     * Get the URL to the resource
+     *
+     * This is used for sharing to Google Classroom
+     *
+     * @param  int  $itemid
+     *
+     * @return string
+     */
+    public abstract static function get_resource_url(int $itemid);
 }

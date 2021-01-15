@@ -145,6 +145,7 @@ class api extends external_api
         $type_class    = type::get_class(item::get_type($item->id));
         $item->display = $type_class::get_display_html($item->id);
         $item->embed   = $type_class::get_embed_html($item->id);
+        $item->url     = $type_class::get_resource_url($item->id);
 
         return $item;
     }
@@ -165,6 +166,7 @@ class api extends external_api
             'topics'       => new external_value(PARAM_TEXT, 'Item topics'),
             'display'      => new external_value(PARAM_RAW, 'Item display HTML'),
             'embed'        => new external_value(PARAM_RAW, 'Item embed HTML'),
+            'url'          => new external_value(PARAM_RAW, 'Item URL to the resource'),
             'data'         => new external_multiple_structure(
                 new external_single_structure([
                     'name'  => new external_value(PARAM_TEXT, 'Item data name'),

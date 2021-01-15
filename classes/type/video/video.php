@@ -13,6 +13,7 @@ class video
 
     const PROPERTIES = ['videoid'];
     const YOUTUBE_EMBED_URL = 'https://www.youtube.com/embed/';
+    const YOUTUBE_VIEW_URL = 'https://www.youtube.com/watch?v=';
 
     public static function get_name()
     {
@@ -132,5 +133,12 @@ class video
     public static function get_unique_identifier(int $itemid)
     {
         return self::get_embed_url($itemid);
+    }
+
+    public static function get_resource_url(int $itemid)
+    {
+        $data = data::get_item_data($itemid);
+
+        return self::YOUTUBE_VIEW_URL.$data['videoid'].'?rel=0';
     }
 }

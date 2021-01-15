@@ -277,4 +277,18 @@ trait file_type
         return repository::get_file_url($itemid)->out();
     }
 
+    /**
+     * Get the PDF resource URL
+     *
+     * This is used for sharing to Google Classroom
+     *
+     * @param  int  $itemid
+     *
+     * @return string
+     * @throws moodle_exception
+     */
+    public static function get_resource_url(int $itemid) {
+        return repository::get_file_url($itemid)->out();
+    }
+
 }

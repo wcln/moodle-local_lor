@@ -109,13 +109,13 @@
             </a>
         </router-link>
 
-        <copy-modal
+        <embed-modal
                 ref="embedModal"
                 v-if="showEmbedModal"
                 @close="showEmbedModal = false"
-                :content="resource.embed"
+                :resource="resource"
                 :title="strings.embed_modal_title">
-        </copy-modal>
+        </embed-modal>
 
         <copy-modal
                 ref="shareModal"
@@ -139,12 +139,13 @@
 <script>
     import {mapState} from "vuex";
     import CopyModal from "./CopyModal";
+    import EmbedModal from "./EmbedModal";
     import {ajax} from "../store";
     import RelatedModal from "./RelatedModal";
 
     export default {
         name: "resource-view",
-        components: {RelatedModal, CopyModal},
+        components: {RelatedModal, CopyModal, EmbedModal},
         computed: {
             ...mapState(['strings', 'resourceTypes', 'user']),
             shareLink() {

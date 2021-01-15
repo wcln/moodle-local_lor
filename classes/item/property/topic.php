@@ -59,7 +59,7 @@ class topic implements noneditable_property
                 } else {
                     if ($topicid = $DB->insert_record(
                         self::TABLE,
-                        (object)['name' => $topic]
+                        (object)['name' => trim($topic)]
                     )
                     ) {
                         $DB->insert_record(

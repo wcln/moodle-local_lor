@@ -367,7 +367,7 @@ class item
             $joins .= " JOIN {".topic::TABLE."} t ON t.id = it.topicid";
 
             $where .= " AND(
-                (INSTR(:keywords_topic, t.name) > 0
+                (INSTR(:keywords_topic, TRIM(t.name)) > 0
                 OR i.description LIKE CONCAT('%', :keywords_desc, '%')
 	            OR i.name LIKE CONCAT('%', :keywords_name, '%'))
 	            AND t.name NOT LIKE ' '

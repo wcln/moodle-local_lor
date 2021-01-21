@@ -7,7 +7,7 @@
         <button class="delete" aria-label="close" @click="$emit('close')"></button>
       </header>
       <section class="modal-card-body">
-        <div class="share-buttons mb-1">
+        <div class="share-buttons mb-3">
           <span class="mr-2"><i>Share:</i></span>
           <div
               id="g-sharetoclassroom"
@@ -16,6 +16,11 @@
               :data-url="resource.url"
               :data-title="resource.name"
           >
+          </div>
+          <div
+              class="teams-share-button"
+              :data-href="resource.url"
+              data-icon-px-size="24">
           </div>
         </div>
         <input class="input" type="text" aria-label="Content to copy" readonly :rows="rows" :value="resource.url">
@@ -67,11 +72,15 @@ export default {
         this.copied = true;
       }
     },
+    loadScript(url) {
+      let script = document.createElement('script');
+      script.setAttribute('src', url);
+      document.head.appendChild(script);
+    }
   },
   mounted() {
-    let googleClassroomScript = document.createElement('script');
-    googleClassroomScript.setAttribute('src', "https://apis.google.com/js/platform.js");
-    document.head.appendChild(googleClassroomScript);
+    this.loadScript("https://apis.google.com/js/platform.js");
+    this.loadScript("https://teams.microsoft.com/share/launcher.js");
   },
 }
 </script>

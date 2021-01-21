@@ -20,7 +20,12 @@
             <li :class="{'is-active': activeTabIndex === 1}">
               <a @click="activeTabIndex = 1">
                 <span class="icon is-small"><i class="fab fa-google" aria-hidden="true"></i></span>
-                <span>Google classroom</span>
+                <span>Google Classroom</span>
+              </a>
+            </li>
+            <li :class="{'is-active': activeTabIndex === 2}">
+              <a @click="activeTabIndex = 2">
+                <span>Microsoft Teams</span>
               </a>
             </li>
           </ul>
@@ -49,6 +54,16 @@
           </div>
         </div>
 
+        <!-- Embed Teams -->
+        <div class="embed-teams has-text-centered" :style="{display: (activeTabIndex === 2) ? 'block' : 'none'}">
+          <p class="mb-1">Click the button below to share this resource on Microsoft Teams:</p>
+          <div
+              class="teams-share-button"
+              :data-href="resource.url"
+              data-icon-px-size="64">
+          </div>
+        </div>
+
       </section>
       <footer class="modal-card-foot">
         <a class="button" @click="$emit('close')">{{strings.close_modal}}</a>
@@ -59,6 +74,7 @@
 
 <script>
 import {mapState} from "vuex";
+import {loadScript} from "../functions/LoadScript";
 
 export default {
   name: "EmbedModal",
@@ -93,9 +109,8 @@ export default {
     },
   },
   mounted() {
-    let googleClassroomScript = document.createElement('script');
-    googleClassroomScript.setAttribute('src', "https://apis.google.com/js/platform.js");
-    document.head.appendChild(googleClassroomScript);
+    loadScript("https://apis.google.com/js/platform.js");
+    loadScript("https://teams.microsoft.com/share/launcher.js");
   },
 }
 </script>
@@ -107,9 +122,5 @@ export default {
 
 #copy-btn {
   margin-top: 1rem;
-}
-
-footer > a.button {
-
 }
 </style>

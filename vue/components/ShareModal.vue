@@ -38,6 +38,7 @@
 
 <script>
 import {mapState} from "vuex";
+import {loadScript} from "../functions/LoadScript";
 
 export default {
   name: "ShareModal",
@@ -72,15 +73,10 @@ export default {
         this.copied = true;
       }
     },
-    loadScript(url) {
-      let script = document.createElement('script');
-      script.setAttribute('src', url);
-      document.head.appendChild(script);
-    }
   },
   mounted() {
-    this.loadScript("https://apis.google.com/js/platform.js");
-    this.loadScript("https://teams.microsoft.com/share/launcher.js");
+    loadScript("https://apis.google.com/js/platform.js");
+    loadScript("https://teams.microsoft.com/share/launcher.js");
   },
 }
 </script>

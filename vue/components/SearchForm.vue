@@ -52,8 +52,8 @@
         },
         methods: {
             search() {
-              this.$store.dispatch('getResources', {});
               this.$store.commit('setFilters', {page: 0});
+              this.$store.dispatch('getResources', {});
             }
         },
         created() {

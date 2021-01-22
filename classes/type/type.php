@@ -56,8 +56,9 @@ trait type
      * a LOR item is created or edited
      *
      * @param $item_form item_form A reference to the item moodle form
+     * @param  int  $itemid Only given if we are editing an existing item
      */
-    public abstract static function add_to_form(&$item_form);
+    public abstract static function add_to_form(&$item_form, $itemid = 0);
 
     /**
      * Called after an item of this type is created

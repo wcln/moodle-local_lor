@@ -291,4 +291,13 @@ trait file_type
         return repository::get_file_url($itemid)->out();
     }
 
+    /**
+     * Get the display height of file resources on the resource view page
+     *
+     * @return string
+     */
+    public static function get_display_height() {
+        return "900px";
+    }
+
 }

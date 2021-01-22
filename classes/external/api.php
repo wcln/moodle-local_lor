@@ -142,10 +142,11 @@ class api extends external_api
             get_string('strftimedate', 'langconfig')
         );
 
-        $type_class    = type::get_class(item::get_type($item->id));
-        $item->display = $type_class::get_display_html($item->id);
-        $item->embed   = $type_class::get_embed_html($item->id);
-        $item->url     = $type_class::get_resource_url($item->id);
+        $type_class           = type::get_class(item::get_type($item->id));
+        $item->display        = $type_class::get_display_html($item->id);
+        $item->embed          = $type_class::get_embed_html($item->id);
+        $item->url            = $type_class::get_resource_url($item->id);
+        $item->display_height = $type_class::get_display_height();
 
         return $item;
     }
@@ -153,21 +154,22 @@ class api extends external_api
     public static function get_resource_returns()
     {
         return new external_single_structure([
-            'id'           => new external_value(PARAM_INT, 'Item ID'),
-            'type'         => new external_value(PARAM_TEXT, 'Item type'),
-            'name'         => new external_value(PARAM_TEXT, 'Item name'),
-            'image'        => new external_value(PARAM_TEXT, 'Item image'),
-            'description'  => new external_value(PARAM_RAW, 'Item description'),
-            'timecreated'  => new external_value(PARAM_TEXT, 'Time created'),
-            'timemodified' => new external_value(PARAM_INT, 'Time modified'),
-            'categories'   => new external_value(PARAM_TEXT, 'Item categories'),
-            'contributors' => new external_value(PARAM_TEXT, 'Item contributors'),
-            'grades'       => new external_value(PARAM_TEXT, 'Item grades'),
-            'topics'       => new external_value(PARAM_TEXT, 'Item topics'),
-            'display'      => new external_value(PARAM_RAW, 'Item display HTML'),
-            'embed'        => new external_value(PARAM_RAW, 'Item embed HTML'),
-            'url'          => new external_value(PARAM_RAW, 'Item URL to the resource'),
-            'data'         => new external_multiple_structure(
+            'id'             => new external_value(PARAM_INT, 'Item ID'),
+            'type'           => new external_value(PARAM_TEXT, 'Item type'),
+            'name'           => new external_value(PARAM_TEXT, 'Item name'),
+            'image'          => new external_value(PARAM_TEXT, 'Item image'),
+            'description'    => new external_value(PARAM_RAW, 'Item description'),
+            'timecreated'    => new external_value(PARAM_TEXT, 'Time created'),
+            'timemodified'   => new external_value(PARAM_INT, 'Time modified'),
+            'categories'     => new external_value(PARAM_TEXT, 'Item categories'),
+            'contributors'   => new external_value(PARAM_TEXT, 'Item contributors'),
+            'grades'         => new external_value(PARAM_TEXT, 'Item grades'),
+            'topics'         => new external_value(PARAM_TEXT, 'Item topics'),
+            'display'        => new external_value(PARAM_RAW, 'Item display HTML'),
+            'embed'          => new external_value(PARAM_RAW, 'Item embed HTML'),
+            'url'            => new external_value(PARAM_RAW, 'Item URL to the resource'),
+            'display_height' => new external_value(PARAM_RAW, 'Display height on the resource view page', VALUE_OPTIONAL),
+            'data'           => new external_multiple_structure(
                 new external_single_structure([
                     'name'  => new external_value(PARAM_TEXT, 'Item data name'),
                     'value' => new external_value(PARAM_RAW, 'Item data value'),

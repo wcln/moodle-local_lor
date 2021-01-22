@@ -101,9 +101,10 @@
         </div>
       </transition>
 
-      <div class="column resource-display">
+      <!-- Show the resource -->
+      <div class="column">
         <div class="card" >
-          <div class="card-content" v-html="resource.display">
+          <div class="card-content resource-display" :style="{height: resource.display_height === null ? 'auto' : resource.display_height}" v-html="resource.display">
           </div>
         </div>
       </div>
@@ -203,6 +204,10 @@ export default {
 
 #local-lor-app .resource-view .title {
   margin-bottom: 1rem;
+}
+
+.resource-display {
+  height: 900px;
 }
 
 #resource-details {

@@ -171,4 +171,16 @@ trait type
      * @return string
      */
     public abstract static function get_resource_url(int $itemid);
+
+    /**
+     * Get the height of the resource for the resource view page
+     *
+     * Override this as required
+     *
+     * @return null
+     */
+    public static function get_display_height()
+    {
+        return null;
+    }
 }

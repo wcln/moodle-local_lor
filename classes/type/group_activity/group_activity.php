@@ -11,6 +11,7 @@ class group_activity
 {
     use file_type, type {
         file_type::delete insteadof type;
+        file_type::get_display_height insteadof type;
     }
 
     /**

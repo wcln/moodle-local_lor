@@ -101,7 +101,12 @@
         </div>
       </transition>
 
-      <div class="column resource-display" v-html="resource.display"></div>
+      <div class="column resource-display">
+        <div class="card" >
+          <div class="card-content" v-html="resource.display">
+          </div>
+        </div>
+      </div>
     </div>
 
     <router-link :to="{ name: 'resources-index' }">
@@ -190,10 +195,6 @@ export default {
 
 .fade-enter, .fade-leave-to {
   opacity: 0;
-}
-
-.resource-display {
-  min-height: 900px;
 }
 
 #local-lor-app .columns {

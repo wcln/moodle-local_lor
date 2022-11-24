@@ -1,5 +1,5 @@
 # Western Canadian Learning Network (WCLN) Learning Object Repository (LOR) Moodle Plugin
-Learning Object Repository local plugin created for Western Canadian Learning Network (wcln.ca).  
-This plugin creates a database of searchable, embeddable, shareable learning objects including educational games, videos, inquiry projects, learning guides and lessons.  
-  
-Visit wcln.ca for more details.
+
+A Moodle plugin with a Vue.js front-end that stores and manages 5000+ games, projects, video tutorials and other resources which can be embedded in courses by teachers to assist with online learning.
+
+View live at https://wcln.ca/local/lor/index.php/resources

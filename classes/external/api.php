@@ -6,6 +6,11 @@ use local_lor\item\property\category;
 use local_lor\item\property\grade;
 use local_lor\related\related_helper;
 use local_lor\type\type;
+use core_external\external_function_parameters;
+use core_external\external_value;
+use core_external\external_multiple_structure;
+use core_external\external_single_structure;
+use core_external\external_api;
 
 require_once("$CFG->libdir/externallib.php");
 
@@ -24,25 +29,27 @@ class api extends external_api
     public static function get_resources_parameters()
     {
         return new external_function_parameters([
-            'page'       => new external_value(PARAM_INT, 'The current page number', VALUE_OPTIONAL),
-            'keywords'   => new external_value(PARAM_TEXT, 'Keywords to search for', VALUE_OPTIONAL),
-            'type'       => new external_value(PARAM_TEXT, 'Type of resources', VALUE_OPTIONAL),
+            'page' => new external_value(PARAM_INT, 'The current page number', VALUE_OPTIONAL),
+            'keywords' => new external_value(PARAM_TEXT, 'Keywords to search for', VALUE_OPTIONAL),
+            'type' => new external_value(PARAM_TEXT, 'Type of resources', VALUE_OPTIONAL),
             'categories' => new external_multiple_structure(
                 new external_single_structure([
-                    'id'   => new external_value(PARAM_INT, 'Category ID'),
+                    'id' => new external_value(PARAM_INT, 'Category ID'),
                     'name' => new external_value(PARAM_TEXT, 'Category name'),
                 ]),
-                'List of categories', VALUE_OPTIONAL
+                'List of categories',
+                VALUE_OPTIONAL
             ),
-            'grades'     => new external_multiple_structure(
+            'grades' => new external_multiple_structure(
                 new external_single_structure([
-                    'id'   => new external_value(PARAM_INT, 'Grade ID'),
+                    'id' => new external_value(PARAM_INT, 'Grade ID'),
                     'name' => new external_value(PARAM_TEXT, 'Grade name'),
                 ]),
-                'List of grades', VALUE_OPTIONAL
+                'List of grades',
+                VALUE_OPTIONAL
             ),
-            'sort'       => new external_value(PARAM_TEXT, 'How to sort the results', VALUE_OPTIONAL),
-            'perpage'    => new external_value(PARAM_INT, 'The number of items per page', VALUE_OPTIONAL),
+            'sort' => new external_value(PARAM_TEXT, 'How to sort the results', VALUE_OPTIONAL),
+            'perpage' => new external_value(PARAM_INT, 'The number of items per page', VALUE_OPTIONAL),
         ]);
     }
 
@@ -54,21 +61,33 @@ class api extends external_api
         $grades = [],
         $sort = null,
         $perpage = 8 // Default is 8 resources per page
-    )
-    {
-        $params = self::validate_parameters(self::get_resources_parameters(),
-            compact('page', 'keywords', 'type', 'categories', 'grades', 'sort', 'perpage'));
+    ) {
+        $params = self::validate_parameters(
+            self::get_resources_parameters(),
+            compact('page', 'keywords', 'type', 'categories', 'grades', 'sort', 'perpage')
+        );
 
         // Clean categories and grades (we only want the IDs for the search function)
         $params['categories'] = array_column($params['categories'], 'id');
-        $params['grades']     = array_column($params['grades'], 'id');
+        $params['grades'] = array_column($params['grades'], 'id');
 
-        $items = item::search($params['keywords'], $params['type'], $params['categories'],
-            $params['grades'], $params['sort'], $params['page'], $params['perpage']);
+        $items = item::search(
+            $params['keywords'],
+            $params['type'],
+            $params['categories'],
+            $params['grades'],
+            $params['sort'],
+            $params['page'],
+            $params['perpage']
+        );
 
-        $resource_count = item::count_search_results($params['keywords'], $params['type'], $params['categories'],
-            $params['grades']);
-        $num_pages      = ceil($resource_count / $perpage);
+        $resource_count = item::count_search_results(
+            $params['keywords'],
+            $params['type'],
+            $params['categories'],
+            $params['grades']
+        );
+        $num_pages = ceil($resource_count / $perpage);
 
         // Include the image URLs as well
         foreach ($items as $item) {
@@ -76,8 +95,8 @@ class api extends external_api
         }
 
         return [
-            'resources'      => $items,
-            'pages'          => $num_pages,
+            'resources' => $items,
+            'pages' => $num_pages,
             'resource_count' => $resource_count,
         ];
     }
@@ -85,16 +104,16 @@ class api extends external_api
     public static function get_resources_returns()
     {
         return new external_single_structure([
-            'pages'          => new external_value(PARAM_INT, 'The total number of pages'),
+            'pages' => new external_value(PARAM_INT, 'The total number of pages'),
             'resource_count' => new external_value(PARAM_INT, 'The total number of resources matching this search'),
-            'resources'      => new external_multiple_structure(
+            'resources' => new external_multiple_structure(
                 new external_single_structure([
-                    'id'           => new external_value(PARAM_INT, 'Item ID'),
-                    'type'         => new external_value(PARAM_TEXT, 'Item type'),
-                    'name'         => new external_value(PARAM_TEXT, 'Item name'),
-                    'image'        => new external_value(PARAM_TEXT, 'Item image'),
-                    'description'  => new external_value(PARAM_RAW, 'Item description'),
-                    'timecreated'  => new external_value(PARAM_INT, 'Time created'),
+                    'id' => new external_value(PARAM_INT, 'Item ID'),
+                    'type' => new external_value(PARAM_TEXT, 'Item type'),
+                    'name' => new external_value(PARAM_TEXT, 'Item name'),
+                    'image' => new external_value(PARAM_TEXT, 'Item image'),
+                    'description' => new external_value(PARAM_RAW, 'Item description'),
+                    'timecreated' => new external_value(PARAM_INT, 'Time created'),
                     'timemodified' => new external_value(PARAM_INT, 'Time modified'),
                 ])
             ),
@@ -126,15 +145,15 @@ class api extends external_api
         $data = [];
         foreach ($item->data as $data_key => $data_value) {
             $data[] = [
-                'name'  => $data_key,
+                'name' => $data_key,
                 'value' => $data_value,
             ];
         }
         $item->data = $data;
 
-        $item->categories   = helper::implode_format($item->categories);
-        $item->grades       = helper::implode_format($item->grades);
-        $item->topics       = helper::implode_format($item->topics);
+        $item->categories = helper::implode_format($item->categories);
+        $item->grades = helper::implode_format($item->grades);
+        $item->topics = helper::implode_format($item->topics);
         $item->contributors = helper::implode_format($item->contributors, 'fullname');
 
         $item->timecreated = userdate(
@@ -142,10 +161,10 @@ class api extends external_api
             get_string('strftimedate', 'langconfig')
         );
 
-        $type_class           = type::get_class(item::get_type($item->id));
-        $item->display        = $type_class::get_display_html($item->id);
-        $item->embed          = $type_class::get_embed_html($item->id);
-        $item->url            = $type_class::get_resource_url($item->id);
+        $type_class = type::get_class(item::get_type($item->id));
+        $item->display = $type_class::get_display_html($item->id);
+        $item->embed = $type_class::get_embed_html($item->id);
+        $item->url = $type_class::get_resource_url($item->id);
         $item->display_height = $type_class::get_display_height();
 
         return $item;
@@ -154,24 +173,24 @@ class api extends external_api
     public static function get_resource_returns()
     {
         return new external_single_structure([
-            'id'             => new external_value(PARAM_INT, 'Item ID'),
-            'type'           => new external_value(PARAM_TEXT, 'Item type'),
-            'name'           => new external_value(PARAM_TEXT, 'Item name'),
-            'image'          => new external_value(PARAM_TEXT, 'Item image'),
-            'description'    => new external_value(PARAM_RAW, 'Item description'),
-            'timecreated'    => new external_value(PARAM_TEXT, 'Time created'),
-            'timemodified'   => new external_value(PARAM_INT, 'Time modified'),
-            'categories'     => new external_value(PARAM_TEXT, 'Item categories'),
-            'contributors'   => new external_value(PARAM_TEXT, 'Item contributors'),
-            'grades'         => new external_value(PARAM_TEXT, 'Item grades'),
-            'topics'         => new external_value(PARAM_TEXT, 'Item topics'),
-            'display'        => new external_value(PARAM_RAW, 'Item display HTML'),
-            'embed'          => new external_value(PARAM_RAW, 'Item embed HTML'),
-            'url'            => new external_value(PARAM_RAW, 'Item URL to the resource'),
+            'id' => new external_value(PARAM_INT, 'Item ID'),
+            'type' => new external_value(PARAM_TEXT, 'Item type'),
+            'name' => new external_value(PARAM_TEXT, 'Item name'),
+            'image' => new external_value(PARAM_TEXT, 'Item image'),
+            'description' => new external_value(PARAM_RAW, 'Item description'),
+            'timecreated' => new external_value(PARAM_TEXT, 'Time created'),
+            'timemodified' => new external_value(PARAM_INT, 'Time modified'),
+            'categories' => new external_value(PARAM_TEXT, 'Item categories'),
+            'contributors' => new external_value(PARAM_TEXT, 'Item contributors'),
+            'grades' => new external_value(PARAM_TEXT, 'Item grades'),
+            'topics' => new external_value(PARAM_TEXT, 'Item topics'),
+            'display' => new external_value(PARAM_RAW, 'Item display HTML'),
+            'embed' => new external_value(PARAM_RAW, 'Item embed HTML'),
+            'url' => new external_value(PARAM_RAW, 'Item URL to the resource'),
             'display_height' => new external_value(PARAM_RAW, 'Display height on the resource view page', VALUE_OPTIONAL),
-            'data'           => new external_multiple_structure(
+            'data' => new external_multiple_structure(
                 new external_single_structure([
-                    'name'  => new external_value(PARAM_TEXT, 'Item data name'),
+                    'name' => new external_value(PARAM_TEXT, 'Item data name'),
                     'value' => new external_value(PARAM_RAW, 'Item data value'),
                 ])
             ),
@@ -197,11 +216,11 @@ class api extends external_api
     {
         $resource_types = [];
         foreach (type::get_all_types() as $value => $name) {
-            $type_class       = type::get_class($value);
+            $type_class = type::get_class($value);
             $resource_types[] = [
                 'value' => $value,
-                'name'  => $name,
-                'icon'  => $type_class::get_icon(),
+                'name' => $name,
+                'icon' => $type_class::get_icon(),
             ];
         }
 
@@ -213,8 +232,8 @@ class api extends external_api
         return new external_multiple_structure(
             new external_single_structure([
                 'value' => new external_value(PARAM_TEXT, 'The resource type value'),
-                'name'  => new external_value(PARAM_TEXT, 'The resource type name to be displayed'),
-                'icon'  => new external_value(PARAM_TEXT, 'The resource font-awesome icon identifier'),
+                'name' => new external_value(PARAM_TEXT, 'The resource type name to be displayed'),
+                'icon' => new external_value(PARAM_TEXT, 'The resource font-awesome icon identifier'),
             ])
         );
     }
@@ -243,7 +262,7 @@ class api extends external_api
     {
         return new external_multiple_structure(
             new external_single_structure([
-                'id'   => new external_value(PARAM_INT, 'The category ID'),
+                'id' => new external_value(PARAM_INT, 'The category ID'),
                 'name' => new external_value(PARAM_TEXT, 'The category name'),
             ])
         );
@@ -273,7 +292,7 @@ class api extends external_api
     {
         return new external_multiple_structure(
             new external_single_structure([
-                'id'   => new external_value(PARAM_INT, 'The grade ID'),
+                'id' => new external_value(PARAM_INT, 'The grade ID'),
                 'name' => new external_value(PARAM_TEXT, 'The grade name'),
             ])
         );
@@ -304,8 +323,10 @@ class api extends external_api
     public static function get_user_returns()
     {
         return new external_single_structure([
-            'isAdmin' => new external_value(PARAM_BOOL,
-                'True if the current logged in user is an admin, otherwise false'),
+            'isAdmin' => new external_value(
+                PARAM_BOOL,
+                'True if the current logged in user is an admin, otherwise false'
+            ),
         ]);
     }
 
@@ -332,7 +353,7 @@ class api extends external_api
         $cache = cache::make('local_lor', 'sections_used');
         if ($cache->get($id) !== false) {
             return [
-                'related'  => related_helper::get_related_items($params['id']),
+                'related' => related_helper::get_related_items($params['id']),
                 'disabled' => false,
             ];
         }
@@ -340,7 +361,7 @@ class api extends external_api
         // The cache is not up to date, we should disable related functionality until the scheduled task
         // runs this night. Otherwise users could be stuck waiting for the cache to build for a long time.
         return [
-            'related'  => [],
+            'related' => [],
             'disabled' => true,
         ];
     }
@@ -348,23 +369,23 @@ class api extends external_api
     public static function get_related_items_returns()
     {
         return new external_single_structure([
-            'related'  => new external_multiple_structure(
+            'related' => new external_multiple_structure(
                 new external_single_structure([
-                    'id'       => new external_value(PARAM_INT, 'ID of the related item'),
-                    'name'     => new external_value(PARAM_TEXT),
-                    'type'     => new external_value(PARAM_TEXT),
-                    'image'    => new external_value(PARAM_TEXT),
-                    'url'      => new external_value(PARAM_URL),
+                    'id' => new external_value(PARAM_INT, 'ID of the related item'),
+                    'name' => new external_value(PARAM_TEXT),
+                    'type' => new external_value(PARAM_TEXT),
+                    'image' => new external_value(PARAM_TEXT),
+                    'url' => new external_value(PARAM_URL),
                     'sections' => new external_multiple_structure(
                         new external_single_structure([
-                            'id'     => new external_value(PARAM_INT, 'ID of the section this item is used in'),
-                            'name'   => new external_value(PARAM_TEXT),
+                            'id' => new external_value(PARAM_INT, 'ID of the section this item is used in'),
+                            'name' => new external_value(PARAM_TEXT),
                             'course' => new external_single_structure([
-                                'id'        => new external_value(PARAM_INT, 'ID of the course containing this item'),
-                                'fullname'  => new external_value(PARAM_TEXT),
+                                'id' => new external_value(PARAM_INT, 'ID of the course containing this item'),
+                                'fullname' => new external_value(PARAM_TEXT),
                                 'shortname' => new external_value(PARAM_TEXT),
                             ]),
-                            'url'    => new external_value(PARAM_URL),
+                            'url' => new external_value(PARAM_URL),
                         ])
                     ),
                 ])
